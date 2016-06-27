@@ -162,6 +162,7 @@ Blockly.Blocks['controls_if'] = {
    * @param {!Blockly.Block} containerBlock Root block in mutator.
    * @this Blockly.Block
    */
+   
   saveConnections: function(containerBlock) {
     var clauseBlock = containerBlock.nextConnection.targetBlock();
     var i = 1;
@@ -187,6 +188,7 @@ Blockly.Blocks['controls_if'] = {
       clauseBlock = clauseBlock.nextConnection &&
           clauseBlock.nextConnection.targetBlock();
     }
+
   },
   /**
    * Modify this block to have the correct number of inputs.

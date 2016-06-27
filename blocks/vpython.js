@@ -40,7 +40,83 @@ Blockly.Blocks['vpython_box'] = {
             connection = posBlock.nextConnection;
         }
 
+        if(this.hasSize){
+            var sizeBlock = workspace.newBlock('box_size');
+            sizeBlock.initSvg();
+            connection.connect(sizeBlock.previousConnection);
+            connection = sizeBlock.nextConnection;
+        }
+
+
+        if(this.hasWidth){
+            var widthBlock = workspace.newBlock('box_width');
+            widthBlock.initSvg();
+            connection.connect(widthBlock.previousConnection);
+            connection = widthBlock.nextConnection;
+        }
+
+
+        if(this.hasHeight){
+            var heightBlock = workspace.newBlock('box_height');
+            heightBlock.initSvg();
+            connection.connect(heightBlock.previousConnection);
+            connection = heightBlock.nextConnection;
+        }
+
+        if(this.hasColor){
+            var colorBlock = workspace.newBlock('box_color');
+            colorBlock.initSvg();
+            connection.connect(colorBlock.previousConnection);
+            connection = colorBlock.nextConnection;
+        }
+
         return containerBlock;
+    },
+
+    compose: function(containerBlock){
+        var clauseBlock = containerBlock.nextConnection.targetBlock();
+
+        this.hasPos = false;
+        this.hasSize = false;
+        this.hasWidth = false;
+        this.hasHeight = false;
+        this.hasColor = false;
+        var valueConnections = [null];
+        while(clauseBlock){
+            switch(clouseBlock.type){
+                case 'box_pos':
+                    this.hasPos = true;
+                    valueConnections.push(clauseBlock.valueConnection_);
+                    break;
+                case 'box_size':
+                    this.hasSize = true;
+                    valueConnections.push(clauseBlock.valueConnection_);
+                    break;
+                case 'box_width':
+                    this.hasWidth = true;
+                    valueConnections.push(clauseBlock.valueConnection_);
+                    break;
+                case 'box_height':
+                    this.hasHeight = true;
+                    valueConnections.push(clauseBlock.valueConnection_);
+                    break; 
+                case 'box_color':
+                    this.hasColor = true;
+                    valueConnections.push(clauseBlock.valueConnection_);
+                    break;
+
+                default:
+                    throw "Unknown block type.";
+
+            }
+            clauseBlock = clauseBlock.nextConnection && 
+                clauseBlock.nextConnection.targetBlock();
+        }
+        this.updateShape_();
+    },
+
+    updateShape_: function(){
+        if(this.)
     }
 };
 
@@ -49,7 +125,7 @@ Blockly.Blocks['vpython_create_box']= {
         this.appendDummyInput()
             .appendField("Box");
         this.setColour(20);
-        this.setNextStatement(true, null);
+        this.setNextStatement(true);
         this.setTooltip('');
         this.setHelpUrl('http://www.example.com/');
     }

@@ -138,17 +138,17 @@ Blockly.Blocks['lists_create_with'] = {
    * @param {!Blockly.Block} containerBlock Root block in mutator.
    * @this Blockly.Block
    */
-  saveConnections: function(containerBlock) {
-    var itemBlock = containerBlock.getInputTargetBlock('STACK');
-    var i = 0;
-    while (itemBlock) {
-      var input = this.getInput('ADD' + i);
-      itemBlock.valueConnection_ = input && input.connection.targetConnection;
-      i++;
-      itemBlock = itemBlock.nextConnection &&
-          itemBlock.nextConnection.targetBlock();
-    }
-  },
+  // saveConnections: function(containerBlock) {
+  //   var itemBlock = containerBlock.getInputTargetBlock('STACK');
+  //   var i = 0;
+  //   while (itemBlock) {
+  //     var input = this.getInput('ADD' + i);
+  //     itemBlock.valueConnection_ = input && input.connection.targetConnection;
+  //     i++;
+  //     itemBlock = itemBlock.nextConnection &&
+  //         itemBlock.nextConnection.targetBlock();
+  //   }
+  // },
   /**
    * Modify this block to have the correct number of inputs.
    * @private

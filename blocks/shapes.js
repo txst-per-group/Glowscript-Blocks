@@ -290,37 +290,37 @@ Blockly.Blocks['vpython_box'] = {
         if(this.hasPos){
             //alert("updateShape_ has pos");
             this.appendValueInput("POS")
-                .setCheck(null)
+                .setCheck("Vector")
                 .appendField("Pos");
         }
 
         if(this.hasAxis){
             this.appendValueInput("AXIS")
-                .setCheck(null)
+                .setCheck("Vector")
                 .appendField("Axis");
         }
 
         if(this.hasLength){
             this.appendValueInput("LENGTH")
-                .setCheck(null)
+                .setCheck("Number")
                 .appendField("Length");
         }
 
         if(this.hasWidth){
             this.appendValueInput("WIDTH")
-                .setCheck(null)
+                .setCheck("Number")
                 .appendField("Width");
         }
 
         if(this.hasHeight){
             this.appendValueInput("HEIGHT")
-                .setCheck(null)
+                .setCheck("Number")
                 .appendField("Height");
         }
 
         if(this.hasUp){
             this.appendValueInput("UP")
-                .setCheck(null)
+                .setCheck("Vector")
                 .appendField("Up");
         }
 

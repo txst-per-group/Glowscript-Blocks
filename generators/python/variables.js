@@ -28,6 +28,18 @@ goog.provide('Blockly.Python.variables');
 
 goog.require('Blockly.Python');
 
+// new vpython object code
+
+Blockly.Python['set_attribute'] = function(block) {
+  var dropdown_attribute = block.getFieldValue('attribute');
+  var value_object = Blockly.Python.valueToCode(block, 'object', Blockly.Python.ORDER_ATOMIC);
+  var value_value = Blockly.Python.valueToCode(block, 'value', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = '...\n';
+  return code;
+};
+
+/////////////////
 
 Blockly.Python['variables_get'] = function(block) {
   // Variable getter.

@@ -4,12 +4,12 @@ goog.provide('Blockly.Python.vector');
 
 goog.require('Blockly.Python');
 
-Blockly.JavaScript['vector'] = function(block) {
-  var value_x = Blockly.JavaScript.valueToCode(block, 'X', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_y = Blockly.JavaScript.valueToCode(block, 'Y', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_z = Blockly.JavaScript.valueToCode(block, 'Z', Blockly.JavaScript.ORDER_ATOMIC);
-  // TODO: Assemble JavaScript into code variable.
+Blockly.Python['vector'] = function(block) {
+  var value_x = Blockly.Python.valueToCode(block, 'X', Blockly.Python.ORDER_ATOMIC);
+  var value_y = Blockly.Python.valueToCode(block, 'Y', Blockly.Python.ORDER_ATOMIC);
+  var value_z = Blockly.Python.valueToCode(block, 'Z', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
   var code = 'Vector(' + value_x + ', ' + value_y + ', ' + value_z + ')';
   // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };

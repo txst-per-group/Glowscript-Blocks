@@ -34,6 +34,28 @@ goog.require('Blockly.Blocks');
  */
 Blockly.Blocks.variables.HUE = 330;
 
+// VPYTHON object setting code 
+Blockly.Blocks['set_attribute'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Attribute")
+        .appendField(new Blockly.FieldDropdown([["option", "OPTIONNAME"], ["option", "OPTIONNAME"], ["option", "OPTIONNAME"]]), "attribute");
+    this.appendValueInput("object")
+        .setCheck(["Box", "Sphere"])
+        .appendField("Object");
+    this.appendValueInput("value")
+        .setCheck(null)
+        .appendField("Value");
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Blocks.variables.HUE);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+/////////////////////////////////////////////
+
 Blockly.Blocks['variables_get'] = {
   /**
    * Block for variable getter.

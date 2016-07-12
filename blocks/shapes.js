@@ -1,13 +1,13 @@
 'use strict';
 
-goog.provide('Blockly.Blocks.vpython');
+goog.provide('Blockly.Blocks.shapes');
 
 goog.require('Blockly.Blocks');
 
 
 
 Blockly.Blocks['vpython_box'] = {
-  init: function() {
+  init: function(){
     this.appendDummyInput()
         .appendField("Box");
     this.setInputsInline(false);
@@ -17,17 +17,22 @@ Blockly.Blocks['vpython_box'] = {
     this.itemCount_ = 0;
     this.setHelpUrl('http://www.example.com/');
     this.setMutator(new Blockly.Mutator(['box_pos',
-                                         'box_size',
+                                         'box_axis',
+                                         'box_length',
                                          'box_width',
                                          'box_height',
+                                         'box_up',
                                          'box_color']));
     this.hasPos = false;
-    this.hasSize = false;
+    this.hasAxis= false;
+    this.hasLength= false;
     this.hasWidth = false;
     this.hasHeight = false;
+    this.hasUp = false;
     this.hasColor = false;
     this.elementCount_ = 0;
     },
+
 
     mutationToDom: function(){
         if(!this.elementCount_){
@@ -38,14 +43,21 @@ Blockly.Blocks['vpython_box'] = {
         if(this.hasPos){
             container.setAttribute('pos', 1);
         }
-        if(this.hasSize){
-            container.setAttribute('size', 1);
+
+        if(this.hasAxis){
+            container.setAttribute('axis', 1);
+        }
+        if(this.hasLength){
+            container.setAttribute('length', 1);
         }
         if(this.hasWidth){
             container.setAttribute('width', 1);
         }
         if(this.hasHeight){
             container.setAttribute('height',1);
+        }
+        if(this.hasUp){
+            container.setAttribute('up', 1);
         }
         if(this.hasColor){
             container.setAttribute('color', 1);
@@ -57,9 +69,11 @@ Blockly.Blocks['vpython_box'] = {
     domToMutation: function(xmlElement){
 
         this.hasPos = parseInt(xmlElement.getAttribute('pos'), 10) || 0;
-        this.hasSize = parseInt(xmlElement.getAttribute('size'), 10) || 0;
+        this.hasAxis = parseInt(xmlElement.getAttribute('axis'), 10) || 0;
+        this.hasLength = parseInt(xmlElement.getAttribute('length'), 10) || 0;
         this.hasWidth = parseInt(xmlElement.getAttribute('width'), 10) || 0;
         this.hasHeight = parseInt(xmlElement.getAttribute('height'), 10) || 0;
+        this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
         this.elementCount_ = parseInt(xmlElement.getAttribute('elementCount'), 10) || 0;
         this.updateShape_();
@@ -78,11 +92,18 @@ Blockly.Blocks['vpython_box'] = {
             connection = posBlock.nextConnection;
         }
 
-        if(this.hasSize){
-            var sizeBlock = workspace.newBlock('box_size');
-            sizeBlock.initSvg();
-            connection.connect(sizeBlock.previousConnection);
-            connection = sizeBlock.nextConnection;
+        if(this.hasAxis){
+            var axisBlock = workspace.newBlock('box_axis')
+            axisBlock.initSvg();
+            connection.connect(axisBlock.previousConnection);
+            connection = axisBlock.nextConnection;
+
+        }
+        if(this.hasLength){
+            var lengthBlock = workspace.newBlock('box_length');
+            lengthBlock.initSvg();
+            connection.connect(lengthBlock.previousConnection);
+            connection = lengthBlock.nextConnection;
         }
 
 
@@ -97,6 +118,13 @@ Blockly.Blocks['vpython_box'] = {
         if(this.hasHeight){
             var heightBlock = workspace.newBlock('box_height');
             heightBlock.initSvg();
+            connection.connect(heightBlock.previousConnection);
+            connection = heightBlock.nextConnection;
+        }
+
+        if(this.hasUp){
+            var upBlock = workspace.newBlock('box_up');
+            upBlock.initSvg();
             connection.connect(heightBlock.previousConnection);
             connection = heightBlock.nextConnection;
         }
@@ -116,9 +144,11 @@ Blockly.Blocks['vpython_box'] = {
         var clauseBlock = containerBlock.nextConnection.targetBlock();
         
         this.hasPos = false;
-        this.hasSize = false;
+        this.hasAxis = false;
+        this.hasLength = false;
         this.hasWidth = false;
         this.hasHeight = false;
+        this.hasUp = false;
         this.hasColor = false;
         this.elementCount_ = 0;
         //alert("compose");
@@ -134,10 +164,15 @@ Blockly.Blocks['vpython_box'] = {
                     this.elementCount_++;
                     valueConnections.push(['box_pos', clauseBlock.valueConnection_]);
                     break;
-                case 'box_size':
-                    this.hasSize = true;
+                case 'box_axis':
+                    this.hasAxis = true;
                     this.elementCount_++;
-                    valueConnections.push(['box_size', clauseBlock.valueConnection_]);
+                    valueConnections.push(['box_axis', clauseBlock.valueConnections_]);
+                    break;
+                case 'box_length':
+                    this.hasLength = true;
+                    this.elementCount_++;
+                    valueConnections.push(['box_length', clauseBlock.valueConnection_]);
                     break;
                 case 'box_width':
                     this.hasWidth = true;
@@ -149,6 +184,11 @@ Blockly.Blocks['vpython_box'] = {
                     this.elementCount_++;
                     valueConnections.push(['box_height', clauseBlock.valueConnection_]);
                     break; 
+                case 'box_up':
+                    this.hasUp = true;
+                    this.elementCount_++;
+                    valueConnections.push(['box_up', clauseBlock.valueConnection_]);
+                    break;
                 case 'box_color':
                     this.hasColor = true;
                     this.elementCount_++;
@@ -163,14 +203,14 @@ Blockly.Blocks['vpython_box'] = {
             i++;
             
         }
-        if(valueConnections[0])
-            //alert(valueConnections[0]);
+        
         this.updateShape_();
-        // for(var i = 0; i <= this.elementCount_ - 1; i++){
-        //     Blockly.Mutator.reconnect(valueConnections[i][1], 
-        //                               this, 
-        //                               valueConnections[i][0]);
-        // }
+
+        /*for(var i = 0; i <= this.elementCount_ - 1; i++){
+            Blockly.Mutator.reconnect(valueConnections[i][1], 
+                                      this, 
+                                      valueConnections[i][0]);
+        }*/
 
     },
 
@@ -185,10 +225,14 @@ Blockly.Blocks['vpython_box'] = {
                     var inputPos = this.getInput('POS');
                     clauseBlock.valueConnection_ = inputPos && inputPos.connection.targetConnection;
                     break;
-                case 'box_size':
+                case 'box_axis':
+                    var inputAxis = this.getInput('AXIS');
+                    clauseBlock.valueConnection_ = inputAxis && inputAxis.connection.targetConnection;
+                    break;
+                case 'box_length':
                     //alert("saveConnections clauseBlock box_size");
-                    var inputSize = this.getInput('SIZE');
-                    clauseBlock.valueConnection_ = inputSize && inputSize.connection.targetConnection;
+                    var inputLength = this.getInput('LENGTH');
+                    clauseBlock.valueConnection_ = inputLength && inputLength.connection.targetConnection;
                     break;
                 case 'box_width':
                     var inputWidth = this.getInput('WIDTH');
@@ -197,6 +241,10 @@ Blockly.Blocks['vpython_box'] = {
                 case 'box_height':
                     var inputHeight = this.getInput('HEIGHT');
                     clauseBlock.valueConnection_ = inputHeight && inputHeight.connection.targetConnection;
+                    break;
+                case 'box_up':
+                    var inputUp = this.getInput('UP');
+                    clauseBlock.valueConnection_ = inputUp && inputUp.connection.targetConnection;
                     break;
                 case 'box_color':
                     var inputColor = this.getInput('COLOR');
@@ -219,8 +267,11 @@ Blockly.Blocks['vpython_box'] = {
         if(this.getInput('POS')){
             this.removeInput('POS');
         }
-        if(this.getInput('SIZE')){
-            this.removeInput('SIZE');
+        if(this.getInput('AXIS')){
+            this.removeInput('AXIS');
+        }
+        if(this.getInput('LENGTH')){
+            this.removeInput('LENGTH');
         }
 
         if(this.getInput('WIDTH')){
@@ -228,6 +279,9 @@ Blockly.Blocks['vpython_box'] = {
         }
         if(this.getInput('HEIGHT')){
             this.removeInput('HEIGHT');
+        }
+        if(this.getInput('UP')){
+            this.removeInput('UP');
         }
         if(this.getInput('COLOR')){
             this.removeInput('COLOR');
@@ -240,10 +294,16 @@ Blockly.Blocks['vpython_box'] = {
                 .appendField("Pos");
         }
 
-        if(this.hasSize){
-            this.appendValueInput("SIZE")
+        if(this.hasAxis){
+            this.appendValueInput("AXIS")
                 .setCheck(null)
-                .appendField("Size");
+                .appendField("Axis");
+        }
+
+        if(this.hasLength){
+            this.appendValueInput("LENGTH")
+                .setCheck(null)
+                .appendField("Length");
         }
 
         if(this.hasWidth){
@@ -256,6 +316,12 @@ Blockly.Blocks['vpython_box'] = {
             this.appendValueInput("HEIGHT")
                 .setCheck(null)
                 .appendField("Height");
+        }
+
+        if(this.hasUp){
+            this.appendValueInput("UP")
+                .setCheck(null)
+                .appendField("Up");
         }
 
         if(this.hasColor){
@@ -289,10 +355,21 @@ Blockly.Blocks['box_pos']= {
     }
 };
 
-Blockly.Blocks['box_size']= {
+Blockly.Blocks['box_axis']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Size");
+            .appendField("Axis");
+        this.setColour(20);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setTooltip('');
+        this.setHelpUrl('http://www.example.com/');
+    }
+};
+Blockly.Blocks['box_length']= {
+    init: function(){
+        this.appendDummyInput()
+            .appendField("Length");
         this.setColour(20);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -317,6 +394,18 @@ Blockly.Blocks['box_height']= {
     init: function(){
         this.appendDummyInput()
             .appendField("Height");
+        this.setColour(20);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setTooltip('');
+        this.setHelpUrl('http://www.example.com/');
+    }
+};
+
+Blockly.Blocks['box_up']= {
+    init: function(){
+        this.appendDummyInput()
+            .appendField("Up");
         this.setColour(20);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);

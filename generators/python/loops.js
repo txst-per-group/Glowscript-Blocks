@@ -28,6 +28,13 @@ goog.provide('Blockly.Python.loops');
 
 goog.require('Blockly.Python');
 
+Blockly.Python['rate'] = function(block) {
+  var value_rate = Blockly.Python.valueToCode(block, 'rate', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = 'rate(' + value_rate + ' , wait)\n';
+  return code;
+};
+
 
 Blockly.Python['controls_repeat_ext'] = function(block) {
   // Repeat n times.

@@ -5,6 +5,56 @@ goog.provide('Blockly.Blocks.shapes');
 goog.require('Blockly.Blocks');
 
 
+Blockly.Blocks['set'] = {
+  init: function() {
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField("Set");
+    this.appendDummyInput()
+        .appendField("Object Type")
+        .appendField(new Blockly.FieldDropdown([["box", "box"], ["sphere", "sphere"], 
+                                                ["cylinder", "cylinder"]]), "OBJECT_TYPE")
+        .appendField("Attribute")
+        .appendField(new Blockly.FieldDropdown([["pos", "pos"], ["axis", "axis"], 
+                                                ["length", "length"], ["width", "width"], 
+                                                ["height", "height"], ["up", "up"], 
+                                                ["color", "color"]]), "ATTRIBUTE");
+    this.appendValueInput("OBJECT")
+        .setCheck(null)
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("Object");
+    this.appendValueInput("VALUE")
+        .setCheck(null)
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("Value");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+  
+ 
+Blockly.Blocks['get'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField("Get")
+        .appendField(new Blockly.FieldDropdown([["box", "BOX"], ["sphere", "SPHERE"], 
+                                                ["cylinder", "CYLINDER"]]), "OBJECT")
+
+        .appendField(new Blockly.FieldDropdown([["pos", "pos"], ["axis", "axis"], 
+                                                ["length", "length"], ["width", "width"], 
+                                                ["height", "height"], ["up", "up"], 
+                                                ["color", "color"]]), "VALUE");
+    this.setOutput(true, null);
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
 
 Blockly.Blocks['vpython_box'] = {
   init: function(){

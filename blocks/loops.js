@@ -34,6 +34,19 @@ goog.require('Blockly.Blocks');
  */
 Blockly.Blocks.loops.HUE = 120;
 
+Blockly.Blocks['rate'] = {
+  init: function() {
+    this.appendValueInput("rate")
+        .setCheck("Number")
+        .appendField("rate");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
 Blockly.Blocks['controls_repeat_ext'] = {
   /**
    * Block for repeat n times (external number).

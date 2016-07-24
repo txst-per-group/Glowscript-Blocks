@@ -5,6 +5,27 @@ goog.provide('Blockly.Python.shapes');
 goog.require('Blockly.Python');
 
 
+Blockly.Python['set'] = function(block) {
+  var dropdown_object_type = block.getFieldValue('OBJECT_TYPE');
+  var dropdown_attribute = block.getFieldValue('ATTRIBUTE');
+  var value_object = Blockly.Python.valueToCode(block, 'OBJECT', Blockly.Python.ORDER_ATOMIC);
+  var value_value = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = value_object + '.' + dropdown_attribute + ' = ' + value_value;
+  return code;
+};
+
+Blockly.Python['get'] = function(block) {
+  var dropdown_object = block.getFieldValue('OBJECT');
+  var dropdown_value = block.getFieldValue('VALUE');
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = value_name + '.' + dropdown_value;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+
+
 Blockly.Python['vpython_box'] = function(block) {
   
   var code = 'box('; 

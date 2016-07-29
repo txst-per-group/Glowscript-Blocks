@@ -115,6 +115,20 @@ Blockly.Python['vpython_box'] = function(block) {
     var B = hexToB(value_color);
 
     code = code + 'color=vector(' + R + ',' + G + ',' + B + ')'
+    previousArg = true;
+  }
+  if(block.hasTrail){
+
+    if(previousArg)
+      code = code + ', ';
+  
+
+
+  var value_trail = Blockly.Python.valueToCode(block,
+                                                'TRAIL',
+                                                Blockly.Python.ORDER_ATOMIC);
+
+  code = code + 'make_trail=' + value_trail;
   }
   //var value_color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_ATOMIC);
   // TODO: Assemble Python into code variable.

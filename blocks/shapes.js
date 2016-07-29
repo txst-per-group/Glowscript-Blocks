@@ -19,7 +19,12 @@ var cylinderDropDown = [["cylinderTest", "cylinderTest"]];
 
 var sphereDropDown = [["sphereTest", "sphereTest"]];
 
+///////////////////////////////////////////////////////////////////////////////
 
+
+
+
+///////////////////////////////////////////////////////////////////////////////
 
 Blockly.Blocks['set'] = {
   init: function() {
@@ -152,6 +157,14 @@ Blockly.Blocks['get'] = {
   }
 };
 
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
 Blockly.Blocks['vpython_box'] = {
   init: function(){
     this.appendDummyInput()
@@ -168,7 +181,8 @@ Blockly.Blocks['vpython_box'] = {
                                          'width',
                                          'height',
                                          'up',
-                                         'color']));
+                                         'color',
+                                         'make_trail']));
     this.hasPos = false;
     this.hasAxis= false;
     this.hasLength= false;
@@ -176,6 +190,7 @@ Blockly.Blocks['vpython_box'] = {
     this.hasHeight = false;
     this.hasUp = false;
     this.hasColor = false;
+    this.hasTrail = false;
     this.elementCount_ = 0;
     },
 
@@ -208,6 +223,9 @@ Blockly.Blocks['vpython_box'] = {
         if(this.hasColor){
             container.setAttribute('color', 1);
         }
+        if(this.hasTrail){
+            container.setAttribute('make_trail', 1);
+        }
         container.setAttribute('elementCount', this.elementCount_)
         return container;
     },
@@ -221,6 +239,7 @@ Blockly.Blocks['vpython_box'] = {
         this.hasHeight = parseInt(xmlElement.getAttribute('height'), 10) || 0;
         this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
+        this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
         this.elementCount_ = parseInt(xmlElement.getAttribute('elementCount'), 10) || 0;
         this.updateShape_();
 
@@ -282,6 +301,13 @@ Blockly.Blocks['vpython_box'] = {
             connection = colorBlock.nextConnection;
         }
 
+        if(this.hasTrail){
+            var trailBlock = workspace.newBlock('make_trail');
+            trailBlock.initSvg();
+            connection.connect(trailBlock.previousConnection);
+            connection = trailBlock.nextConnection;
+        }
+
         return containerBlock;
     },
 
@@ -296,6 +322,7 @@ Blockly.Blocks['vpython_box'] = {
         this.hasHeight = false;
         this.hasUp = false;
         this.hasColor = false;
+        this.hasTrail = false;
         this.elementCount_ = 0;
         //alert("compose");
         var valueConnections = [];
@@ -339,6 +366,11 @@ Blockly.Blocks['vpython_box'] = {
                     this.hasColor = true;
                     this.elementCount_++;
                     valueConnections.push(['color', clauseBlock.valueConnection_]);
+                    break;
+                case 'make_trail':
+                    this.hasTrail = true;
+                    this.elementCount_++;
+                    valueConnections.push(['make_trail', clauseBlock.valueConnection_]);
                     break;
 
                 default:
@@ -396,6 +428,11 @@ Blockly.Blocks['vpython_box'] = {
                     var inputColor = this.getInput('COLOR');
                     clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
                     break;
+                case 'make_trail':
+                    var inputTrail = this.getInput('TRAIL');
+                    clauseBlock.valueConnection_ = inputTrail && inputTrail.connection.targetConnection;
+                    break;
+
                 default:
                     throw 'Unknown block type.';
 
@@ -431,6 +468,9 @@ Blockly.Blocks['vpython_box'] = {
         }
         if(this.getInput('COLOR')){
             this.removeInput('COLOR');
+        }
+        if(this.getInput('TRAIL')){
+            this.removeInput('TRAIL');
         }
 
         if(this.hasPos){
@@ -474,6 +514,12 @@ Blockly.Blocks['vpython_box'] = {
             this.appendValueInput("COLOR")
                 .setCheck(null)
                 .appendField("Color");
+        }
+
+        if(this.hasTrail){
+            this.appendValueInput("TRAIL")
+                .setCheck("Boolean")
+                .appendField("Make Trail");
         }
     }
 };
@@ -572,4 +618,38 @@ Blockly.Blocks['color']= {
     }
 };
 
+Blockly.Blocks['radius'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Radius");
+    this.setColour(20);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
 
+Blockly.Blocks['opacity'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Opacity");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['make_trail'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Make Trail");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};

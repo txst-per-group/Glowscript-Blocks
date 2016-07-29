@@ -4,6 +4,22 @@ goog.provide('Blockly.Blocks.shapes');
 
 goog.require('Blockly.Blocks');
 
+var objectDropDown = [["box", "box"], ["sphere", "sphere"],
+                      ["cylinder", "cylinder"], ["vector", "vector"]];
+
+var boxDropDown = [["pos", "pos"], ["axis", "axis"],
+                   ["length", "length"], ["width", "width"],
+                   ["height", "height"], ["up", "up"],
+                   ["color","color"]];
+
+var vectorDropDown = [["x", "x"], ["y", "y"],
+                      ["z", "z"]];
+
+var cylinderDropDown = [["cylinderTest", "cylinderTest"]];
+
+var sphereDropDown = [["sphereTest", "sphereTest"]];
+
+
 
 Blockly.Blocks['set'] = {
   init: function() {
@@ -12,13 +28,9 @@ Blockly.Blocks['set'] = {
         .appendField("Set");
     this.appendDummyInput()
         .appendField("Object Type")
-        .appendField(new Blockly.FieldDropdown([["box", "box"], ["sphere", "sphere"], 
-                                                ["cylinder", "cylinder"]]), "OBJECT_TYPE")
+        .appendField(new Blockly.FieldDropdown(objectDropDown), "OBJECT_TYPE")
         .appendField("Attribute")
-        .appendField(new Blockly.FieldDropdown([["pos", "pos"], ["axis", "axis"], 
-                                                ["length", "length"], ["width", "width"], 
-                                                ["height", "height"], ["up", "up"], 
-                                                ["color", "color"]]), "ATTRIBUTE");
+        .appendField(new Blockly.FieldDropdown(boxDropDown), "ATTRIBUTE");
     this.appendValueInput("OBJECT")
         .setCheck(null)
         .setAlign(Blockly.ALIGN_RIGHT)
@@ -39,20 +51,60 @@ Blockly.Blocks['set'] = {
  
 Blockly.Blocks['get'] = {
   init: function() {
+    var thisBlock = this;
     this.appendValueInput("NAME")
         .setCheck(null)
         .appendField("Get")
-        .appendField(new Blockly.FieldDropdown([["box", "BOX"], ["sphere", "SPHERE"], 
-                                                ["cylinder", "CYLINDER"]]), "OBJECT")
+        .appendField(new Blockly.FieldDropdown(objectDropDown, function(selection){
+            thisBlock.updateShape_(selection);
+        }), "OBJECT")
 
-        .appendField(new Blockly.FieldDropdown([["pos", "pos"], ["axis", "axis"], 
-                                                ["length", "length"], ["width", "width"], 
-                                                ["height", "height"], ["up", "up"], 
-                                                ["color", "color"]]), "VALUE");
+        .appendField(new Blockly.FieldDropdown(boxDropDown), "VALUE");
     this.setOutput(true, null);
     this.setColour(20);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+    this.selected = '';
+  },
+
+  mutationToDom: function(){
+    var container = document.createElement('mutation');
+    this.selected = this.getFieldValue('OBJECT');
+    container.setAttribute('selected', this.selected);
+    return container;
+  },
+
+  domToMutation: function(xmlElement){
+    this.selected = xmlElement.getAttribute('selected');
+    //alert(selected);
+    this.updateShape_(this.selected);
+  },
+
+
+  updateShape_: function(selected){
+
+    var input = this.getInput('NAME');
+    input.removeField('VALUE');
+
+    switch(selected){
+
+        case 'box':
+            input.appendField(new Blockly.FieldDropdown(boxDropDown), "VALUE");
+            break;
+
+        case 'vector':
+            input.appendField(new Blockly.FieldDropdown(vectorDropDown), "VALUE");
+            break;
+
+        case 'cylinder':
+            input.appendField(new Blockly.FieldDropdown(cylinderDropDown), "VALUE");
+            break;
+
+        case 'sphere': 
+            input.appendField(new Blockly.FieldDropdown(sphereDropDown), "VALUE");
+            break;
+
+    }
   }
 };
 

@@ -11,7 +11,7 @@ Blockly.Python['set'] = function(block) {
   var value_object = Blockly.Python.valueToCode(block, 'OBJECT', Blockly.Python.ORDER_ATOMIC);
   var value_value = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_ATOMIC);
   // TODO: Assemble Python into code variable.
-  var code = value_object + '.' + dropdown_attribute + ' = ' + value_value;
+  var code = value_object + '.' + dropdown_attribute + ' = ' + value_value + '\n';
   return code;
 };
 

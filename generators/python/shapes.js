@@ -4,6 +4,11 @@ goog.provide('Blockly.Python.shapes');
 
 goog.require('Blockly.Python');
 
+function hexToR(h) {return parseInt((cutHex(h)).substring(0,2),16)}
+function hexToG(h) {return parseInt((cutHex(h)).substring(2,4),16)}
+function hexToB(h) {return parseInt((cutHex(h)).substring(4,6),16)}
+function cutHex(h) {return (h.charAt(0)=="#") ? h.substring(1,7):h}
+
 
 Blockly.Python['set'] = function(block) {
   var dropdown_object_type = block.getFieldValue('OBJECT_TYPE');
@@ -98,16 +103,24 @@ Blockly.Python['vpython_box'] = function(block) {
     if(previousArg)
         code = code + ', ';
 
+
+
     var value_color = Blockly.Python.valueToCode(block,
                                                  'COLOR',
                                                  Blockly.Python.ORDER_ATOMIC);
-    code = code + 'color=' + value_color
+
+    value_color = value_color.replace('\'', '');
+    var R = hexToR(value_color);
+    var G = hexToG(value_color);
+    var B = hexToB(value_color);
+
+    code = code + 'color=vector(' + R + ',' + G + ',' + B + ')'
   }
   //var value_color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_ATOMIC);
   // TODO: Assemble Python into code variable.
   // TODO: Change ORDER_NONE to the correct strength.
   //var code = 'Test';
-  code = code + ')';
+  code = code + ')\n';
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 

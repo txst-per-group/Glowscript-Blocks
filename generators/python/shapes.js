@@ -103,8 +103,6 @@ Blockly.Python['vpython_box'] = function(block) {
     if(previousArg)
         code = code + ', ';
 
-
-
     var value_color = Blockly.Python.valueToCode(block,
                                                  'COLOR',
                                                  Blockly.Python.ORDER_ATOMIC);
@@ -115,6 +113,18 @@ Blockly.Python['vpython_box'] = function(block) {
     var B = hexToB(value_color);
 
     code = code + 'color=vector(' + R + ',' + G + ',' + B + ')'
+    previousArg = true;
+  }
+  if(block.hasOpacity){
+
+    if(previousArg)
+        code = code + ', ';
+
+    var value_opacity = Blockly.Python.valueToCode(block,
+                                                  'OPACITY',
+                                                  Blockly.Python.ORDER_ATOMIC);
+
+    code = code + 'opacity=' + value_opacity;
     previousArg = true;
   }
   if(block.hasTrail){

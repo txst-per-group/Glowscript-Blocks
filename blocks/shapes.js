@@ -23,12 +23,15 @@ var sphereDropDown = [["sphereTest", "sphereTest"]];
 
 Blockly.Blocks['set'] = {
   init: function() {
+    var thisBlock = this;
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
         .appendField("Set");
-    this.appendDummyInput()
+    this.appendDummyInput("NAME")
         .appendField("Object Type")
-        .appendField(new Blockly.FieldDropdown(objectDropDown), "OBJECT_TYPE")
+        .appendField(new Blockly.FieldDropdown(objectDropDown, function(selected){
+            thisBlock.updateShape_(selected);
+        }), "OBJECT_TYPE")
         .appendField("Attribute")
         .appendField(new Blockly.FieldDropdown(boxDropDown), "ATTRIBUTE");
     this.appendValueInput("OBJECT")
@@ -44,7 +47,48 @@ Blockly.Blocks['set'] = {
     this.setColour(20);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
-  }
+    this.selected = '';
+  },
+
+  mutationToDom: function(){
+    var container = document.createElement('mutation');
+    this.selected = this.getFieldValue('OBJECT_TYPE');
+    container.setAttribute('selected', this.selected);
+    return container;
+  },
+
+  domToMutation: function(xmlElement){
+    this.selected = xmlElement.getAttribute('selected');
+    //alert(selected);
+    this.updateShape_(this.selected);
+  },
+
+
+  updateShape_: function(selected){
+
+    var input = this.getInput('NAME');
+    input.removeField('ATTRIBUTE');
+
+    switch(selected){
+
+        case 'box':
+            input.appendField(new Blockly.FieldDropdown(boxDropDown), "ATTRIBUTE");
+            break;
+
+        case 'vector':
+            input.appendField(new Blockly.FieldDropdown(vectorDropDown), "ATTRIBUTE");
+            break;
+
+        case 'cylinder':
+            input.appendField(new Blockly.FieldDropdown(cylinderDropDown), "ATTRIBUTE");
+            break;
+
+        case 'sphere': 
+            input.appendField(new Blockly.FieldDropdown(sphereDropDown), "ATTRIBUTE");
+            break;
+
+        }
+    }
 };
 
   

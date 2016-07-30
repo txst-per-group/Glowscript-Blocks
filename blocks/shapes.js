@@ -182,6 +182,7 @@ Blockly.Blocks['vpython_box'] = {
                                          'height',
                                          'up',
                                          'color',
+                                         'opacity',
                                          'make_trail']));
     this.hasPos = false;
     this.hasAxis= false;
@@ -190,6 +191,7 @@ Blockly.Blocks['vpython_box'] = {
     this.hasHeight = false;
     this.hasUp = false;
     this.hasColor = false;
+    this.hasOpacity = false;
     this.hasTrail = false;
     this.elementCount_ = 0;
     },
@@ -223,6 +225,9 @@ Blockly.Blocks['vpython_box'] = {
         if(this.hasColor){
             container.setAttribute('color', 1);
         }
+        if(this.hasOpacity){
+            container.setAttribute('opacity', 1);
+        }
         if(this.hasTrail){
             container.setAttribute('make_trail', 1);
         }
@@ -239,6 +244,7 @@ Blockly.Blocks['vpython_box'] = {
         this.hasHeight = parseInt(xmlElement.getAttribute('height'), 10) || 0;
         this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
+        this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
         this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
         this.elementCount_ = parseInt(xmlElement.getAttribute('elementCount'), 10) || 0;
         this.updateShape_();
@@ -301,6 +307,13 @@ Blockly.Blocks['vpython_box'] = {
             connection = colorBlock.nextConnection;
         }
 
+        if(this.hasOpacity){
+            var opacityBlock = workspace.newBlock('opacity');
+            opacityBlock.initSvg();
+            connection.connect(opacityBlock.previousConnection);
+            connection = opacityBlock.nextConnection;
+        }
+
         if(this.hasTrail){
             var trailBlock = workspace.newBlock('make_trail');
             trailBlock.initSvg();
@@ -322,6 +335,7 @@ Blockly.Blocks['vpython_box'] = {
         this.hasHeight = false;
         this.hasUp = false;
         this.hasColor = false;
+        this.hasOpacity = false;
         this.hasTrail = false;
         this.elementCount_ = 0;
         //alert("compose");
@@ -366,6 +380,11 @@ Blockly.Blocks['vpython_box'] = {
                     this.hasColor = true;
                     this.elementCount_++;
                     valueConnections.push(['color', clauseBlock.valueConnection_]);
+                    break;
+                case 'opacity':
+                    this.hasOpacity = true;
+                    this.elementCount_++;
+                    valueConnections.push(['opacity', clauseBlock.valueConnection_]);
                     break;
                 case 'make_trail':
                     this.hasTrail = true;
@@ -428,6 +447,10 @@ Blockly.Blocks['vpython_box'] = {
                     var inputColor = this.getInput('COLOR');
                     clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
                     break;
+                case 'opacity':
+                    var inputOpacity = this.getInput('OPACITY');
+                    clauseBlock.valueConnection_ = inputOpacity && inputOpacity.connection.targetConnection;
+                    break;
                 case 'make_trail':
                     var inputTrail = this.getInput('TRAIL');
                     clauseBlock.valueConnection_ = inputTrail && inputTrail.connection.targetConnection;
@@ -468,6 +491,9 @@ Blockly.Blocks['vpython_box'] = {
         }
         if(this.getInput('COLOR')){
             this.removeInput('COLOR');
+        }
+        if(this.getInput('OPACITY')){
+        	this.removeInput('OPACITY');
         }
         if(this.getInput('TRAIL')){
             this.removeInput('TRAIL');
@@ -516,6 +542,12 @@ Blockly.Blocks['vpython_box'] = {
                 .appendField("Color");
         }
 
+        if(this.hasOpacity){
+        	this.appendValueInput("OPACITY")
+        		.setCheck("Number")
+        		.appendField("Opacity");
+        }
+        
         if(this.hasTrail){
             this.appendValueInput("TRAIL")
                 .setCheck("Boolean")
@@ -523,6 +555,14 @@ Blockly.Blocks['vpython_box'] = {
         }
     }
 };
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 Blockly.Blocks['vpython_create_box']= {
     init: function(){
@@ -646,6 +686,30 @@ Blockly.Blocks['make_trail'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("Make Trail");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['radius'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Radius");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['opacity'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Opacity");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);

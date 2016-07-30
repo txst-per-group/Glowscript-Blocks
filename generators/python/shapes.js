@@ -114,7 +114,7 @@ Blockly.Python['vpython_box'] = function(block) {
     var G = hexToG(value_color);
     var B = hexToB(value_color);
 
-    code = code + 'color=vector(' + R + ',' + G + ',' + B + ')'
+    code = code + 'color=vector(' + R + '/255 ,' + G + '/255 ,' + B + '/255)'
     previousArg = true;
   }
   if(block.hasTrail){

@@ -298,8 +298,8 @@ Blockly.Blocks['vpython_box'] = {
         if(this.hasUp){
             var upBlock = workspace.newBlock('up');
             upBlock.initSvg();
-            connection.connect(heightBlock.previousConnection);
-            connection = heightBlock.nextConnection;
+            connection.connect(upBlock.previousConnection);
+            connection = upBlock.nextConnection;
         }
 
         if(this.hasColor){

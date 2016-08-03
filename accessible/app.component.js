@@ -25,9 +25,6 @@
 
 blocklyApp.workspace = new Blockly.Workspace();
 
-// If the debug flag is true, print console.logs to help with debugging.
-blocklyApp.debug = false;
-
 blocklyApp.AppView = ng.core
   .Component({
     selector: 'blockly-app',
@@ -55,11 +52,13 @@ blocklyApp.AppView = ng.core
     `,
     directives: [blocklyApp.ToolboxComponent, blocklyApp.WorkspaceComponent],
     pipes: [blocklyApp.TranslatePipe],
-    // The clipboard and utils services are declared here, so that all
+    // The clipboard, tree and utils services are declared here, so that all
     // components in the application use the same instance of the service.
     // https://www.sitepoint.com/angular-2-components-providers-classes-factories-values/
-    providers: [blocklyApp.ClipboardService, blocklyApp.UtilsService]
+    providers: [
+        blocklyApp.ClipboardService, blocklyApp.TreeService,
+        blocklyApp.UtilsService]
   })
   .Class({
-    constructor: function() {}
+    constructor: [function() {}]
   });

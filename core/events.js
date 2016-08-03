@@ -303,8 +303,10 @@ Blockly.Events.Abstract = function(block) {
 Blockly.Events.Abstract.prototype.toJson = function() {
   var json = {
     'type': this.type,
-    'blockId': this.blockId
   };
+  if (this.blockId) {
+    json['blockId'] = this.blockId;
+  }
   if (this.group) {
     json['group'] = this.group;
   }
@@ -550,6 +552,9 @@ Blockly.Events.Change.prototype.run = function(forward) {
     case 'field':
       var field = block.getField(this.name);
       if (field) {
+        // Run the validator for any side-effects it may have.
+        // The validator's opinion on validity is ignored.
+        field.callValidator(value);
         field.setValue(value);
       } else {
         console.warn("Can't set non-existant field: " + this.name);
@@ -779,4 +784,35 @@ Blockly.Events.Ui.prototype.fromJson = function(json) {
   Blockly.Events.Ui.superClass_.fromJson.call(this, json);
   this.element = json['element'];
   this.newValue = json['newValue'];
+};
+
+/**
+ * Enable/disable a block depending on whether it is properly connected.
+ * Use this on applications where all blocks should be connected to a top block.
+ * Recommend setting the 'disable' option to 'false' in the config so that
+ * users don't try to reenable disabled orphan blocks.
+ * @param {!Blockly.Events.Abstract} event Custom data for event.
+ */
+Blockly.Events.disableOrphans = function(event) {
+  if (event.type == Blockly.Events.MOVE ||
+      event.type == Blockly.Events.CREATE) {
+    Blockly.Events.disable();
+    var workspace = Blockly.Workspace.getById(event.workspaceId);
+    var block = workspace.getBlockById(event.blockId);
+    if (block) {
+      if (block.getParent() && !block.getParent().disabled) {
+        var children = block.getDescendants();
+        for (var i = 0, child; child = children[i]; i++) {
+          child.setDisabled(false);
+        }
+      } else if ((block.outputConnection || block.previousConnection) &&
+                 Blockly.dragMode_ == Blockly.DRAG_NONE) {
+        do {
+          block.setDisabled(true);
+          block = block.getNextBlock();
+        } while (block);
+      }
+    }
+    Blockly.Events.enable();
+  }
 };

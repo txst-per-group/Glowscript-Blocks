@@ -17,7 +17,11 @@ var vectorDropDown = [["x", "x"], ["y", "y"],
 
 var cylinderDropDown = [["cylinderTest", "cylinderTest"]];
 
-var sphereDropDown = [["sphereTest", "sphereTest"]];
+var sphereDropDown = [["pos", "pos"], ["axis", "axis"], 
+                      ["radius", "radius"], ["up", "up"],
+                      ["color", "color"], ["opacity", "opacity"],
+                      ["trail", "trail"], ["retain", "retain"]
+                      ];
 
 ///////////////////////////////////////////////////////////////////////////////
 

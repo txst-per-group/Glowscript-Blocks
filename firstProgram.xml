@@ -39,42 +39,29 @@ object variables
                     <field name="VAR">testBox</field>
                     <value name="VALUE">
                       <block type="vpython_box" id="(iFDZEY+D8-/m*5EuJ?f">
+                        <mutation pos="1" length="1" width="1" height="1" color="1" elementcount="5"></mutation>
                         <value name="POS">
-                          <block type="vector" id="mt1n,qz_BG/P]DUKb?/t">
-                            <value name="X">
-                              <block type="math_number" id="H?Wb.?Wi?@(8f]Ck~eFW">
-                                <field name="NUM">0</field>
-                              </block>
-                            </value>
-                            <value name="Y">
-                              <block type="variables_get" id="5k5*`7#[gPM?/vYTJ@|E">
-                                <field name="VAR">startingHeight</field>
-                              </block>
-                            </value>
-                            <value name="Z">
-                              <block type="math_number" id="IJZvS5zrdd-!mNY;CzsI">
-                                <field name="NUM">0</field>
-                              </block>
-                            </value>
+                          <block type="variables_get" id="n.9VF{~rtQ4uY,FK5HXi">
+                            <field name="VAR">startingHeight</field>
                           </block>
                         </value>
                         <value name="LENGTH">
-                          <block type="variables_get" id="JVfphpZ0D:Sv*l/1n?hG">
+                          <block type="variables_get" id="p1G%QH`OOK:fTs)%c|jP">
                             <field name="VAR">boxSize</field>
                           </block>
                         </value>
                         <value name="WIDTH">
-                          <block type="variables_get" id="A*:B:s`_+2z]B}YMY:5k">
+                          <block type="variables_get" id="-hCE|NUIByH0;9ko^nw,">
                             <field name="VAR">boxSize</field>
                           </block>
                         </value>
                         <value name="HEIGHT">
-                          <block type="variables_get" id="{D-M%BUE=Dd[x]mvau~F">
+                          <block type="variables_get" id="fjNjP}]dC(I3?GB;%%vp">
                             <field name="VAR">boxSize</field>
                           </block>
                         </value>
                         <value name="COLOR">
-                          <block type="colour_picker" id="?*s^Y*T2FCZcUyu6EW.,">
+                          <block type="colour_picker" id="pcLN!Z?{N#9`l@GNx0F4">
                             <field name="COLOUR">#ff0000</field>
                           </block>
                         </value>
@@ -85,23 +72,24 @@ object variables
                         <field name="VAR">floor</field>
                         <value name="VALUE">
                           <block type="vpython_box" id="Yt/4;e:=GRh1ez5XGKA{">
+                            <mutation length="1" width="1" height="1" color="1" elementcount="4"></mutation>
                             <value name="LENGTH">
-                              <block type="variables_get" id="/Zt08cyr;?wTWc]gS84F">
+                              <block type="variables_get" id="N:Lq3J#gIjwb^C;3W;nL">
                                 <field name="VAR">floorSize</field>
                               </block>
                             </value>
                             <value name="WIDTH">
-                              <block type="variables_get" id="{TmEx^ti392]3{r*m}!3">
+                              <block type="variables_get" id="w@ctLet7;-6i{)P~YpAw">
                                 <field name="VAR">floorSize</field>
                               </block>
                             </value>
                             <value name="HEIGHT">
-                              <block type="variables_get" id="th[A+xgF%t=+A{@/]a91">
+                              <block type="variables_get" id="myQJRZyRdk]-ru;kM-%H">
                                 <field name="VAR">floorHeight</field>
                               </block>
                             </value>
                             <value name="COLOR">
-                              <block type="colour_picker" id=".{=Iku?r7x,_LSHGD[sP">
+                              <block type="colour_picker" id="-Fn5a]Ok~J%nla{-9*!`">
                                 <field name="COLOUR">#3333ff</field>
                               </block>
                             </value>
@@ -366,4 +354,5 @@ Main Simulation Loop
       </block>
     </next>
   </block>
+  <block type="vpython_sphere" id="%e]VeN[JtnlxBq#BGE:@" x="113" y="63"></block>
 </xml>

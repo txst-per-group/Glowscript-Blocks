@@ -179,18 +179,14 @@ Blockly.Blocks['vpython_box'] = {
     this.setHelpUrl('http://www.example.com/');
     this.setMutator(new Blockly.Mutator(['pos',
                                          'axis',
-                                         'length',
-                                         'width',
-                                         'height',
+                                         'size',
                                          'up',
                                          'color',
                                          'opacity',
                                          'make_trail']));
     this.hasPos = false;
     this.hasAxis= false;
-    this.hasLength= false;
-    this.hasWidth = false;
-    this.hasHeight = false;
+    this.hasSize= false;
     this.hasUp = false;
     this.hasColor = false;
     this.hasOpacity = false;
@@ -208,18 +204,11 @@ Blockly.Blocks['vpython_box'] = {
         if(this.hasPos){
             container.setAttribute('pos', 1);
         }
-
         if(this.hasAxis){
             container.setAttribute('axis', 1);
         }
-        if(this.hasLength){
-            container.setAttribute('length', 1);
-        }
-        if(this.hasWidth){
-            container.setAttribute('width', 1);
-        }
-        if(this.hasHeight){
-            container.setAttribute('height',1);
+        if(this.hasSize){
+            container.setAttribute('size', 1);
         }
         if(this.hasUp){
             container.setAttribute('up', 1);
@@ -241,9 +230,7 @@ Blockly.Blocks['vpython_box'] = {
 
         this.hasPos = parseInt(xmlElement.getAttribute('pos'), 10) || 0;
         this.hasAxis = parseInt(xmlElement.getAttribute('axis'), 10) || 0;
-        this.hasLength = parseInt(xmlElement.getAttribute('length'), 10) || 0;
-        this.hasWidth = parseInt(xmlElement.getAttribute('width'), 10) || 0;
-        this.hasHeight = parseInt(xmlElement.getAttribute('height'), 10) || 0;
+        this.hasSize = parseInt(xmlElement.getAttribute('size'), 10) || 0;
         this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
         this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
@@ -272,27 +259,11 @@ Blockly.Blocks['vpython_box'] = {
             connection = axisBlock.nextConnection;
 
         }
-        if(this.hasLength){
-            var lengthBlock = workspace.newBlock('length');
-            lengthBlock.initSvg();
-            connection.connect(lengthBlock.previousConnection);
-            connection = lengthBlock.nextConnection;
-        }
-
-
-        if(this.hasWidth){
-            var widthBlock = workspace.newBlock('width');
-            widthBlock.initSvg();
-            connection.connect(widthBlock.previousConnection);
-            connection = widthBlock.nextConnection;
-        }
-
-
-        if(this.hasHeight){
-            var heightBlock = workspace.newBlock('height');
-            heightBlock.initSvg();
-            connection.connect(heightBlock.previousConnection);
-            connection = heightBlock.nextConnection;
+        if(this.hasSize){
+            var sizeBlock = workspace.newBlock('size');
+            sizeBlock.initSvg();
+            connection.connect(sizeBlock.previousConnection);
+            connection = sizeBlock.nextConnection;
         }
 
         if(this.hasUp){
@@ -332,9 +303,7 @@ Blockly.Blocks['vpython_box'] = {
         
         this.hasPos = false;
         this.hasAxis = false;
-        this.hasLength = false;
-        this.hasWidth = false;
-        this.hasHeight = false;
+        this.hasSize = false;
         this.hasUp = false;
         this.hasColor = false;
         this.hasOpacity = false;
@@ -358,21 +327,11 @@ Blockly.Blocks['vpython_box'] = {
                     this.elementCount_++;
                     valueConnections.push(['axis', clauseBlock.valueConnections_]);
                     break;
-                case 'length':
-                    this.hasLength = true;
+                case 'size':
+                    this.hasSize = true;
                     this.elementCount_++;
-                    valueConnections.push(['length', clauseBlock.valueConnection_]);
+                    valueConnections.push(['size', clauseBlock.valueConnection_]);
                     break;
-                case 'width':
-                    this.hasWidth = true;
-                    this.elementCount_++;
-                    valueConnections.push(['width', clauseBlock.valueConnection_]);
-                    break;
-                case 'height':
-                    this.hasHeight = true;
-                    this.elementCount_++;
-                    valueConnections.push(['height', clauseBlock.valueConnection_]);
-                    break; 
                 case 'up':
                     this.hasUp = true;
                     this.elementCount_++;
@@ -428,18 +387,10 @@ Blockly.Blocks['vpython_box'] = {
                     var inputAxis = this.getInput('AXIS');
                     clauseBlock.valueConnection_ = inputAxis && inputAxis.connection.targetConnection;
                     break;
-                case 'length':
+                case 'size':
                     //alert("saveConnections clauseBlock box_size");
-                    var inputLength = this.getInput('LENGTH');
-                    clauseBlock.valueConnection_ = inputLength && inputLength.connection.targetConnection;
-                    break;
-                case 'width':
-                    var inputWidth = this.getInput('WIDTH');
-                    clauseBlock.valueConnection_ = inputWidth && inputWidth.connection.targetConnection;
-                    break;
-                case 'height':
-                    var inputHeight = this.getInput('HEIGHT');
-                    clauseBlock.valueConnection_ = inputHeight && inputHeight.connection.targetConnection;
+                    var inputSize = this.getInput('SIZE');
+                    clauseBlock.valueConnection_ = inputSize && inputSize.connection.targetConnection;
                     break;
                 case 'up':
                     var inputUp = this.getInput('UP');
@@ -478,17 +429,10 @@ Blockly.Blocks['vpython_box'] = {
         if(this.getInput('AXIS')){
             this.removeInput('AXIS');
         }
-        if(this.getInput('LENGTH')){
-            this.removeInput('LENGTH');
+        if(this.getInput('SIZE')){
+            this.removeInput('SIZE');
         }
-
-        if(this.getInput('WIDTH')){
-            this.removeInput('WIDTH');
-        }
-        if(this.getInput('HEIGHT')){
-            this.removeInput('HEIGHT');
-        }
-        if(this.getInput('UP')){
+       if(this.getInput('UP')){
             this.removeInput('UP');
         }
         if(this.getInput('COLOR')){
@@ -499,6 +443,7 @@ Blockly.Blocks['vpython_box'] = {
         }
         if(this.getInput('TRAIL')){
             this.removeInput('TRAIL');
+            this.removeInput('RETAIN_INPUT');
         }
 
         if(this.hasPos){
@@ -514,22 +459,10 @@ Blockly.Blocks['vpython_box'] = {
                 .appendField("Axis");
         }
 
-        if(this.hasLength){
-            this.appendValueInput("LENGTH")
-                .setCheck("Number")
-                .appendField("Length");
-        }
-
-        if(this.hasWidth){
-            this.appendValueInput("WIDTH")
-                .setCheck("Number")
-                .appendField("Width");
-        }
-
-        if(this.hasHeight){
-            this.appendValueInput("HEIGHT")
-                .setCheck("Number")
-                .appendField("Height");
+        if(this.hasSize){
+            this.appendValueInput("SIZE")
+                .setCheck("Vector")
+                .appendField("Size");
         }
 
         if(this.hasUp){
@@ -554,6 +487,9 @@ Blockly.Blocks['vpython_box'] = {
             this.appendValueInput("TRAIL")
                 .setCheck("Boolean")
                 .appendField("Make Trail");
+            this.appendDummyInput("RETAIN_INPUT")
+                .appendField("Retain")
+                .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
         }
     }
 };
@@ -562,7 +498,7 @@ Blockly.Blocks['vpython_box'] = {
 Blockly.Blocks['vpython_sphere'] = {
   init: function(){
     this.appendDummyInput()
-        .appendField("Ball");
+        .appendField("Sphere");
     this.setInputsInline(false);
     this.setOutput(true, null);
     this.setColour(20);
@@ -572,6 +508,7 @@ Blockly.Blocks['vpython_sphere'] = {
     this.setMutator(new Blockly.Mutator(['pos',
                                          'axis',
                                          'radius',
+                                         'size',
                                          'up',
                                          'color',
                                          'opacity',
@@ -579,6 +516,7 @@ Blockly.Blocks['vpython_sphere'] = {
     this.hasPos = false;
     this.hasAxis = false;
     this.hasRadius = false;
+    this.hasSize = false;
     this.hasUp = false;
     this.hasColor = false;
     this.hasOpacity = false;
@@ -596,12 +534,14 @@ Blockly.Blocks['vpython_sphere'] = {
         if(this.hasPos){
             container.setAttribute('pos', 1);
         }
-
         if(this.hasAxis){
             container.setAttribute('axis', 1);
         }
         if(this.hasRadius){
-            container.setAttribute('axis', 1);
+            container.setAttribute('radius', 1);
+        }
+        if(this.hasSize){
+            container.setAttribute('size', 1);
         }
         if(this.hasUp){
             container.setAttribute('up', 1);
@@ -623,7 +563,8 @@ Blockly.Blocks['vpython_sphere'] = {
 
         this.hasPos = parseInt(xmlElement.getAttribute('pos'), 10) || 0;
         this.hasAxis = parseInt(xmlElement.getAttribute('axis'), 10) || 0;
-        this.hasRadius = parseInt(xmlElement.getAttribute('length'), 10) || 0;
+        this.hasRadius = parseInt(xmlElement.getAttribute('radius'), 10) || 0;
+        this.hasSize = parseInt(xmlElement.getAttribute('size'), 10) || 0;
         this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
         this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
@@ -652,11 +593,19 @@ Blockly.Blocks['vpython_sphere'] = {
             connection = axisBlock.nextConnection;
 
         }
+
         if(this.hasRadius){
             var radiusBlock = workspace.newBlock('radius');
             radiusBlock.initSvg();
             connection.connect(radiusBlock.previousConnection);
             connection = radiusBlock.nextConnection;
+        }
+
+        if(this.hasSize){
+            var sizeBlock = workspace.newBlock('size');
+            sizeBlock.initSvg();
+            connection.connect(sizeBlock.previousConnection);
+            connection = sizeBlock.nextConnection;
         }
 
         if(this.hasUp){
@@ -697,6 +646,7 @@ Blockly.Blocks['vpython_sphere'] = {
         this.hasPos = false;
         this.hasAxis = false;
         this.hasRadius = false;
+        this.hasSize = false;
         this.hasUp = false;
         this.hasColor = false;
         this.hasOpacity = false;
@@ -724,6 +674,11 @@ Blockly.Blocks['vpython_sphere'] = {
                     this.hasRadius = true;
                     this.elementCount_++;
                     valueConnections.push(['radius', clauseBlock.valueConnection_]);
+                    break; 
+                case 'size':
+                    this.hasSize = true;
+                    this.elementCount_++;
+                    valueConnections.push(['size', clauseBlock.valueConnection_]);
                     break; 
                 case 'up':
                     this.hasUp = true;
@@ -785,6 +740,10 @@ Blockly.Blocks['vpython_sphere'] = {
                     var inputRadius = this.getInput('RADIUS');
                     clauseBlock.valueConnection_ = inputRadius && inputRadius.connection.targetConnection;
                     break;
+                case 'size':
+                    var inputSize = this.getInput('SIZE');
+                    clauseBlock.valueConnection_ = inputSize && inputSize.connection.targetConnection;
+                    break;
                 case 'up':
                     var inputUp = this.getInput('UP');
                     clauseBlock.valueConnection_ = inputUp && inputUp.connection.targetConnection;
@@ -825,6 +784,9 @@ Blockly.Blocks['vpython_sphere'] = {
         if(this.getInput('RADIUS')){
             this.removeInput('RADIUS');
         }
+        if(this.getInput('SIZE')){
+            this.removeInput('SIZE');
+        }
         if(this.getInput('UP')){
             this.removeInput('UP');
         }
@@ -836,6 +798,7 @@ Blockly.Blocks['vpython_sphere'] = {
         }
         if(this.getInput('TRAIL')){
             this.removeInput('TRAIL');
+            this.removeInput('RETAIN_INPUT');
         }
 
         if(this.hasPos){
@@ -854,6 +817,12 @@ Blockly.Blocks['vpython_sphere'] = {
             this.appendValueInput("RADIUS")
                 .setCheck("Number")
                 .appendField("Radius");
+        }
+
+        if(this.hasSize){
+            this.appendValueInput("SIZE")
+                .setCheck("Vector")
+                .appendField("Size");
         }
 
         if(this.hasUp){
@@ -878,6 +847,9 @@ Blockly.Blocks['vpython_sphere'] = {
             this.appendValueInput("TRAIL")
                 .setCheck("Boolean")
                 .appendField("Make Trail");
+            this.appendDummyInput("RETAIN_INPUT")
+                .appendField("Retain")
+                .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
         }
     }
 };
@@ -937,34 +909,11 @@ Blockly.Blocks['axis']= {
         this.setHelpUrl('http://www.example.com/');
     }
 };
-Blockly.Blocks['length']= {
-    init: function(){
-        this.appendDummyInput()
-            .appendField("Length");
-        this.setColour(20);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setTooltip('');
-        this.setHelpUrl('http://www.example.com/');
-    }
-};
 
-Blockly.Blocks['width']= {
+Blockly.Blocks['size']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Width");
-        this.setColour(20);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setTooltip('');
-        this.setHelpUrl('http://www.example.com/');
-    }
-};
-
-Blockly.Blocks['height']= {
-    init: function(){
-        this.appendDummyInput()
-            .appendField("Height");
+            .appendField("Size");
         this.setColour(20);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);

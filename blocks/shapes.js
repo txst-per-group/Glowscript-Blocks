@@ -8,9 +8,9 @@ var objectDropDown = [["box", "box"], ["sphere", "sphere"],
                       ["cylinder", "cylinder"], ["vector", "vector"]];
 
 var boxDropDown = [["pos", "pos"], ["axis", "axis"],
-                   ["length", "length"], ["width", "width"],
-                   ["height", "height"], ["up", "up"],
-                   ["color","color"]];
+                   ["size", "size"], ["up", "up"],
+                   ["color","color"],["trail", "trail"],
+                   ["retain", "retain"]];
 
 var vectorDropDown = [["x", "x"], ["y", "y"],
                       ["z", "z"]];

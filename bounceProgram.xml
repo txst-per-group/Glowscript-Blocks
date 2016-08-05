@@ -901,7 +901,7 @@
                                                     <field name="VAR">side</field>
                                                     <value name="VALUE">
                                                       <block type="math_arithmetic" id="8M.YSPn*X^JS+2!uhW(t">
-                                                        <field name="OP">ADD</field>
+                                                        <field name="OP">MINUS</field>
                                                         <value name="A">
                                                           <shadow type="math_number" id="t#[-K08G)B3|37.yb7.^">
                                                             <field name="NUM">1</field>

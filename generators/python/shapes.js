@@ -49,6 +49,123 @@ Blockly.Python['get'] = function(block) {
 ///////////////////////////////////////////////////////////////////////////////
 
 
+Blockly.Python['vpython_cylinder'] = function(block) {
+  
+  var code = 'cylinder('; 
+  var previousArg = false; 
+
+  if(block.hasPos){
+    var value_pos = Blockly.Python.valueToCode(block, 
+                                               'POS', 
+                                               Blockly.Python.ORDER_ATOMIC);
+    code = code + 'pos=' + value_pos;
+    previousArg = true;
+  }
+  if(block.hasAxis){
+
+    if(previousArg)
+        code = code + ', ';
+    
+    var value_axis = Blockly.Python.valueToCode(block,
+                                                'AXIS',
+                                                Blockly.Python.ORDER_ATOMIC);
+    code = code +'axis=' + value_axis;
+    previousArg = true;
+  }
+  if(block.hasRadius){
+
+    if(previousArg)
+        code = code + ', ';
+
+    var value_radius = Blockly.Python.valueToCode(block,
+                                                'RADIUS',
+                                                Blockly.Python.ORDER_ATOMIC);
+    code = code + 'radius=' + value_radius;
+    previousArg = true;
+  }
+  if(block.hasLength){
+
+    if(previousArg)
+        code = code + ', ';
+
+    var value_length = Blockly.Python.valueToCode(block,
+                                                'LENGTH',
+                                                Blockly.Python.ORDER_ATOMIC);
+    code = code + 'length=' + value_length;
+    previousArg = true;
+  }
+  if(block.hasSize){
+
+    if(previousArg)
+        code = code + ', ';
+
+    var value_size = Blockly.Python.valueToCode(block,
+                                                'SIZE',
+                                                Blockly.Python.ORDER_ATOMIC);
+    code = code + 'size=' + value_size;
+    previousArg = true;
+  }
+  if(block.hasUp){
+
+    if(previousArg)
+        code = code + ', ';
+
+    var value_up = Blockly.Python.valueToCode(block,
+                                              'UP',
+                                              Blockly.Python.ORDER_ATOMIC);
+    code = code +'up=' + value_up;
+    previousArg = true;
+  }
+  if(block.hasColor){
+
+    if(previousArg)
+        code = code + ', ';
+
+    var value_color = Blockly.Python.valueToCode(block,
+                                                 'COLOR',
+                                                 Blockly.Python.ORDER_ATOMIC);
+
+    value_color = value_color.replace('\'', '');
+    var R = hexToR(value_color);
+    var G = hexToG(value_color);
+    var B = hexToB(value_color);
+
+    code = code + 'color=vector(' + R + '/255 ,' + G + '/255 ,' + B + '/255)'
+    previousArg = true;
+  }
+  if(block.hasOpacity){
+
+    if(previousArg)
+        code = code + ', ';
+
+    var value_opacity = Blockly.Python.valueToCode(block,
+                                                  'OPACITY',
+                                                  Blockly.Python.ORDER_ATOMIC);
+
+    code = code + 'opacity=' + value_opacity;
+    previousArg = true;
+  }
+  if(block.hasTrail){
+
+    if(previousArg)
+      code = code + ', ';
+  
+
+
+  var value_trail = Blockly.Python.valueToCode(block,
+                                                'TRAIL',
+                                                Blockly.Python.ORDER_ATOMIC);
+  var value_retain = block.getFieldValue("RETAIN_VALUE");
+
+  code = code + 'make_trail=' + value_trail + ' ,retain=' + value_retain;
+  }
+
+  code = code + ')\n';
+  return [code, Blockly.Python.ORDER_ATOMIC];
+
+};
+
+
 Blockly.Python['vpython_sphere'] = function(block) {
   
   var code = 'sphere('; 

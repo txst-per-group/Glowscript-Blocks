@@ -12,8 +12,10 @@ var boxDropDown = [["pos", "pos"], ["axis", "axis"],
                    ["color","color"],["trail", "trail"],
                    ["retain", "retain"]];
 
-var vectorDropDown = [["x", "x"], ["y", "y"],
+var vectorDropDown = [["all", "all"],["x", "x"], ["y", "y"],
                       ["z", "z"]];
+
+var vectorList = ["pos", "axis", "up", "size"];
 
 var cylinderDropDown = [["pos", "pos"], ["axis", "axis"], 
                       ["radius", "radius"],["length", "length"],
@@ -41,17 +43,31 @@ Blockly.Blocks['set'] = {
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
         .appendField("Set");
+
     this.appendDummyInput("NAME")
-        .appendField("Object Type")
-        .appendField(new Blockly.FieldDropdown(objectDropDown, function(selected){
-            thisBlock.updateShape_(selected);
-        }), "OBJECT_TYPE")
-        .appendField("Attribute")
-        .appendField(new Blockly.FieldDropdown(boxDropDown), "ATTRIBUTE");
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("Type")
+        .appendField(new Blockly.FieldDropdown(objectDropDown, function(objectSelected){
+            thisBlock.updateShape_(objectSelected);
+        }), "OBJECT_TYPE");
+
+    this.appendDummyInput("ATTRIBUTE_TYPE") 
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("Attribute", "FIELD_TEXT")
+        .appendField(new Blockly.FieldDropdown(boxDropDown, function(attSelected){
+            thisBlock.updateVector_(attSelected);
+        }), "ATTRIBUTE"); 
+
+    this.appendDummyInput('VECTOR')
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("Component")
+        .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
+
     this.appendValueInput("OBJECT")
         .setCheck(null)
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("Object");
+        .appendField("Object", "Object");
+
     this.appendValueInput("VALUE")
         .setCheck(null)
         .setAlign(Blockly.ALIGN_RIGHT)
@@ -61,107 +77,231 @@ Blockly.Blocks['set'] = {
     this.setColour(20);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
-    this.selected = '';
+    this.objectSelected = '';
+    this.attSelected = '';
   },
 
   mutationToDom: function(){
     var container = document.createElement('mutation');
-    this.selected = this.getFieldValue('OBJECT_TYPE');
-    container.setAttribute('selected', this.selected);
+    this.objectSelected = this.getFieldValue('OBJECT_TYPE');
+    this.attSelected = this.getFieldValue('ATTRIBUTE');
+    container.setAttribute('objectSelected', this.objectSelected);
+    container.setAttribute('attSelected', this.attSelected);
     return container;
   },
 
   domToMutation: function(xmlElement){
-    this.selected = xmlElement.getAttribute('selected');
+    this.objectSelected = xmlElement.getAttribute('objectSelected');
+    this.attSelected = xmlElement.getAttribute('attSelected');
     //alert(selected);
-    this.updateShape_(this.selected);
+    this.updateShape_(this.objectSelected);
+    this.updateVector_(this.attSelected);
   },
 
 
   updateShape_: function(selected){
 
-    var input = this.getInput('NAME');
+    var thisBlock = this;
+    var input = this.getInput('ATTRIBUTE_TYPE');
+    input.removeField('FIELD_TEXT');
     input.removeField('ATTRIBUTE');
+    
 
     switch(selected){
 
         case 'box':
-            input.appendField(new Blockly.FieldDropdown(boxDropDown), "ATTRIBUTE");
+            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(boxDropDown, function(attSelected){
+            thisBlock.updateVector_(attSelected);
+        }), "ATTRIBUTE");
+            var vectorExists = this.getInput('VECTOR');
+            if(!vectorExists)
+                this.updateVector_("pos");
             break;
 
         case 'vector':
-            input.appendField(new Blockly.FieldDropdown(vectorDropDown), "ATTRIBUTE");
+            input.appendField("Component", 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(vectorDropDown, function(attSelected){
+            thisBlock.updateVector_(attSelected);
+        }), "ATTRIBUTE");
+            var vectorExists = this.getInput('VECTOR');
+            if(vectorExists)
+                this.removeInput('VECTOR');
             break;
 
         case 'cylinder':
-            input.appendField(new Blockly.FieldDropdown(cylinderDropDown), "ATTRIBUTE");
+            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(cylinderDropDown, function(attSelected){
+            thisBlock.updateVector_(attSelected);
+        }), "ATTRIBUTE");
+            var vectorExists = this.getInput('VECTOR');
+            if(!vectorExists)
+                this.updateVector_("pos");
             break;
 
         case 'sphere': 
-            input.appendField(new Blockly.FieldDropdown(sphereDropDown), "ATTRIBUTE");
+            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(sphereDropDown, function(attSelected){
+            thisBlock.updateVector_(attSelected);
+        }), "ATTRIBUTE");
+            var vectorExists = this.getInput('VECTOR');
+            if(!vectorExists)
+                this.updateVector_("pos");
             break;
 
-        }
     }
+    
+  },
+
+  updateVector_:  function(attSelection){
+
+    var vectorExists = this.getInput('VECTOR');
+    if(vectorList.indexOf(attSelection) >= 0){
+        if(!vectorExists){
+            this.removeInput('OBJECT');
+            this.removeInput('VALUE');
+
+            this.appendDummyInput('VECTOR')
+                .setAlign(Blockly.ALIGN_RIGHT)
+                .appendField("Component")
+                .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
+
+            this.appendValueInput("OBJECT")
+                .setCheck(null)
+                .setAlign(Blockly.ALIGN_RIGHT)
+                .appendField("Object", "Object");
+
+            this.appendValueInput("VALUE")
+                .setCheck(null)
+                .setAlign(Blockly.ALIGN_RIGHT)
+                .appendField("Value");
+
+
+        }
+    }else if(vectorExists){
+        this.removeInput('VECTOR');
+    }
+  }   
 };
 
   
  
 Blockly.Blocks['get'] = {
   init: function() {
+    this.setInputsInline(false);
     var thisBlock = this;
-    this.appendValueInput("NAME")
+    this.appendValueInput("OBJECT_TYPE")
         .setCheck(null)
         .appendField("Get")
+        .setAlign(Blockly.ALIGN_RIGHT)
         .appendField(new Blockly.FieldDropdown(objectDropDown, function(selection){
             thisBlock.updateShape_(selection);
-        }), "OBJECT")
+        }), "OBJECT");
 
-        .appendField(new Blockly.FieldDropdown(boxDropDown), "VALUE");
+    this.appendDummyInput("ATTRIBUTE_TYPE")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField('Attribute', 'FIELD_TEXT')
+        .appendField(new Blockly.FieldDropdown(boxDropDown, function(selection){
+            thisBlock.updateVector_(selection);
+        }), "VALUE");
+
+    this.appendDummyInput('VECTOR')
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("Component")
+        .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
+
     this.setOutput(true, null);
     this.setColour(20);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
-    this.selected = '';
+    this.objectSelected = '';
+    this.attSelected = '';
   },
 
   mutationToDom: function(){
     var container = document.createElement('mutation');
-    this.selected = this.getFieldValue('OBJECT');
-    container.setAttribute('selected', this.selected);
+    this.objectSelected = this.getFieldValue('OBJECT');
+    this.attSelected = this.getFieldValue('VALUE');
+    container.setAttribute('objectSelected', this.objectSelected);
+    container.setAttribute('attSelected', this.attSelected);
     return container;
   },
 
   domToMutation: function(xmlElement){
-    this.selected = xmlElement.getAttribute('selected');
-    //alert(selected);
-    this.updateShape_(this.selected);
+    this.objectSelected = xmlElement.getAttribute('objectSelected');
+    this.attSelected = xmlElement.getAttribute('attSelected');
+    this.updateShape_(this.objectSelected);
+    this.updateVector_(this.attSelected);
   },
 
 
   updateShape_: function(selected){
 
-    var input = this.getInput('NAME');
+    var input = this.getInput('ATTRIBUTE_TYPE');
+    var thisBlock = this;
+    input.removeField('FIELD_TEXT');
     input.removeField('VALUE');
 
     switch(selected){
 
         case 'box':
-            input.appendField(new Blockly.FieldDropdown(boxDropDown), "VALUE");
+            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(boxDropDown, function(selection){
+            thisBlock.updateVector_(selection);
+        }), "VALUE");
+            var vectorExists = this.getInput('VECTOR');
+            if(!vectorExists)
+                this.updateVector_("pos");
             break;
 
         case 'vector':
-            input.appendField(new Blockly.FieldDropdown(vectorDropDown), "VALUE");
+            input.appendField("Component", 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(vectorDropDown, function(selection){
+            thisBlock.updateVector_(selection);
+        }), "VALUE");
+            var vectorExists = this.getInput('VECTOR');
+            if(vectorExists)
+                this.removeInput('VECTOR');
             break;
 
         case 'cylinder':
-            input.appendField(new Blockly.FieldDropdown(cylinderDropDown), "VALUE");
+            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(cylinderDropDown, function(selection){
+            thisBlock.updateVector_(selection);
+        }), "VALUE");
+            var vectorExists = this.getInput('VECTOR');
+            if(!vectorExists)
+                this.updateVector_("pos");
             break;
 
         case 'sphere': 
-            input.appendField(new Blockly.FieldDropdown(sphereDropDown), "VALUE");
+            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(sphereDropDown, function(selection){
+            thisBlock.updateVector_(selection);
+        }), "VALUE");
+            var vectorExists = this.getInput('VECTOR');
+            if(!vectorExists)
+                this.updateVector_("pos");
             break;
 
+    }
+  },
+
+  updateVector_:  function(attSelection){
+
+    var vectorExists = this.getInput('VECTOR');
+    if(vectorList.indexOf(attSelection) >= 0){
+        if(!vectorExists){
+            
+
+            this.appendDummyInput('VECTOR')
+                .setAlign(Blockly.ALIGN_RIGHT)
+                .appendField("Component")
+                .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
+
+        }
+    }else if(vectorExists){
+        this.removeInput('VECTOR');
     }
   }
 };

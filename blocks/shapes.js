@@ -1718,6 +1718,17 @@ Blockly.Blocks['vpython_create_cylinder']= {
     }
 };
 
+Blockly.Blocks['vpython_create_arrow']= {
+    init: function(){
+        this.appendDummyInput()
+            .appendField("Arrow");
+        this.setColour(20);
+        this.setNextStatement(true);
+        this.setTooltip('');
+        this.setHelpUrl('http://www.example.com/');
+    }
+};
+
 Blockly.Blocks['pos']= {
     init: function(){
         this.appendDummyInput()

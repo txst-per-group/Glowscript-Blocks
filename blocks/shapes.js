@@ -5,7 +5,9 @@ goog.provide('Blockly.Blocks.shapes');
 goog.require('Blockly.Blocks');
 
 var objectDropDown = [["box", "box"], ["sphere", "sphere"],
-                      ["cylinder", "cylinder"], ["vector", "vector"]];
+                      ["cylinder", "cylinder"], ["vector", "vector"],
+                      ["sphere", "sphere"],["arrow", "arrow"], 
+                      ["ring", "ring"]];
 
 var boxDropDown = [["pos", "pos"], ["axis", "axis"],
                    ["size", "size"], ["up", "up"],
@@ -28,6 +30,18 @@ var sphereDropDown = [["pos", "pos"], ["axis", "axis"],
                       ["color", "color"], ["opacity", "opacity"],
                       ["trail", "trail"], ["retain", "retain"]
                       ];
+
+var arrowDropDown = [["pos", "pos"], ["axis", "axis"], ["length", "length"],
+                     ["shaftwidth", "shaftwidth"], ["headwidth", "headwidth"],
+                     ["headlength", "headlength"], ["up", "up"], 
+                     ["color", "color"], ["opacity", "opacity"],
+                     ["make_trail"], ["retain", "retain"]];
+
+var ringDropDown = [["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
+                    ["length", "length"], ["thickness", "thickness"], 
+                    ["size", "size"], ["up", "up"], ["color", "color"],
+                    ["opacity", "opacity"], ["make_trail", "make_trail"],
+                    ["retain", "retain"]];
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -81,18 +95,23 @@ Blockly.Blocks['set'] = {
     this.attSelected = '';
   },
 
+
+ // xml values for names must be lowercased (for some reason)
+ // do not camel case when setting or reading values from
+ // xml element or writing to container
+
   mutationToDom: function(){
     var container = document.createElement('mutation');
     this.objectSelected = this.getFieldValue('OBJECT_TYPE');
     this.attSelected = this.getFieldValue('ATTRIBUTE');
-    container.setAttribute('objectSelected', this.objectSelected);
-    container.setAttribute('attSelected', this.attSelected);
+    container.setAttribute('object_selected', this.objectSelected);
+    container.setAttribute('att_selected', this.attSelected);
     return container;
   },
 
   domToMutation: function(xmlElement){
-    this.objectSelected = xmlElement.getAttribute('objectSelected');
-    this.attSelected = xmlElement.getAttribute('attSelected');
+    this.objectSelected = xmlElement.getAttribute('object_selected');
+    this.attSelected = xmlElement.getAttribute('att_selected');
     //alert(selected);
     this.updateShape_(this.objectSelected);
     this.updateVector_(this.attSelected);
@@ -103,8 +122,10 @@ Blockly.Blocks['set'] = {
 
     var thisBlock = this;
     var input = this.getInput('ATTRIBUTE_TYPE');
-    input.removeField('FIELD_TEXT');
-    input.removeField('ATTRIBUTE');
+    if(this.getFieldValue('FIELD_TEXT'))
+        input.removeField('FIELD_TEXT');
+    if(this.getFieldValue('ATTRIBUTE'))
+        input.removeField('ATTRIBUTE');
     
 
     switch(selected){
@@ -142,6 +163,26 @@ Blockly.Blocks['set'] = {
         case 'sphere': 
             input.appendField('Attribute', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(sphereDropDown, function(attSelected){
+            thisBlock.updateVector_(attSelected);
+        }), "ATTRIBUTE");
+            var vectorExists = this.getInput('VECTOR');
+            if(!vectorExists)
+                this.updateVector_("pos");
+            break;
+
+        case 'arrow': 
+            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(arrowDropDown, function(attSelected){
+            thisBlock.updateVector_(attSelected);
+        }), "ATTRIBUTE");
+            var vectorExists = this.getInput('VECTOR');
+            if(!vectorExists)
+                this.updateVector_("pos");
+            break;
+
+        case 'ring': 
+            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(ringDropDown, function(attSelected){
             thisBlock.updateVector_(attSelected);
         }), "ATTRIBUTE");
             var vectorExists = this.getInput('VECTOR');
@@ -218,18 +259,23 @@ Blockly.Blocks['get'] = {
     this.attSelected = '';
   },
 
+
+  // xml values for names must be lowercased (for some reason)
+  // do not camel case when setting or reading values from
+  // xml element or writing to container
+
   mutationToDom: function(){
     var container = document.createElement('mutation');
     this.objectSelected = this.getFieldValue('OBJECT');
     this.attSelected = this.getFieldValue('VALUE');
-    container.setAttribute('objectSelected', this.objectSelected);
-    container.setAttribute('attSelected', this.attSelected);
+    container.setAttribute('object_selected', this.objectSelected);
+    container.setAttribute('att_selected', this.attSelected);
     return container;
   },
 
   domToMutation: function(xmlElement){
-    this.objectSelected = xmlElement.getAttribute('objectSelected');
-    this.attSelected = xmlElement.getAttribute('attSelected');
+    this.objectSelected = xmlElement.getAttribute('object_selected');
+    this.attSelected = xmlElement.getAttribute('att_selected');
     this.updateShape_(this.objectSelected);
     this.updateVector_(this.attSelected);
   },
@@ -277,6 +323,26 @@ Blockly.Blocks['get'] = {
         case 'sphere': 
             input.appendField('Attribute', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(sphereDropDown, function(selection){
+            thisBlock.updateVector_(selection);
+        }), "VALUE");
+            var vectorExists = this.getInput('VECTOR');
+            if(!vectorExists)
+                this.updateVector_("pos");
+            break;
+
+        case 'arrow': 
+            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(arrowDropDown, function(selection){
+            thisBlock.updateVector_(selection);
+        }), "VALUE");
+            var vectorExists = this.getInput('VECTOR');
+            if(!vectorExists)
+                this.updateVector_("pos");
+            break;
+
+        case 'ring': 
+            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(ringDropDown, function(selection){
             thisBlock.updateVector_(selection);
         }), "VALUE");
             var vectorExists = this.getInput('VECTOR');
@@ -342,6 +408,9 @@ Blockly.Blocks['vpython_box'] = {
     this.elementCount_ = 0;
     },
 
+    // xml values for names must be lowercased (for some reason)
+    // do not camel case when setting or reading values from
+    // xml element or writing to container
 
     mutationToDom: function(){
         if(!this.elementCount_){
@@ -370,9 +439,13 @@ Blockly.Blocks['vpython_box'] = {
         if(this.hasTrail){
             container.setAttribute('make_trail', 1);
         }
-        container.setAttribute('elementCount', this.elementCount_)
+        container.setAttribute('element_count', this.elementCount_)
         return container;
     },
+
+    // xml values for names must be lowercased (for some reason)
+    // do not camel case when setting or reading values from
+    // xml element or writing to container
 
     domToMutation: function(xmlElement){
 
@@ -383,7 +456,7 @@ Blockly.Blocks['vpython_box'] = {
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
         this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
         this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
-        this.elementCount_ = parseInt(xmlElement.getAttribute('elementCount'), 10) || 0;
+        this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
         this.updateShape_();
 
     },
@@ -672,6 +745,9 @@ Blockly.Blocks['vpython_sphere'] = {
     this.elementCount_ = 0;
     },
 
+    // xml values for names must be lowercased (for some reason)
+    // do not camel case when setting or reading values from
+    // xml element or writing to container
 
     mutationToDom: function(){
         if(!this.elementCount_){
@@ -703,9 +779,13 @@ Blockly.Blocks['vpython_sphere'] = {
         if(this.hasTrail){
             container.setAttribute('make_trail', 1);
         }
-        container.setAttribute('elementCount', this.elementCount_)
+        container.setAttribute('element_count', this.elementCount_)
         return container;
     },
+
+    // xml values for names must be lowercased (for some reason)
+    // do not camel case when setting or reading values from
+    // xml element or writing to container
 
     domToMutation: function(xmlElement){
 
@@ -717,7 +797,7 @@ Blockly.Blocks['vpython_sphere'] = {
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
         this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
         this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
-        this.elementCount_ = parseInt(xmlElement.getAttribute('elementCount'), 10) || 0;
+        this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
         this.updateShape_();
 
     },
@@ -1036,6 +1116,9 @@ Blockly.Blocks['vpython_arrow'] = {
     this.elementCount_ = 0;
     },
 
+    // xml values for names must be lowercased (for some reason)
+    // do not camel case when setting or reading values from
+    // xml element or writing to container
 
     mutationToDom: function(){
         if(!this.elementCount_){
@@ -1073,9 +1156,13 @@ Blockly.Blocks['vpython_arrow'] = {
         if(this.hasTrail){
             container.setAttribute('make_trail', 1);
         }
-        container.setAttribute('elementCount', this.elementCount_)
+        container.setAttribute('element_count', this.elementCount_)
         return container;
     },
+
+    // xml values for names must be lowercased (for some reason)
+    // do not camel case when setting or reading values from
+    // xml element or writing to container
 
     domToMutation: function(xmlElement){
 
@@ -1089,7 +1176,7 @@ Blockly.Blocks['vpython_arrow'] = {
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
         this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
         this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
-        this.elementCount_ = parseInt(xmlElement.getAttribute('elementCount'), 10) || 0;
+        this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
         this.updateShape_();
 
     },
@@ -1456,6 +1543,9 @@ Blockly.Blocks['vpython_cylinder'] = {
     this.elementCount_ = 0;
     },
 
+    // xml values for names must be lowercased (for some reason)
+    // do not camel case when setting or reading values from
+    // xml element or writing to container
 
     mutationToDom: function(){
         if(!this.elementCount_){
@@ -1490,9 +1580,13 @@ Blockly.Blocks['vpython_cylinder'] = {
         if(this.hasTrail){
             container.setAttribute('make_trail', 1);
         }
-        container.setAttribute('elementCount', this.elementCount_)
+        container.setAttribute('element_count', this.elementCount_)
         return container;
     },
+
+    // xml values for names must be lowercased (for some reason)
+    // do not camel case when setting or reading values from
+    // xml element or writing to container
 
     domToMutation: function(xmlElement){
 
@@ -1505,7 +1599,7 @@ Blockly.Blocks['vpython_cylinder'] = {
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
         this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
         this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
-        this.elementCount_ = parseInt(xmlElement.getAttribute('elementCount'), 10) || 0;
+        this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
         this.updateShape_();
 
     },
@@ -1849,6 +1943,9 @@ Blockly.Blocks['vpython_ring'] = {
     this.elementCount_ = 0;
     },
 
+    // xml values for names must be lowercased (for some reason)
+    // do not camel case when setting or reading values from
+    // xml element or writing to container
 
     mutationToDom: function(){
         if(!this.elementCount_){
@@ -1886,9 +1983,13 @@ Blockly.Blocks['vpython_ring'] = {
         if(this.hasTrail){
             container.setAttribute('make_trail', 1);
         }
-        container.setAttribute('elementCount', this.elementCount_)
+        container.setAttribute('element_count', this.elementCount_)
         return container;
     },
+
+    // xml values for names must be lowercased (for some reason)
+    // do not camel case when setting or reading values from
+    // xml element or writing to container
 
     domToMutation: function(xmlElement){
 
@@ -1902,7 +2003,7 @@ Blockly.Blocks['vpython_ring'] = {
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
         this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
         this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
-        this.elementCount_ = parseInt(xmlElement.getAttribute('elementCount'), 10) || 0;
+        this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
         this.updateShape_();
 
     },

@@ -6,8 +6,8 @@ goog.require('Blockly.Blocks');
 
 var objectDropDown = [["box", "box"], ["sphere", "sphere"],
                       ["cylinder", "cylinder"], ["vector", "vector"],
-                      ["sphere", "sphere"],["arrow", "arrow"], 
-                      ["ring", "ring"]];
+                      ["sphere", "sphere"], ["arrow", "arrow"], 
+                      ["ring", "ring"], ["helix", "helix"]];
 
 var boxDropDown = [["pos", "pos"], ["axis", "axis"],
                    ["size", "size"], ["up", "up"],
@@ -40,6 +40,13 @@ var arrowDropDown = [["pos", "pos"], ["axis", "axis"], ["length", "length"],
 var ringDropDown = [["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
                     ["length", "length"], ["thickness", "thickness"], 
                     ["size", "size"], ["up", "up"], ["color", "color"],
+                    ["opacity", "opacity"], ["make_trail", "make_trail"],
+                    ["retain", "retain"]];
+
+var helixDropDown = [["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
+                    ["length", "length"], ["coils", "coils"],
+                    ["thickness", "thickness"], ["size", "size"],
+                    ["up", "up"], ["color", "color"],
                     ["opacity", "opacity"], ["make_trail", "make_trail"],
                     ["retain", "retain"]];
 
@@ -183,6 +190,16 @@ Blockly.Blocks['set'] = {
         case 'ring': 
             input.appendField('Attribute', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(ringDropDown, function(attSelected){
+            thisBlock.updateVector_(attSelected);
+        }), "ATTRIBUTE");
+            var vectorExists = this.getInput('VECTOR');
+            if(!vectorExists)
+                this.updateVector_("pos");
+            break;
+
+        case 'helix': 
+            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(helixDropDown, function(attSelected){
             thisBlock.updateVector_(attSelected);
         }), "ATTRIBUTE");
             var vectorExists = this.getInput('VECTOR');
@@ -343,6 +360,16 @@ Blockly.Blocks['get'] = {
         case 'ring': 
             input.appendField('Attribute', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(ringDropDown, function(selection){
+            thisBlock.updateVector_(selection);
+        }), "VALUE");
+            var vectorExists = this.getInput('VECTOR');
+            if(!vectorExists)
+                this.updateVector_("pos");
+            break;
+
+        case 'helix': 
+            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField(new Blockly.FieldDropdown(helixDropDown, function(selection){
             thisBlock.updateVector_(selection);
         }), "VALUE");
             var vectorExists = this.getInput('VECTOR');

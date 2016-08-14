@@ -26,15 +26,72 @@ Blockly.Blocks['vector'] = {
 };
 
  
-Blockly.Blocks['vector_test'] = {
+Blockly.Blocks['vector_math'] = {
   init: function() {
-    this.appendValueInput("test")
+    var thisBlock = this;
+    this.appendValueInput("vector1")
         .setCheck("Vector")
-        .appendField("Test Vector here");
-    this.setInputsInline(false);
-    this.setOutput(true, null);
+        .appendField(new Blockly.FieldDropdown([["magnitude", "MAG"], 
+                                                ["magnitude squared", "MAG2"], 
+                                                ["normal", "NORM"], 
+                                                ["dot product", "DOT"], 
+                                                ["cross product", "CROSS"], 
+                                                ["projection", "PROJ"], 
+                                                ["comp", "COMP"], 
+                                                ["angle difference", "DIFF_ANGLE"]], 
+                                                function(selected){
+                                                    thisBlock.updateShape_(selected);
+                                                }), 
+                                                "operation");
+    this.setOutput(true, "Number");
     this.setColour(65);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+    this.selection = "";
+  },
+
+  mutationToDom: function(){
+    var container = document.createElement('mutation');
+    this.selection = this.getFieldValue("operation");
+    container.setAttribute('selection', this.selection);
+    return container;
+  },
+
+  domToMutation: function(xmlElement){
+    this.selection = xmlElement.getAttribute('selection');
+    this.updateShape_(this.selection);
+  },
+
+  updateShape_: function(selected){
+
+    if(this.getInput('vector2')){
+        this.removeInput('vector2');
+    }
+
+    switch(selected){
+
+        case 'MAG':
+        case 'MAG2':
+            this.setOutput(true, "Number");
+            break;
+
+        case 'NORM':
+            this.setOutput(true, "Vector");
+            break;
+
+        case 'DOT':
+        case 'COMP':
+        case 'DIFF_ANGLE':
+            this.appendValueInput('vector2');
+            this.setOutput(true, "Number");
+            break;
+
+        case 'CROSS':
+        case 'PROJ':
+            this.appendValueInput('vector2');
+            this.setOutput(true, "Vector");
+            break;
+
+    }
   }
 };

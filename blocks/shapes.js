@@ -1149,7 +1149,7 @@ Blockly.Blocks['vpython_arrow'] = {
 Blockly.Blocks['vpython_cylinder'] = {
   init: function(){
     this.appendDummyInput()
-        .appendField("Clyinder");
+        .appendField("Cylinder");
     this.setInputsInline(false);
     this.setOutput(true, null);
     this.setColour(20);

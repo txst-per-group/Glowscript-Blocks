@@ -4,11 +4,10 @@ goog.provide('Blockly.Blocks.shapes');
 
 goog.require('Blockly.Blocks');
 
-// VPYTHON object setting code 
 var objectDropDown = [["box", "box"], ["sphere", "sphere"],
-                      ["cylinder", "cylinder"], ["vector", "vector"],
-                      ["sphere", "sphere"], ["arrow", "arrow"], 
-                      ["ring", "ring"], ["helix", "helix"]];
+                      ["arrow", "arrow"], ["vector", "vector"],
+                      ["ring", "ring"], ["cylinder", "cylinder"], 
+                      ["helix", "helix"]];
 
 var boxDropDown = [["pos", "pos"], ["axis", "axis"],
                    ["size", "size"], ["up", "up"],
@@ -59,41 +58,35 @@ var helixDropDown = [["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
 
 ///////////////////////////////////////////////////////////////////////////////
 
-Blockly.Blocks['set'] = {
+Blockly.Blocks['set_shape'] = {
   init: function() {
     var thisBlock = this;
-    this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField("Set");
 
-    this.appendDummyInput("NAME")
+    this.appendValueInput("OBJECT")
+        .setCheck(null)
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("Type")
+        .appendField("set shape", "Object");
+
+    this.appendDummyInput("SHAPE_ATTRIBUTE")
+        .setAlign(Blockly.ALIGN_RIGHT)
         .appendField(new Blockly.FieldDropdown(objectDropDown, function(objectSelected){
             thisBlock.updateShape_(objectSelected);
-        }), "OBJECT_TYPE");
-
-    this.appendDummyInput("ATTRIBUTE_TYPE") 
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("Attribute", "FIELD_TEXT")
+        }), "OBJECT_TYPE")
+        .appendField("->", "FIELD_TEXT")
         .appendField(new Blockly.FieldDropdown(boxDropDown, function(attSelected){
             thisBlock.updateVector_(attSelected);
         }), "ATTRIBUTE"); 
 
     this.appendDummyInput('VECTOR')
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("Component")
+        .appendField("component")
         .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
-
-    this.appendValueInput("OBJECT")
-        .setCheck(null)
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("Variable Name", "Object");
 
     this.appendValueInput("VALUE")
         .setCheck(null)
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("Value");
+        .appendField("to");
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
@@ -129,7 +122,7 @@ Blockly.Blocks['set'] = {
   updateShape_: function(selected){
 
     var thisBlock = this;
-    var input = this.getInput('ATTRIBUTE_TYPE');
+    var input = this.getInput('SHAPE_ATTRIBUTE');
     if(this.getFieldValue('FIELD_TEXT'))
         input.removeField('FIELD_TEXT');
     if(this.getFieldValue('ATTRIBUTE'))
@@ -139,7 +132,7 @@ Blockly.Blocks['set'] = {
     switch(selected){
 
         case 'box':
-            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField('->', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(boxDropDown, function(attSelected){
             thisBlock.updateVector_(attSelected);
         }), "ATTRIBUTE");
@@ -149,7 +142,7 @@ Blockly.Blocks['set'] = {
             break;
 
         case 'vector':
-            input.appendField("Component", 'FIELD_TEXT');
+            input.appendField("component", 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(vectorDropDown, function(attSelected){
             thisBlock.updateVector_(attSelected);
         }), "ATTRIBUTE");
@@ -159,7 +152,7 @@ Blockly.Blocks['set'] = {
             break;
 
         case 'cylinder':
-            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField('->', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(cylinderDropDown, function(attSelected){
             thisBlock.updateVector_(attSelected);
         }), "ATTRIBUTE");
@@ -169,7 +162,7 @@ Blockly.Blocks['set'] = {
             break;
 
         case 'sphere': 
-            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField('->', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(sphereDropDown, function(attSelected){
             thisBlock.updateVector_(attSelected);
         }), "ATTRIBUTE");
@@ -179,7 +172,7 @@ Blockly.Blocks['set'] = {
             break;
 
         case 'arrow': 
-            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField('->', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(arrowDropDown, function(attSelected){
             thisBlock.updateVector_(attSelected);
         }), "ATTRIBUTE");
@@ -189,7 +182,7 @@ Blockly.Blocks['set'] = {
             break;
 
         case 'ring': 
-            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField('->', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(ringDropDown, function(attSelected){
             thisBlock.updateVector_(attSelected);
         }), "ATTRIBUTE");
@@ -199,7 +192,7 @@ Blockly.Blocks['set'] = {
             break;
 
         case 'helix': 
-            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField('->', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(helixDropDown, function(attSelected){
             thisBlock.updateVector_(attSelected);
         }), "ATTRIBUTE");
@@ -217,23 +210,23 @@ Blockly.Blocks['set'] = {
     var vectorExists = this.getInput('VECTOR');
     if(vectorList.indexOf(attSelection) >= 0){
         if(!vectorExists){
-            this.removeInput('OBJECT');
+            this.removeInput('SHAPE');
             this.removeInput('VALUE');
-
-            this.appendDummyInput('VECTOR')
-                .setAlign(Blockly.ALIGN_RIGHT)
-                .appendField("Component")
-                .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
-
-            this.appendValueInput("OBJECT")
-                .setCheck(null)
-                .setAlign(Blockly.ALIGN_RIGHT)
-                .appendField("Object", "Object");
 
             this.appendValueInput("VALUE")
                 .setCheck(null)
                 .setAlign(Blockly.ALIGN_RIGHT)
-                .appendField("Value");
+                .appendField("to");
+
+            this.appendDummyInput('VECTOR')
+                .setAlign(Blockly.ALIGN_RIGHT)
+                .appendField("component")
+                .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
+
+            this.appendValueInput("SHAPE")
+                .setCheck(null)
+                .setAlign(Blockly.ALIGN_RIGHT)
+                .appendField("Object", "Object");
 
 
         }
@@ -245,28 +238,29 @@ Blockly.Blocks['set'] = {
 
   
  
-Blockly.Blocks['get'] = {
+Blockly.Blocks['get_shape'] = {
   init: function() {
     this.setInputsInline(false);
     var thisBlock = this;
-    this.appendValueInput("OBJECT_TYPE")
+
+    this.appendValueInput("SHAPE")
         .setCheck(null)
-        .appendField("Get")
+        .appendField("get shape")
+        .setAlign(Blockly.ALIGN_RIGHT);
+
+    this.appendDummyInput("SHAPE_ATTRIBUTE")
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField(new Blockly.FieldDropdown(objectDropDown, function(selection){
             thisBlock.updateShape_(selection);
-        }), "OBJECT");
-
-    this.appendDummyInput("ATTRIBUTE_TYPE")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField('Attribute', 'FIELD_TEXT')
+        }), "OBJECT")
+        .appendField('->', 'FIELD_TEXT')
         .appendField(new Blockly.FieldDropdown(boxDropDown, function(selection){
             thisBlock.updateVector_(selection);
         }), "VALUE");
 
     this.appendDummyInput('VECTOR')
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("Component")
+        .appendField("component")
         .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
 
     this.setOutput(true, null);
@@ -301,7 +295,7 @@ Blockly.Blocks['get'] = {
 
   updateShape_: function(selected){
 
-    var input = this.getInput('ATTRIBUTE_TYPE');
+    var input = this.getInput('SHAPE_ATTRIBUTE');
     var thisBlock = this;
     input.removeField('FIELD_TEXT');
     input.removeField('VALUE');
@@ -309,7 +303,7 @@ Blockly.Blocks['get'] = {
     switch(selected){
 
         case 'box':
-            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField('->', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(boxDropDown, function(selection){
             thisBlock.updateVector_(selection);
         }), "VALUE");
@@ -319,7 +313,7 @@ Blockly.Blocks['get'] = {
             break;
 
         case 'vector':
-            input.appendField("Component", 'FIELD_TEXT');
+            input.appendField("component", 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(vectorDropDown, function(selection){
             thisBlock.updateVector_(selection);
         }), "VALUE");
@@ -329,7 +323,7 @@ Blockly.Blocks['get'] = {
             break;
 
         case 'cylinder':
-            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField('->', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(cylinderDropDown, function(selection){
             thisBlock.updateVector_(selection);
         }), "VALUE");
@@ -339,7 +333,7 @@ Blockly.Blocks['get'] = {
             break;
 
         case 'sphere': 
-            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField('->', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(sphereDropDown, function(selection){
             thisBlock.updateVector_(selection);
         }), "VALUE");
@@ -349,7 +343,7 @@ Blockly.Blocks['get'] = {
             break;
 
         case 'arrow': 
-            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField('->', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(arrowDropDown, function(selection){
             thisBlock.updateVector_(selection);
         }), "VALUE");
@@ -359,7 +353,7 @@ Blockly.Blocks['get'] = {
             break;
 
         case 'ring': 
-            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField('->', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(ringDropDown, function(selection){
             thisBlock.updateVector_(selection);
         }), "VALUE");
@@ -369,7 +363,7 @@ Blockly.Blocks['get'] = {
             break;
 
         case 'helix': 
-            input.appendField('Attribute', 'FIELD_TEXT');
+            input.appendField('->', 'FIELD_TEXT');
             input.appendField(new Blockly.FieldDropdown(helixDropDown, function(selection){
             thisBlock.updateVector_(selection);
         }), "VALUE");
@@ -390,7 +384,7 @@ Blockly.Blocks['get'] = {
 
             this.appendDummyInput('VECTOR')
                 .setAlign(Blockly.ALIGN_RIGHT)
-                .appendField("Component")
+                .appendField("component")
                 .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
 
         }
@@ -412,7 +406,7 @@ Blockly.Blocks['get'] = {
 Blockly.Blocks['vpython_box'] = {
   init: function(){
     this.appendDummyInput()
-        .appendField("Box");
+        .appendField("box");
     this.setInputsInline(false);
     this.setOutput(true, null);
     this.setColour(20);
@@ -747,7 +741,7 @@ Blockly.Blocks['vpython_box'] = {
 Blockly.Blocks['vpython_sphere'] = {
   init: function(){
     this.appendDummyInput()
-        .appendField("Sphere");
+        .appendField("sphere");
     this.setInputsInline(false);
     this.setOutput(true, null);
     this.setColour(20);
@@ -1114,7 +1108,7 @@ Blockly.Blocks['vpython_sphere'] = {
 Blockly.Blocks['vpython_arrow'] = {
   init: function(){
     this.appendDummyInput()
-        .appendField("Arrow");
+        .appendField("arrow");
     this.setInputsInline(false);
     this.setOutput(true, null);
     this.setColour(20);
@@ -1543,7 +1537,7 @@ Blockly.Blocks['vpython_arrow'] = {
 Blockly.Blocks['vpython_cylinder'] = {
   init: function(){
     this.appendDummyInput()
-        .appendField("Cylinder");
+        .appendField("cylinder");
     this.setInputsInline(false);
     this.setOutput(true, null);
     this.setColour(20);
@@ -1941,7 +1935,7 @@ Blockly.Blocks['vpython_cylinder'] = {
 Blockly.Blocks['vpython_ring'] = {
   init: function(){
     this.appendDummyInput()
-        .appendField("Ring");
+        .appendField("ring");
     this.setInputsInline(false);
     this.setOutput(true, null);
     this.setColour(20);
@@ -2372,7 +2366,7 @@ Blockly.Blocks['vpython_ring'] = {
 Blockly.Blocks['vpython_helix'] = {
   init: function(){
     this.appendDummyInput()
-        .appendField("Helix");
+        .appendField("helix");
     this.setInputsInline(false);
     this.setOutput(true, null);
     this.setColour(20);

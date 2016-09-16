@@ -19,7 +19,7 @@ function cutHex(h) {return (h.charAt(0)=="#") ? h.substring(1,7):h}
 ///////////////////////////////////////////////////////////////////////////////
 
 
-Blockly.Python['set'] = function(block) {
+Blockly.Python['set_shape'] = function(block) {
   var dropdown_object_type = block.getFieldValue('OBJECT_TYPE');
   var dropdown_attribute = block.getFieldValue('ATTRIBUTE');
   var dropdown_vector = block.getFieldValue('VECTOR_SELECTION');
@@ -44,12 +44,12 @@ Blockly.Python['set'] = function(block) {
   return code;
 };
 
-Blockly.Python['get'] = function(block) {
+Blockly.Python['get_shape'] = function(block) {
   var dropdown_object = block.getFieldValue('OBJECT');
   var dropdown_value = block.getFieldValue('VALUE');
   var dropdown_vector = block.getFieldValue('VECTOR_SELECTION');
 
-  var value_name = Blockly.Python.valueToCode(block, 'OBJECT_TYPE', Blockly.Python.ORDER_ATOMIC);
+  var value_name = Blockly.Python.valueToCode(block, 'SHAPE', Blockly.Python.ORDER_ATOMIC);
   
   // TODO: Assemble Python into code variable.
   if(dropdown_vector){

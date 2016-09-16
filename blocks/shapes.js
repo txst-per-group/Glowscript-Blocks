@@ -62,7 +62,9 @@ Blockly.Blocks['set_shape'] = {
   init: function() {
     var thisBlock = this;
 
-    this.appendValueInput("OBJECT")
+    this.setInputsInline(false);
+
+    this.appendValueInput("SHAPE")
         .setCheck(null)
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField("set shape", "Object");
@@ -210,23 +212,18 @@ Blockly.Blocks['set_shape'] = {
     var vectorExists = this.getInput('VECTOR');
     if(vectorList.indexOf(attSelection) >= 0){
         if(!vectorExists){
-            this.removeInput('SHAPE');
             this.removeInput('VALUE');
 
-            this.appendValueInput("VALUE")
-                .setCheck(null)
-                .setAlign(Blockly.ALIGN_RIGHT)
-                .appendField("to");
-
+            
             this.appendDummyInput('VECTOR')
                 .setAlign(Blockly.ALIGN_RIGHT)
                 .appendField("component")
                 .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
 
-            this.appendValueInput("SHAPE")
+            this.appendValueInput("VALUE")
                 .setCheck(null)
                 .setAlign(Blockly.ALIGN_RIGHT)
-                .appendField("Object", "Object");
+                .appendField("to");
 
 
         }

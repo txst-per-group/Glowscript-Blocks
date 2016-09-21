@@ -35,6 +35,15 @@ Blockly.Python['colour_picker'] = function(block) {
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
+
+Blockly.Python['texture_picker'] = function(block) {
+  var dropdown_texture_selection = block.getFieldValue('TEXTURE_SELECTION');
+  // TODO: Assemble Python into code variable.
+  var code = "texture." + dropdown_texture_selection;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+
 Blockly.Python['colour_random'] = function(block) {
   // Generate a random colour.
   Blockly.Python.definitions_['import_random'] = 'import random';

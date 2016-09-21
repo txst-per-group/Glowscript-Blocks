@@ -64,6 +64,29 @@ Blockly.Blocks['colour_picker'] = {
   }
 };
 
+
+Blockly.Blocks['texture_picker'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Texture")
+        .appendField(new Blockly.FieldDropdown([["flower", "flower"], 
+                                                ["granite", "granite"], 
+                                                ["gravel", "gravel"], 
+                                                ["rock", "rock"], 
+                                                ["rough", "rough"], 
+                                                ["rug", "rug"], 
+                                                ["stones", "stones"], 
+                                                ["stucco", "stucco"], 
+                                                ["wood", "wood"], 
+                                                ["wood_old", "wood_old"], 
+                                                ["earth", "earth"]]), "TEXTURE_SELECTION");
+    this.setOutput(true, "Texture");
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
 Blockly.Blocks['colour_random'] = {
   /**
    * Block for random colour.

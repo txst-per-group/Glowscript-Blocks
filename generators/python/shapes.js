@@ -190,6 +190,17 @@ Blockly.Python['vpython_helix'] = function(block) {
     code = code + 'color=vector(' + R + '/255 ,' + G + '/255 ,' + B + '/255)'
     previousArg = true;
   }
+  if(block.hasTexture){
+
+    if(previousArg)
+      code = code +', ';
+
+    var value_texture = Blockly.Python.valueToCode(block,
+                                                   'TEXTURE',
+                                                   Blockly.Python.ORDER_ATOMIC);
+
+    code = code + 'texture=' + value_texture; 
+  }
   if(block.hasOpacity){
 
     if(previousArg)
@@ -814,6 +825,17 @@ Blockly.Python['vpython_box'] = function(block) {
 
       code = code + 'color=' + value_color;
     previousArg = true;
+  }
+  if(block.hasTexture){
+
+    if(previousArg)
+      code = code +', ';
+
+    var value_texture = Blockly.Python.valueToCode(block,
+                                                   'TEXTURE',
+                                                   Blockly.Python.ORDER_ATOMIC);
+
+    code = code + 'texture=' + value_texture; 
   }
   if(block.hasOpacity){
 

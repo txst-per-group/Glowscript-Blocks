@@ -29,7 +29,7 @@ Blockly.Python['set_shape'] = function(block) {
   var dropdown_attribute = block.getFieldValue('ATTRIBUTE');
   var dropdown_vector = block.getFieldValue('VECTOR_SELECTION');
 
-  var value_object = Blockly.Python.valueToCode(block, 'OBJECT', Blockly.Python.ORDER_ATOMIC);
+  var value_object = Blockly.Python.valueToCode(block, 'SHAPE', Blockly.Python.ORDER_ATOMIC);
   var value_value = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_ATOMIC);
   // TODO: Assemble Python into code variable.
 

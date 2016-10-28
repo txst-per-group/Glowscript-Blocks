@@ -132,7 +132,7 @@ function start() {
 
 function getToolboxElement() {
   var match = location.search.match(/toolbox=([^&]+)/);
-  return document.getElementById('toolbox-' + (match ? match[1] : 'simple'));
+  return document.getElementById('toolbox-' + (match ? match[1] : 'categories'));
 }
 
 function toXml() {
@@ -338,12 +338,7 @@ h1 {
 <body onload="start()">
 
   <div id="blocklyDiv"></div>
-<!--
-  <h1>Blockly Playground</h1>
-  
-  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
-   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
-   -->
+
   <form id="options">
     <select name="dir" onchange="document.forms.options.submit()">
       <option value="ltr">LTR</option>
@@ -366,31 +361,18 @@ h1 {
     &nbsp;
     <input type="button" value="Import from XML" onclick="fromXml()" id="import">
     <br>
-<!--    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-&nbsp; -->
+
     <input type="button" value="To Python" onclick="toCode('Python')">
     &nbsp;
-<!--    <input type="button" value="To PHP" onclick="toCode('PHP')">
-    &nbsp;
+
     <input type="button" value="To Lua" onclick="toCode('Lua')">
     &nbsp;
     <input type="button" value="To Dart" onclick="toCode('Dart')">
-    <br> -->
+
     <textarea id="importExport" style="width: 26%; height: 33.125em"
       onchange="taChange();" onkeyup="taChange()"></textarea>
   </p>
-<!--
-  <p>
-    Stress test: &nbsp;
-    <input type="button" value="Airstrike!" onclick="airstrike(100)">
-    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
-    <input type="button" value="Fake some drags!" onclick="fakeManyDrags()">
-  </p>
-  <p>
-    Log events: &nbsp;
-    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
-  </p>
-  -->
+
   <xml id="toolbox-simple" style="display: none">
   <!-- VPython Specific Individual Blocks -->
   <!-- ************************************************************* -->
@@ -423,27 +405,8 @@ h1 {
 
      <block type="vector_math"></block>
       
-<!-- ************************************************************* -->
-<!--
-    <block type="controls_if"></block>
-    <block type="logic_compare"></block> -->
-    <!-- <block type="control_repeat"></block> -->
-    <!--
-    <block type="logic_operation"></block>
-    <block type="controls_repeat_ext">
-      <value name="TIMES">
-        <shadow type="math_number">
-          <field name="NUM">10</field>
-        </shadow>
-      </value>
-    </block>
-    <block type="logic_operation"></block>
-    <block type="logic_negate"></block>
-    <block type="logic_boolean"></block>
-    <block type="logic_null" disabled="true"></block>
-    <block type="logic_ternary"></block>
-    -->
   </xml>
+<!-- ************************************************************* -->
 
   <xml id="toolbox-categories" style="display: none">
 
@@ -491,8 +454,6 @@ h1 {
       <block type="logic_operation"></block>
       <block type="logic_negate"></block>
       <block type="logic_boolean"></block>
-      <block type="logic_null" disabled="true"></block>
-      <block type="logic_ternary"></block>
     </category>
     <category name="Loops" colour="120">
       <block type="rate"></block>
@@ -561,13 +522,6 @@ h1 {
           </shadow>
         </value>
       </block>
-      <block type="math_change">
-        <value name="DELTA">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-      </block>
       <block type="math_round">
         <value name="NUM">
           <shadow type="math_number">
@@ -588,97 +542,14 @@ h1 {
           </shadow>
         </value>
       </block>
-      <block type="math_constrain">
-        <value name="VALUE">
-          <shadow type="math_number">
-            <field name="NUM">50</field>
-          </shadow>
-        </value>
-        <value name="LOW">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="HIGH">
-          <shadow type="math_number">
-            <field name="NUM">100</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_random_int">
-        <value name="FROM">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="TO">
-          <shadow type="math_number">
-            <field name="NUM">100</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_random_float"></block>
     </category>
     <category name="Text" colour="160">
       <block type="text"></block>
-      <block type="text_join"></block>
-      <block type="text_append">
-        <value name="TEXT">
-          <shadow type="text"></shadow>
-        </value>
-      </block>
-      <block type="text_length">
-        <value name="VALUE">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_isEmpty">
-        <value name="VALUE">
-          <shadow type="text">
-            <field name="TEXT"></field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_indexOf">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">text</field>
-          </block>
-        </value>
-        <value name="FIND">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_charAt">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">text</field>
-          </block>
-        </value>
-      </block>
       <block type="text_getSubstring">
         <value name="STRING">
           <block type="variables_get">
             <field name="VAR">text</field>
           </block>
-        </value>
-      </block>
-      <block type="text_changeCase">
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_trim">
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
         </value>
       </block>
       <block type="text_print">
@@ -688,64 +559,6 @@ h1 {
           </shadow>
         </value>
       </block>
-      <block type="text_prompt_ext">
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-    </category>
-    <category name="Lists" colour="260">
-      <block type="lists_create_with">
-        <mutation items="0"></mutation>
-      </block>
-      <block type="lists_create_with"></block>
-      <block type="lists_repeat">
-        <value name="NUM">
-          <shadow type="math_number">
-            <field name="NUM">5</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="lists_length"></block>
-      <block type="lists_isEmpty"></block>
-      <block type="lists_indexOf">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_getIndex">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_setIndex">
-        <value name="LIST">
-          <block type="variables_get">
-            <field name="VAR">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_getSublist">
-        <value name="LIST">
-          <block type="variables_get">
-            <field name="VAR">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_split">
-        <value name="DELIM">
-          <shadow type="text">
-            <field name="TEXT">,</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="lists_sort"></block>
     </category>
     <category name="Color" colour="20">
       <block type="colour_picker"></block>

@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.FieldVariable');
 
+goog.provide('Blockly.FieldShapeVariable');
+
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Variables');
@@ -161,6 +163,156 @@ Blockly.FieldVariable.prototype.classValidator = function(text) {
       Blockly.Variables.renameVariable(text, text, workspace);
       return text;
     }
+    return null;
+  }
+  return undefined;
+};
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+//------------------------Get and Set Dropdown-------------------------------//
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Class for a variable's dropdown field.
+ * @param {?string} varname The default name for the variable.  If null,
+ *     a unique variable name will be generated.
+ * @param {Function=} opt_validator A function that is executed when a new
+ *     option is selected.  Its sole argument is the new option value.
+ * @extends {Blockly.FieldDropdown}
+ * @constructor
+ */
+Blockly.FieldShapeVariable = function(varname, opt_validator) {
+  Blockly.FieldShapeVariable.superClass_.constructor.call(this,
+      Blockly.FieldShapeVariable.dropdownCreate, opt_validator);
+  this.setValue(varname || '');
+};
+goog.inherits(Blockly.FieldShapeVariable, Blockly.FieldDropdown);
+
+/**
+ * Install this dropdown on a block.
+ */
+Blockly.FieldShapeVariable.prototype.init = function() {
+  if (this.fieldGroup_) {
+    // Dropdown has already been initialized once.
+    return;
+  }
+  Blockly.FieldShapeVariable.superClass_.init.call(this);
+  if (!this.getValue()) {
+    // Variables without names get uniquely named for this workspace.
+    var workspace =
+        this.sourceBlock_.isInFlyout ?
+            this.sourceBlock_.workspace.targetWorkspace :
+            this.sourceBlock_.workspace;
+    this.setValue(Blockly.Variables.generateUniqueName(workspace));
+  }
+};
+
+/**
+ * Get the variable's name (use a variableDB to convert into a real name).
+ * Unline a regular dropdown, variables are literal and have no neutral value.
+ * @return {string} Current text.
+ */
+Blockly.FieldShapeVariable.prototype.getValue = function() {
+  return this.getText();
+};
+
+/**
+ * Set the variable name.
+ * @param {string} newValue New text.
+ */
+Blockly.FieldShapeVariable.prototype.setValue = function(newValue) {
+  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, this.value_, newValue));
+  }
+  this.value_ = newValue;
+  this.setText(newValue);
+};
+
+/**
+ * Return a sorted list of variable names for variable dropdown menus.
+ * Include a special option at the end for creating a new variable name.
+ * @return {!Array.<string>} Array of variable names.
+ * @this {!Blockly.FieldShapeVariable}
+ */
+Blockly.FieldShapeVariable.dropdownCreate = function() {
+  if (this.sourceBlock_ && this.sourceBlock_.workspace) {
+    var variableList =
+        Blockly.Variables.allVariables(this.sourceBlock_.workspace);
+  } else {
+    var variableList = [];
+  }
+  // Ensure that the currently selected variable is an option.
+  var name = this.getText();
+  if (name && variableList.indexOf(name) == -1) {
+    variableList.push(name);
+  }
+  variableList.sort(goog.string.caseInsensitiveCompare);
+
+  //temporary message because 'field_dropdown.js' requires atleast one list
+  // Item. Not sure how to fix it
+  variableList.push("Create Shapes using 'set' and appropriate shape block")
+  //variableList.push(Blockly.Msg.RENAME_VARIABLE);
+  //variableList.push(Blockly.Msg.NEW_VARIABLE);
+  // Variables are not language-specific, use the name as both the user-facing
+  // text and the internal representation.
+  var options = [];
+  for (var i = 0; i < variableList.length; i++) {
+    options[i] = [variableList[i], variableList[i]];
+  }
+  return options;
+};
+
+/**
+ * Event handler for a change in variable name.
+ * Special case the 'New variable...' and 'Rename variable...' options.
+ * In both of these special cases, prompt the user for a new name.
+ * @param {string} text The selected dropdown menu option.
+ * @return {null|undefined|string} An acceptable new variable name, or null if
+ *     change is to be either aborted (cancel button) or has been already
+ *     handled (rename), or undefined if an existing variable was chosen.
+ */
+Blockly.FieldShapeVariable.prototype.classValidator = function(text) {
+  function promptName(promptText, defaultText) {
+    Blockly.hideChaff();
+    var newVar = window.prompt(promptText, defaultText);
+    // Merge runs of whitespace.  Strip leading and trailing whitespace.
+    // Beyond this, all names are legal.
+    if (newVar) {
+      newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
+      if (newVar == Blockly.Msg.RENAME_VARIABLE ||
+          newVar == Blockly.Msg.NEW_VARIABLE) {
+        // Ok, not ALL names are legal...
+        newVar = null;
+      }
+    }
+    return newVar;
+  }
+  var workspace = this.sourceBlock_.workspace;
+  if (text == Blockly.Msg.RENAME_VARIABLE) {
+    var oldVar = this.getText();
+    text = promptName(Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', oldVar),
+                      oldVar);
+    if (text) {
+      Blockly.Variables.renameVariable(oldVar, text, workspace);
+    }
+    return null;
+  } else if (text == Blockly.Msg.NEW_VARIABLE) {
+    text = promptName(Blockly.Msg.NEW_VARIABLE_TITLE, '');
+    // Since variables are case-insensitive, ensure that if the new variable
+    // matches with an existing variable, the new case prevails throughout.
+    if (text) {
+      Blockly.Variables.renameVariable(text, text, workspace);
+      return text;
+    }
+    return null;
+  } else if(text == "Create Shapes using 'set' and appropriate shape block"){
+    // prevent people from being able to select the menu prompt
     return null;
   }
   return undefined;

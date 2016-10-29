@@ -28,6 +28,62 @@ goog.provide('Blockly.Python.variables');
 
 goog.require('Blockly.Python');
 
+///////////////////////////////////////////////////////////////////////////////
+
+
+//------------------------Get and Set Shape Blocks---------------------------//
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+Blockly.Python['set_shape'] = function(block) {
+  var dropdown_object_type = block.getFieldValue('OBJECT_TYPE');
+  var dropdown_attribute = block.getFieldValue('ATTRIBUTE');
+  var dropdown_vector = block.getFieldValue('VECTOR_SELECTION');
+  var selected_shape = block.getFieldValue('SHAPE_VAR'); 
+  var value_value = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+
+  if(dropdown_vector){
+    if(dropdown_vector == 'all'){
+      var code = selected_shape + '.' + dropdown_attribute + ' = ' + value_value + '\n';
+    }
+    else{
+      var code = selected_shape + '.' + dropdown_attribute + '.' + 
+                 dropdown_vector + ' = ' + value_value + '\n';
+    }
+  }
+  else{
+    var code = selected_shape + '.' + dropdown_attribute + ' = ' + value_value + '\n';
+  }
+  
+  return code;
+};
+
+Blockly.Python['get_shape'] = function(block) {
+  var dropdown_object = block.getFieldValue('OBJECT');
+  var dropdown_value = block.getFieldValue('VALUE');
+  var dropdown_vector = block.getFieldValue('VECTOR_SELECTION');
+  var selected_shape = block.getFieldValue('SHAPE_VAR');
+  
+  // TODO: Assemble Python into code variable.
+  if(dropdown_vector){
+    if(dropdown_vector == 'all'){
+      var code = selected_shape + '.' + dropdown_value;
+    }
+    else{
+      var code = selected_shape + '.' + dropdown_value +
+                 '.' + dropdown_vector;
+    }
+  }
+  else{
+    var code = selected_shape + '.' + dropdown_value;
+  }
+  
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+
 // new vpython object code
 
 Blockly.Python['set_attribute'] = function(block) {

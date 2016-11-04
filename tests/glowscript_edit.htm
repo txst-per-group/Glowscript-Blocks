@@ -1,0 +1,210 @@
+
+<!-- saved from url=(0070)file:///Users/DoobBook/Documents/Blockly%20Project/glowscript_edit.htm -->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+        html, body {
+          margin: 0;
+          padding: 0;
+        }
+        div#glowscript {
+          width: 100%;
+          margin: 0 auto;
+          text-align: center;
+        }
+        </style>
+        <link type="text/css" href="./glowscript_edit_files/jquery-ui.custom.css" rel="stylesheet">
+        <link type="text/css" href="./glowscript_edit_files/ide.css" rel="stylesheet">
+        <script src="./glowscript_edit_files/jquery.min.js"></script>
+        <script src="./glowscript_edit_files/jquery-ui.custom.min.js"></script>
+        <script src="./glowscript_edit_files/jquery.ui.touch-punch.min.js"></script>
+        <script type="text/javascript" src="./glowscript_edit_files/glow.1.1.3.min.js"></script>
+        <script type="text/javascript" src="./glowscript_edit_files/RSrun.1.1.3.min.js"></script>
+        <script type="text/javascript" src="./glowscript_edit_files/RScompiler.1.1.3.min.js"></script>
+      </head>
+      <body>
+        <!-- Buttons created for testing if canvas will render injected code while also being able to prove if it can reload the render after one has been rendered -->
+        <button id="sphere" onclick="runCode('sphere()');">Sphere</button>
+        <button id="box" onclick="runCode('box()');">Box</button>
+        <!-- Form area used to try and test injecting user inputed code into the glowscript_source div, was unsuccesfull and further code is most likely needed to actually reading inputted code. Ignore for now as the blockly playground has a method for writing block code into python which can be evaluated -->
+        <form id="user_code">
+            <input type="text">
+        </form>
+        <!-- Declares where the glowscript canvas will be drawn as well as how big the canvas will be. Found known issues on the github with adjusting canvas size but have not attempted yet. Unknown if this div has to be declared at start of compile -->
+        <div id="glowscript">
+            <div class="glowscript-canvas-wrapper ui-resizable ui-resizable-disabled" style="position: relative;">
+                <canvas width="640" height="400" style="position: absolute;"></canvas>
+                <canvas width="640" height="400" style="position: relative; background-color: transparent;"></canvas>
+                <div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div>
+                <div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div>
+                <div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div>
+            </div>
+            <div style="white-space: pre;"></div>
+        </div>
+        <!-- Contains where the code is inpoutting and where the compile script grabs the code from -->  
+        <script id="glowscript_source" type="text/plain">
+        </script>
+
+
+        <script type="text/javascript">
+            //This is the addition that puts the rendering actions into a function only called when the Play button is pressed, writing code into the 'glowscript_source' div and then rendering
+            function runCode(code) {
+                document.getElementById('glowscript_source').innerHTML = code;
+                // Everything from this point on is all glowscript/trinkets compile and rendering code. I deleted all original jquery library imports that did not effect the script and compile falls but there may be needed depndecies I have not encountered yet
+                
+                var prog = $('#glowscript_source').text()
+                , compiled, main_func;
+
+                try {
+                compiled = window.glowscript_compile(prog, { lang : 'vpython', version : '1.1.3' });
+                } catch(e) {
+                window.parent.postMessage(JSON.stringify({ "glowscript.error" : e.message }), "*");
+                }
+
+                function eval_script(x) {
+                return eval(x);
+                }
+
+                if (compiled) {
+                main_func = eval_script(compiled);
+                window.userMain = main_func;
+                }
+
+                $("#loading").remove()
+                window.__context = {
+                glowscript_container : $('#glowscript')
+                };
+
+                window.userMain(function(err) {
+                if (err) {
+                  window.parent.postMessage(JSON.stringify({ "glowscript.error" : err.message }), "*");
+                }
+                });
+
+                window.addEventListener('message', function(e) {
+                if (e.data === "glowscript.snapshot") {
+                  var scene = window.scene;
+                  if (!scene) {
+                    for (var c = 0; c < canvas.all.length; c++) {
+                      if (canvas.all[c] && canvas.all[c].__activated) {
+                        scene = canvas.all[c]
+                        break;
+                      }
+                    }
+                  }
+                  if (scene) {
+                    (scene.__renderer || scene.renderer).screenshot(function (err, img) {
+                      if (!err) {
+                        $(img).load(function () {
+                          // Rescale the image to 128px max dimension and save it as a screenshot
+                          var targetSize = 270;
+                          var aspect = img.width / img.height;
+                          var w = aspect >= 1 ? targetSize : targetSize * aspect;
+                          var h = aspect >= 1 ? targetSize / aspect : targetSize;
+
+                          var canvas = document.createElement("canvas");
+                          canvas.width = w;
+                          canvas.height = h;
+                          var cx = canvas.getContext('2d');
+                          cx.drawImage(img, 0, 0, w, h);
+                          var snapshot = canvas.toDataURL("image/png");
+
+                          window.parent.postMessage(JSON.stringify({ snapshot: snapshot }), "*");
+                        });
+                      }
+                    });
+                  }
+                  else {
+                    var glowscript_graph = $.find('.glowscript-graph canvas');
+                    if (glowscript_graph[0] && typeof glowscript_graph[0].toDataURL == "function") {
+                      var snapshot = glowscript_graph[0].toDataURL("image/png");
+                      window.parent.postMessage(JSON.stringify({ snapshot: snapshot }), "*");
+                    }
+                  }
+                }
+                });
+                }
+        </script>
+
+
+<!-- Original location and setup for above Glowscript code
+        <script type="text/javascript">
+
+        var prog = $('#glowscript_source').text()
+        , compiled, main_func;
+
+        try {
+        compiled = window.glowscript_compile(prog, { lang : 'vpython', version : '1.1.3' });
+        } catch(e) {
+        window.parent.postMessage(JSON.stringify({ "glowscript.error" : e.message }), "*");
+        }
+
+        function eval_script(x) {
+        return eval(x);
+        }
+
+        if (compiled) {
+        main_func = eval_script(compiled);
+        window.userMain = main_func;
+        }
+
+        $("#loading").remove()
+        window.__context = {
+        glowscript_container : $('#glowscript')
+        };
+
+        window.userMain(function(err) {
+        if (err) {
+          window.parent.postMessage(JSON.stringify({ "glowscript.error" : err.message }), "*");
+        }
+        });
+
+        window.addEventListener('message', function(e) {
+        if (e.data === "glowscript.snapshot") {
+          var scene = window.scene;
+          if (!scene) {
+            for (var c = 0; c < canvas.all.length; c++) {
+              if (canvas.all[c] && canvas.all[c].__activated) {
+                scene = canvas.all[c]
+                break;
+              }
+            }
+          }
+          if (scene) {
+            (scene.__renderer || scene.renderer).screenshot(function (err, img) {
+              if (!err) {
+                $(img).load(function () {
+                  // Rescale the image to 128px max dimension and save it as a screenshot
+                  var targetSize = 270;
+                  var aspect = img.width / img.height;
+                  var w = aspect >= 1 ? targetSize : targetSize * aspect;
+                  var h = aspect >= 1 ? targetSize / aspect : targetSize;
+
+                  var canvas = document.createElement("canvas");
+                  canvas.width = w;
+                  canvas.height = h;
+                  var cx = canvas.getContext('2d');
+                  cx.drawImage(img, 0, 0, w, h);
+                  var snapshot = canvas.toDataURL("image/png");
+
+                  window.parent.postMessage(JSON.stringify({ snapshot: snapshot }), "*");
+                });
+              }
+            });
+          }
+          else {
+            var glowscript_graph = $.find('.glowscript-graph canvas');
+            if (glowscript_graph[0] && typeof glowscript_graph[0].toDataURL == "function") {
+              var snapshot = glowscript_graph[0].toDataURL("image/png");
+              window.parent.postMessage(JSON.stringify({ snapshot: snapshot }), "*");
+            }
+          }
+        }
+        });
+        }
+        </script>
+-->
+      
+    
+  </body></html>

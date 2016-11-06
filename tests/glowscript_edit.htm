@@ -33,6 +33,7 @@
         </form>
         <!-- Declares where the glowscript canvas will be drawn as well as how big the canvas will be. Found known issues on the github with adjusting canvas size but have not attempted yet. Unknown if this div has to be declared at start of compile -->
         <div id="glowscript">
+            
             <div class="glowscript-canvas-wrapper ui-resizable ui-resizable-disabled" style="position: relative;">
                 <canvas width="640" height="400" style="position: absolute;"></canvas>
                 <canvas width="640" height="400" style="position: relative; background-color: transparent;"></canvas>
@@ -40,6 +41,7 @@
                 <div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div>
                 <div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div>
             </div>
+            
             <div style="white-space: pre;"></div>
         </div>
         <!-- Contains where the code is inpoutting and where the compile script grabs the code from -->  
@@ -52,6 +54,9 @@
             function runCode(code) {
                 document.getElementById('glowscript_source').innerHTML = code;
                 // Everything from this point on is all glowscript/trinkets compile and rendering code. I deleted all original jquery library imports that did not effect the script and compile falls but there may be needed depndecies I have not encountered yet
+
+                // Remove all previous windows
+                $('#glowscript').empty();
                 
                 var prog = $('#glowscript_source').text()
                 , compiled, main_func;

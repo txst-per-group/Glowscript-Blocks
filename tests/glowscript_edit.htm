@@ -1,5 +1,3 @@
-
-<!-- saved from url=(0070)file:///Users/DoobBook/Documents/Blockly%20Project/glowscript_edit.htm -->
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -31,20 +29,10 @@
         <form id="user_code">
             <input type="text">
         </form>
-        <!-- Declares where the glowscript canvas will be drawn as well as how big the canvas will be. Found known issues on the github with adjusting canvas size but have not attempted yet. Unknown if this div has to be declared at start of compile -->
+        <!-- Declares where the glowscript canvas will be drawn as well as how big the canvas will be. Found known issues on the github with adjusting canvas size but have not attempted yet. Unknown if this div has to be declared at start of compile EDIT: div does need to be declared at creation however does not have to be filled as it will be deleted as soon as new code is injected. Canvas sizing must be edited in renderer most likely-->
         <div id="glowscript">
-            
-            <div class="glowscript-canvas-wrapper ui-resizable ui-resizable-disabled" style="position: relative;">
-                <canvas width="640" height="400" style="position: absolute;"></canvas>
-                <canvas width="640" height="400" style="position: relative; background-color: transparent;"></canvas>
-                <div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div>
-                <div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div>
-                <div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div>
-            </div>
-            
-            <div style="white-space: pre;"></div>
         </div>
-        <!-- Contains where the code is inpoutting and where the compile script grabs the code from -->  
+        <!-- Contains where the code is inputted and where the compile script grabs the code from -->  
         <script id="glowscript_source" type="text/plain">
         </script>
 
@@ -53,7 +41,7 @@
             //This is the addition that puts the rendering actions into a function only called when the Play button is pressed, writing code into the 'glowscript_source' div and then rendering
             function runCode(code) {
                 document.getElementById('glowscript_source').innerHTML = code;
-                // Everything from this point on is all glowscript/trinkets compile and rendering code. I deleted all original jquery library imports that did not effect the script and compile falls but there may be needed depndecies I have not encountered yet
+                // Everything from this point on is all glowscript/trinkets compile and rendering code. I deleted all original jquery library imports that did not effect the script and compile falls but there may be needed depndecies I have not encountered yet. EDIT MathJax library may be needed in more complex programs
 
                 // Remove all previous windows
                 $('#glowscript').empty();

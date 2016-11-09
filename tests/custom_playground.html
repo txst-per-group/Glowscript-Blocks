@@ -72,6 +72,18 @@
 <script src="../blocks/colour.js"></script>
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/procedures.js"></script>
+    
+<!-- Vpython frame files -->
+<link type="text/css" href="./glowscript_edit_files/jquery-ui.custom.css" rel="stylesheet">
+<link type="text/css" href="./glowscript_edit_files/ide.css" rel="stylesheet">
+<script src="./glowscript_edit_files/jquery.min.js"></script>
+<script src="./glowscript_edit_files/jquery-ui.custom.min.js"></script>
+<script src="./glowscript_edit_files/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="./glowscript_edit_files/glow.1.1.3.min.js"></script>
+<script type="text/javascript" src="./glowscript_edit_files/RSrun.1.1.3.min.js"></script>
+<script type="text/javascript" src="./glowscript_edit_files/RScompiler.1.1.3.min.js"></script>
+<!-- ********************************************* -->
+
 <script>
 'use strict';
 var workspace = null;
@@ -108,7 +120,7 @@ function start() {
            toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
            zoom:
              {controls: true,
-              wheel: true,
+              wheel: false,
               startScale: 1.0,
               maxScale: 4,
               minScale: .25,
@@ -156,6 +168,15 @@ function toCode(lang) {
   output.value = Blockly[lang].workspaceToCode(workspace);
   taChange();
 }
+
+// Realtime Generation of code into workspace.
+// Still no functionality even after following googles dev guide
+function myUpdateFunction(event) {
+    var code = Blockly.Javascript.workspaceToCode(workspace);
+    document.getElementById('textarea').value = code;
+    workspace.addChangeListener(myUpdateFunction);
+}
+
 
 // Disable the "Import from XML" button if the XML is invalid.
 // Preserve text between page reloads.
@@ -328,10 +349,14 @@ h1 {
 #blocklyDiv {
   float: right;
   height: 95%;
-  width: 70%;
+  width: 50%;
 }
 #importExport {
   font-family: monospace;
+  float: left;
+}
+#glowscript {
+  width: 50%;
 }
 </style>
 </head>
@@ -356,6 +381,105 @@ h1 {
     </select>
   </form>
 
+<!-- Vpython/Glowscript canvas divs -->
+    
+  <button id="sphere" onclick="runCode();">Play</button>
+    
+  <div id="glowscript">
+  </div>
+    
+  <script id="glowscript_source" type="text/plain">
+  </script>
+    
+  <script type="text/javascript">
+    //This is the addition that puts the rendering actions into a function only called when the Play button is pressed, writing code into the 'glowscript_source' div and then rendering
+    function runCode() {
+        // Grabs existing code in from textarea
+        var code = document.getElementById('importExport');
+  		code.value = Blockly['Python'].workspaceToCode(workspace);
+        console.log(code.value);
+        // Physically writes into the html the existing code. Another solution is to entriley remove 'glowscript_source' div and just grab code directly from textarea in the 'prog' variable declaration.
+        document.getElementById('glowscript_source').innerHTML = code.value;
+
+        // Everything from this point on is all glowscript/trinkets compile and rendering code. I deleted all original jquery library imports that did not effect the script and compile falls but there may be needed depndecies I have not encountered yet. EDIT MathJax library may be needed in more complex programs
+
+        // Remove all previous windows
+        $('#glowscript').empty();
+
+        var prog = $('#glowscript_source').text()
+        , compiled, main_func;
+
+        try {
+        compiled = window.glowscript_compile(prog, { lang : 'vpython', version : '1.1.3' });
+        } catch(e) {
+        window.parent.postMessage(JSON.stringify({ "glowscript.error" : e.message }), "*");
+        }
+
+        function eval_script(x) {
+        return eval(x);
+        }
+
+        if (compiled) {
+        main_func = eval_script(compiled);
+        window.userMain = main_func;
+        }
+
+        $("#loading").remove()
+        window.__context = {
+        glowscript_container : $('#glowscript')
+        };
+
+        window.userMain(function(err) {
+        if (err) {
+          window.parent.postMessage(JSON.stringify({ "glowscript.error" : err.message }), "*");
+        }
+        });
+
+        window.addEventListener('message', function(e) {
+        if (e.data === "glowscript.snapshot") {
+          var scene = window.scene;
+          if (!scene) {
+            for (var c = 0; c < canvas.all.length; c++) {
+              if (canvas.all[c] && canvas.all[c].__activated) {
+                scene = canvas.all[c]
+                break;
+              }
+            }
+          }
+          if (scene) {
+            (scene.__renderer || scene.renderer).screenshot(function (err, img) {
+              if (!err) {
+                $(img).load(function () {
+                  // Rescale the image to 128px max dimension and save it as a screenshot
+                  var targetSize = 270;
+                  var aspect = img.width / img.height;
+                  var w = aspect >= 1 ? targetSize : targetSize * aspect;
+                  var h = aspect >= 1 ? targetSize / aspect : targetSize;
+
+                  var canvas = document.createElement("canvas");
+                  canvas.width = w;
+                  canvas.height = h;
+                  var cx = canvas.getContext('2d');
+                  cx.drawImage(img, 0, 0, w, h);
+                  var snapshot = canvas.toDataURL("image/png");
+
+                  window.parent.postMessage(JSON.stringify({ snapshot: snapshot }), "*");
+                });
+              }
+            });
+          }
+          else {
+            var glowscript_graph = $.find('.glowscript-graph canvas');
+            if (glowscript_graph[0] && typeof glowscript_graph[0].toDataURL == "function") {
+              var snapshot = glowscript_graph[0].toDataURL("image/png");
+              window.parent.postMessage(JSON.stringify({ snapshot: snapshot }), "*");
+            }
+          }
+        }
+        });
+        }
+</script>
+
   <p>
     <input type="button" value="Export to XML" onclick="toXml()">
     &nbsp;
@@ -364,10 +488,7 @@ h1 {
 
     <input type="button" value="To Python" onclick="toCode('Python')">
     &nbsp;
-
-    <input type="button" value="To Lua" onclick="toCode('Lua')">
-    &nbsp;
-    <input type="button" value="To Dart" onclick="toCode('Dart')">
+    <br>
 
     <textarea id="importExport" style="width: 26%; height: 33.125em"
       onchange="taChange();" onkeyup="taChange()"></textarea>

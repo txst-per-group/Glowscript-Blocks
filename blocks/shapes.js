@@ -407,7 +407,7 @@ Blockly.Blocks['vpython_box'] = {
 
         if(this.hasColor){
             this.appendValueInput("COLOR")
-                .setCheck(null)
+                .setCheck(["Vector", "Colour"])
                 .appendField("Color");
         }
 
@@ -780,7 +780,7 @@ Blockly.Blocks['vpython_sphere'] = {
 
         if(this.hasColor){
             this.appendValueInput("COLOR")
-                .setCheck(null)
+                .setCheck(["Vector", "Colour"])
                 .appendField("Color");
         }
 
@@ -1210,7 +1210,7 @@ Blockly.Blocks['vpython_arrow'] = {
 
         if(this.hasColor){
             this.appendValueInput("COLOR")
-                .setCheck(null)
+                .setCheck(["Vector", "Colour"])
                 .appendField("Color");
         }
 
@@ -1607,7 +1607,7 @@ Blockly.Blocks['vpython_cylinder'] = {
 
         if(this.hasColor){
             this.appendValueInput("COLOR")
-                .setCheck(null)
+                .setCheck(["Vector", "Colour"])
                 .appendField("Color");
         }
 
@@ -2038,7 +2038,7 @@ Blockly.Blocks['vpython_ring'] = {
 
         if(this.hasColor){
             this.appendValueInput("COLOR")
-                .setCheck(null)
+                .setCheck(["Vector", "Colour"])
                 .appendField("Color");
         }
 
@@ -2527,7 +2527,7 @@ Blockly.Blocks['vpython_helix'] = {
 
         if(this.hasColor){
             this.appendValueInput("COLOR")
-                .setCheck(null)
+                .setCheck(["Vector", "Colour"])
                 .appendField("Color");
         }
 

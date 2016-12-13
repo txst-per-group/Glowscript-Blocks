@@ -8,7 +8,7 @@ Blockly.Blocks['vector'] = {
   init: function() {
     this.appendValueInput("X")
         .setCheck("Number")
-        .appendField("Vector(");
+        .appendField("vector(");
     this.appendValueInput("Y")
         .setCheck("Number")
         .appendField(",");

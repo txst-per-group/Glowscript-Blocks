@@ -2567,7 +2567,7 @@ Blockly.Blocks['vpython_helix'] = {
 Blockly.Blocks['vpython_create_box']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Box");
+            .appendField("box");
         this.setColour(20);
         this.setNextStatement(true);
         this.setTooltip('');
@@ -2578,7 +2578,7 @@ Blockly.Blocks['vpython_create_box']= {
 Blockly.Blocks['vpython_create_sphere']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Sphere");
+            .appendField("sphere");
         this.setColour(20);
         this.setNextStatement(true);
         this.setTooltip('');
@@ -2589,7 +2589,7 @@ Blockly.Blocks['vpython_create_sphere']= {
 Blockly.Blocks['vpython_create_cylinder']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Cylinder");
+            .appendField("cylinder");
         this.setColour(20);
         this.setNextStatement(true);
         this.setTooltip('');
@@ -2600,7 +2600,7 @@ Blockly.Blocks['vpython_create_cylinder']= {
 Blockly.Blocks['vpython_create_ring']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Ring");
+            .appendField("ring");
         this.setColour(20);
         this.setNextStatement(true);
         this.setTooltip('');
@@ -2611,7 +2611,7 @@ Blockly.Blocks['vpython_create_ring']= {
 Blockly.Blocks['vpython_create_arrow']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Arrow");
+            .appendField("arrow");
         this.setColour(20);
         this.setNextStatement(true);
         this.setTooltip('');
@@ -2622,7 +2622,7 @@ Blockly.Blocks['vpython_create_arrow']= {
 Blockly.Blocks['vpython_create_helix']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Helix");
+            .appendField("helix");
         this.setColour(20);
         this.setNextStatement(true);
         this.setTooltip('');
@@ -2633,7 +2633,7 @@ Blockly.Blocks['vpython_create_helix']= {
 Blockly.Blocks['pos']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Pos");
+            .appendField("pos");
         this.setColour(20);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -2645,7 +2645,7 @@ Blockly.Blocks['pos']= {
 Blockly.Blocks['axis']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Axis");
+            .appendField("axis");
         this.setColour(20);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -2657,7 +2657,7 @@ Blockly.Blocks['axis']= {
 Blockly.Blocks['length']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Length");
+            .appendField("length");
         this.setColour(20);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -2669,7 +2669,7 @@ Blockly.Blocks['length']= {
 Blockly.Blocks['size']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Size");
+            .appendField("size");
         this.setColour(20);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -2681,7 +2681,7 @@ Blockly.Blocks['size']= {
 Blockly.Blocks['up']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Up");
+            .appendField("up");
         this.setColour(20);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -2693,7 +2693,7 @@ Blockly.Blocks['up']= {
 Blockly.Blocks['color']= {
     init: function(){
         this.appendDummyInput()
-            .appendField("Color");
+            .appendField("color");
         this.setColour(20);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -2717,7 +2717,7 @@ Blockly.Blocks['texture']= {
 Blockly.Blocks['radius'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Radius");
+        .appendField("radius");
     this.setColour(20);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -2729,7 +2729,7 @@ Blockly.Blocks['radius'] = {
 Blockly.Blocks['opacity'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Opacity");
+        .appendField("opacity");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
@@ -2741,7 +2741,7 @@ Blockly.Blocks['opacity'] = {
 Blockly.Blocks['make_trail'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Make Trail");
+        .appendField("make trail");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
@@ -2753,7 +2753,7 @@ Blockly.Blocks['make_trail'] = {
 Blockly.Blocks['shaftwidth'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Shaft Width");
+        .appendField("shaft width");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
@@ -2765,7 +2765,7 @@ Blockly.Blocks['shaftwidth'] = {
 Blockly.Blocks['headwidth'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Head Width");
+        .appendField("head width");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
@@ -2777,7 +2777,7 @@ Blockly.Blocks['headwidth'] = {
 Blockly.Blocks['headlength'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Head Length");
+        .appendField("head length");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
@@ -2789,7 +2789,7 @@ Blockly.Blocks['headlength'] = {
 Blockly.Blocks['thickness'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Thickness");
+        .appendField("thickness");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
@@ -2801,7 +2801,7 @@ Blockly.Blocks['thickness'] = {
 Blockly.Blocks['coils'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Coils");
+        .appendField("coils");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);

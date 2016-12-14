@@ -384,51 +384,51 @@ Blockly.Blocks['vpython_box'] = {
             //alert("updateShape_ has pos");
             this.appendValueInput("POS")
                 .setCheck("Vector")
-                .appendField("Pos");
+                .appendField("pos");
         }
 
         if(this.hasAxis){
             this.appendValueInput("AXIS")
                 .setCheck("Vector")
-                .appendField("Axis");
+                .appendField("axis");
         }
 
         if(this.hasSize){
             this.appendValueInput("SIZE")
                 .setCheck("Vector")
-                .appendField("Size");
+                .appendField("size");
         }
 
         if(this.hasUp){
             this.appendValueInput("UP")
                 .setCheck("Vector")
-                .appendField("Up");
+                .appendField("up");
         }
 
         if(this.hasColor){
             this.appendValueInput("COLOR")
                 .setCheck(["Vector", "Colour"])
-                .appendField("Color");
+                .appendField("color");
         }
 
         if(this.hasTexture){
             this.appendValueInput("TEXTURE")
                 .setCheck('Texture')
-                .appendField("Texture");
+                .appendField("texture");
         }
 
         if(this.hasOpacity){
         	this.appendValueInput("OPACITY")
         		.setCheck("Number")
-        		.appendField("Opacity");
+        		.appendField("opacity");
         }
         
         if(this.hasTrail){
             this.appendValueInput("TRAIL")
                 .setCheck("Boolean")
-                .appendField("Make Trail");
+                .appendField("make trail");
             this.appendDummyInput("RETAIN_INPUT")
-                .appendField("Retain")
+                .appendField("retain")
                 .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
         }
     }
@@ -751,51 +751,51 @@ Blockly.Blocks['vpython_sphere'] = {
         if(this.hasPos){
             this.appendValueInput("POS")
                 .setCheck("Vector")
-                .appendField("Pos");
+                .appendField("pos");
         }
 
         if(this.hasAxis){
             this.appendValueInput("AXIS")
                 .setCheck("Vector")
-                .appendField("Axis");
+                .appendField("axis");
         }
 
         if(this.hasRadius){
             this.appendValueInput("RADIUS")
                 .setCheck("Number")
-                .appendField("Radius");
+                .appendField("radius");
         }
 
         if(this.hasSize){
             this.appendValueInput("SIZE")
                 .setCheck("Vector")
-                .appendField("Size");
+                .appendField("size");
         }
 
         if(this.hasUp){
             this.appendValueInput("UP")
                 .setCheck("Vector")
-                .appendField("Up");
+                .appendField("up");
         }
 
         if(this.hasColor){
             this.appendValueInput("COLOR")
                 .setCheck(["Vector", "Colour"])
-                .appendField("Color");
+                .appendField("color");
         }
 
         if(this.hasOpacity){
             this.appendValueInput("OPACITY")
                 .setCheck("Number")
-                .appendField("Opacity");
+                .appendField("opacity");
         }
         
         if(this.hasTrail){
             this.appendValueInput("TRAIL")
                 .setCheck("Boolean")
-                .appendField("Make Trail");
+                .appendField("make trail");
             this.appendDummyInput("RETAIN_INPUT")
-                .appendField("Retain")
+                .appendField("retain")
                 .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
         }
     }
@@ -1169,63 +1169,63 @@ Blockly.Blocks['vpython_arrow'] = {
         if(this.hasPos){
             this.appendValueInput("POS")
                 .setCheck("Vector")
-                .appendField("Pos");
+                .appendField("pos");
         }
 
         if(this.hasAxis){
             this.appendValueInput("AXIS")
                 .setCheck("Vector")
-                .appendField("Axis");
+                .appendField("axis");
         }
 
         if(this.hasLength){
             this.appendValueInput("LENGTH")
                 .setCheck("Number")
-                .appendField("Length");
+                .appendField("length");
         }
 
         if(this.hasShaftWidth){
             this.appendValueInput("SHAFTWIDTH")
                 .setCheck("Number")
-                .appendField("Shaft Width");
+                .appendField("shaft width");
         }
 
         if(this.hasHeadWidth){
             this.appendValueInput("HEADWIDTH")
                 .setCheck("Number")
-                .appendField("Head Width");
+                .appendField("wead width");
         }
 
         if(this.hasHeadLength){
             this.appendValueInput("HEADLENGTH")
                 .setCheck("Number")
-                .appendField("Head Length");
+                .appendField("head length");
         }
 
         if(this.hasUp){
             this.appendValueInput("UP")
                 .setCheck("Vector")
-                .appendField("Up");
+                .appendField("up");
         }
 
         if(this.hasColor){
             this.appendValueInput("COLOR")
                 .setCheck(["Vector", "Colour"])
-                .appendField("Color");
+                .appendField("color");
         }
 
         if(this.hasOpacity){
             this.appendValueInput("OPACITY")
                 .setCheck("Number")
-                .appendField("Opacity");
+                .appendField("opacity");
         }
         
         if(this.hasTrail){
             this.appendValueInput("TRAIL")
                 .setCheck("Boolean")
-                .appendField("Make Trail");
+                .appendField("make trail");
             this.appendDummyInput("RETAIN_INPUT")
-                .appendField("Retain")
+                .appendField("retain")
                 .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
         }
     }
@@ -1573,56 +1573,56 @@ Blockly.Blocks['vpython_cylinder'] = {
         if(this.hasPos){
             this.appendValueInput("POS")
                 .setCheck("Vector")
-                .appendField("Pos");
+                .appendField("pos");
         }
 
         if(this.hasAxis){
             this.appendValueInput("AXIS")
                 .setCheck("Vector")
-                .appendField("Axis");
+                .appendField("axis");
         }
 
         if(this.hasRadius){
             this.appendValueInput("RADIUS")
                 .setCheck("Number")
-                .appendField("Radius");
+                .appendField("radius");
         }
         if(this.hasLength){
             this.appendValueInput("LENGTH")
                 .setCheck("Number")
-                .appendField("Length");
+                .appendField("length");
         }
 
         if(this.hasSize){
             this.appendValueInput("SIZE")
                 .setCheck("Vector")
-                .appendField("Size");
+                .appendField("size");
         }
 
         if(this.hasUp){
             this.appendValueInput("UP")
                 .setCheck("Vector")
-                .appendField("Up");
+                .appendField("up");
         }
 
         if(this.hasColor){
             this.appendValueInput("COLOR")
                 .setCheck(["Vector", "Colour"])
-                .appendField("Color");
+                .appendField("color");
         }
 
         if(this.hasOpacity){
             this.appendValueInput("OPACITY")
                 .setCheck("Number")
-                .appendField("Opacity");
+                .appendField("opacity");
         }
         
         if(this.hasTrail){
             this.appendValueInput("TRAIL")
                 .setCheck("Boolean")
-                .appendField("Make Trail");
+                .appendField("make trail");
             this.appendDummyInput("RETAIN_INPUT")
-                .appendField("Retain")
+                .appendField("retain")
                 .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
         }
     }
@@ -1997,63 +1997,63 @@ Blockly.Blocks['vpython_ring'] = {
         if(this.hasPos){
             this.appendValueInput("POS")
                 .setCheck("Vector")
-                .appendField("Pos");
+                .appendField("pos");
         }
 
         if(this.hasAxis){
             this.appendValueInput("AXIS")
                 .setCheck("Vector")
-                .appendField("Axis");
+                .appendField("axis");
         }
 
         if(this.hasRadius){
             this.appendValueInput("RADIUS")
                 .setCheck("Number")
-                .appendField("Radius");
+                .appendField("radius");
         }
 
         if(this.hasLength){
             this.appendValueInput("LENGTH")
                 .setCheck("Number")
-                .appendField("Length");
+                .appendField("length");
         }
 
         if(this.hasThickness){
             this.appendValueInput("THICKNESS")
                 .setCheck("Number")
-                .appendField("Thickness");
+                .appendField("thickness");
         }
 
         if(this.hasSize){
             this.appendValueInput("SIZE")
                 .setCheck("Vector")
-                .appendField("Size");
+                .appendField("size");
         }
 
         if(this.hasUp){
             this.appendValueInput("UP")
                 .setCheck("Vector")
-                .appendField("Up");
+                .appendField("up");
         }
 
         if(this.hasColor){
             this.appendValueInput("COLOR")
                 .setCheck(["Vector", "Colour"])
-                .appendField("Color");
+                .appendField("color");
         }
 
         if(this.hasOpacity){
             this.appendValueInput("OPACITY")
                 .setCheck("Number")
-                .appendField("Opacity");
+                .appendField("opacity");
         }
         
         if(this.hasTrail){
             this.appendValueInput("TRAIL")
                 .setCheck("Boolean")
-                .appendField("Make Trail");
+                .appendField("make trail");
             this.appendDummyInput("RETAIN_INPUT")
-                .appendField("Retain")
+                .appendField("retain")
                 .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
         }
     }
@@ -2480,75 +2480,75 @@ Blockly.Blocks['vpython_helix'] = {
         if(this.hasPos){
             this.appendValueInput("POS")
                 .setCheck("Vector")
-                .appendField("Pos");
+                .appendField("pos");
         }
 
         if(this.hasAxis){
             this.appendValueInput("AXIS")
                 .setCheck("Vector")
-                .appendField("Axis");
+                .appendField("axis");
         }
 
         if(this.hasRadius){
             this.appendValueInput("RADIUS")
                 .setCheck("Number")
-                .appendField("Radius");
+                .appendField("radius");
         }
 
         if(this.hasLength){
             this.appendValueInput("LENGTH")
                 .setCheck("Number")
-                .appendField("Length");
+                .appendField("length");
         }
 
         if(this.hasCoils){
             this.appendValueInput("COILS")
                 .setCheck("Number")
-                .appendField("Coils");
+                .appendField("coils");
         }
 
         if(this.hasThickness){
             this.appendValueInput("THICKNESS")
                 .setCheck("Number")
-                .appendField("Thickness");
+                .appendField("thickness");
         }
 
         if(this.hasSize){
             this.appendValueInput("SIZE")
                 .setCheck("Vector")
-                .appendField("Size");
+                .appendField("size");
         }
 
         if(this.hasUp){
             this.appendValueInput("UP")
                 .setCheck("Vector")
-                .appendField("Up");
+                .appendField("up");
         }
 
         if(this.hasColor){
             this.appendValueInput("COLOR")
                 .setCheck(["Vector", "Colour"])
-                .appendField("Color");
+                .appendField("color");
         }
 
         if(this.hasTexture){
             this.appendValueInput("TEXTURE")
                 .setCheck("Texture")
-                .appendField("Texture");
+                .appendField("texture");
         }
 
         if(this.hasOpacity){
             this.appendValueInput("OPACITY")
                 .setCheck("Number")
-                .appendField("Opacity");
+                .appendField("opacity");
         }
         
         if(this.hasTrail){
             this.appendValueInput("TRAIL")
                 .setCheck("Boolean")
-                .appendField("Make Trail");
+                .appendField("make trail");
             this.appendDummyInput("RETAIN_INPUT")
-                .appendField("Retain")
+                .appendField("retain")
                 .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
         }
     }

@@ -206,7 +206,7 @@ Blockly.Blocks['set_shape'] = {
                 .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
 
             this.appendValueInput("VALUE")
-                .setCheck(null)
+                .setCheck("Vector")
                 .setAlign(Blockly.ALIGN_RIGHT)
                 .appendField("to");
 

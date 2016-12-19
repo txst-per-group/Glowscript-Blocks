@@ -177,7 +177,7 @@ function myUpdateFunction(event) {
     workspace.addChangeListener(myUpdateFunction);
 }
 
-
+workspace.addChangeListener(taChange());
 // Disable the "Import from XML" button if the XML is invalid.
 // Preserve text between page reloads.
 function taChange() {
@@ -339,7 +339,7 @@ html, body {
 }
 body {
   background-color: #fff;
-  font-family: sans-serif;
+  font-family: monospace;
   overflow: hidden;
 }
 h1 {
@@ -347,6 +347,7 @@ h1 {
   font-size: 140%;
 }
 #blocklyDiv {
+  font-family: monospace;
   float: right;
   height: 95%;
   width: 50%;
@@ -535,12 +536,18 @@ h1 {
 <!-- ************************************************************* -->
 
     <category name="Shapes" colour="20">
-      <block type="vpython_box"></block>
-      <block type="vpython_sphere"></block>
-      <block type="vpython_arrow"></block>
-      <block type="vpython_cylinder"></block>
-      <block type="vpython_ring"></block>
-      <block type="vpython_helix"></block>
+      <category name="Make" colour="20">
+        <block type="vpython_box"></block>
+        <block type="vpython_sphere"></block>
+        <block type="vpython_arrow"></block>
+        <block type="vpython_cylinder"></block>
+        <block type="vpython_ring"></block>
+        <block type="vpython_helix"></block>
+      </category>
+      <category name="Modify" colour="20">
+        <block type="set_shape"></block>
+        <block type="get_shape"></block>
+      </category>              
     </category>
     
     <category name="Vector" colour="65">
@@ -583,7 +590,6 @@ h1 {
           </shadow>
         </value>
       </block>
-      <block type="controls_repeat" disabled="true"></block>
       <block type="controls_whileUntil"></block>
       <block type="controls_for">
         <value name="FROM">
@@ -648,7 +654,6 @@ h1 {
           </shadow>
         </value>
       </block>
-      <block type="math_on_list"></block>
       <block type="math_modulo">
         <value name="DIVIDEND">
           <shadow type="math_number">
@@ -722,8 +727,6 @@ h1 {
     <category name="Variables" colour="330">
       <block type="variables_get"></block>
       <block type="variables_set"></block>
-      <block type="set_shape"></block>
-      <block type="get_shape"></block>
     </category>
     <category name="Functions" colour="290" custom="PROCEDURE"></category>
   </xml>

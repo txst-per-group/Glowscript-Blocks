@@ -4,6 +4,13 @@ goog.provide('Blockly.Blocks.vector');
 
 goog.require('Blockly.Blocks');
 
+/**
+ * Common HSV hue for all blocks in this category.
+ */
+Blockly.Blocks.vectors.HUE = 60;
+
+////////////////////////////////////////////////
+
 Blockly.Blocks['vector'] = {
   init: function() {
     this.appendValueInput("X")
@@ -19,7 +26,7 @@ Blockly.Blocks['vector'] = {
         .appendField(")");
     this.setInputsInline(true);
     this.setOutput(true, "Vector");
-    this.setColour(65);
+    this.setColour(Blockly.Blocks.vectors.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }
@@ -44,7 +51,7 @@ Blockly.Blocks['vector_math'] = {
                                                 }), 
                                                 "operation");
     this.setOutput(true, "Number");
-    this.setColour(65);
+    this.setColour(Blockly.Blocks.vectors.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
     this.selection = "";

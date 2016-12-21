@@ -4,6 +4,13 @@ goog.provide('Blockly.Blocks.shapes');
 
 goog.require('Blockly.Blocks');
 
+/**
+ * Common HSV hue for all blocks in this category.
+ */
+Blockly.Blocks.shapes.HUE = 30;
+
+////////////////////////////////////////////////
+
 var objectDropDown = [["box", "box"], ["sphere", "sphere"],
                       ["arrow", "arrow"], ["vector", "vector"],
                       ["ring", "ring"], ["cylinder", "cylinder"], 
@@ -70,7 +77,7 @@ Blockly.Blocks['vpython_box'] = {
         .appendField("box");
     this.setInputsInline(false);
     this.setOutput(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.itemCount_ = 0;
     this.setHelpUrl('http://www.example.com/');
@@ -441,7 +448,7 @@ Blockly.Blocks['vpython_sphere'] = {
         .appendField("sphere");
     this.setInputsInline(false);
     this.setOutput(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.itemCount_ = 0;
     this.setHelpUrl('http://www.example.com/');
@@ -808,7 +815,7 @@ Blockly.Blocks['vpython_arrow'] = {
         .appendField("arrow");
     this.setInputsInline(false);
     this.setOutput(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.itemCount_ = 0;
     this.setHelpUrl('http://www.example.com/');
@@ -1237,7 +1244,7 @@ Blockly.Blocks['vpython_cylinder'] = {
         .appendField("cylinder");
     this.setInputsInline(false);
     this.setOutput(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.itemCount_ = 0;
     this.setHelpUrl('http://www.example.com/');
@@ -1635,7 +1642,7 @@ Blockly.Blocks['vpython_ring'] = {
         .appendField("ring");
     this.setInputsInline(false);
     this.setOutput(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.itemCount_ = 0;
     this.setHelpUrl('http://www.example.com/');
@@ -2066,7 +2073,7 @@ Blockly.Blocks['vpython_helix'] = {
         .appendField("helix");
     this.setInputsInline(false);
     this.setOutput(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.itemCount_ = 0;
     this.setHelpUrl('http://www.example.com/');
@@ -2598,7 +2605,7 @@ Blockly.Blocks['set_shape'] = {
 
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
     this.objectSelected = '';
@@ -2769,7 +2776,7 @@ Blockly.Blocks['get_shape'] = {
         .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
 
     this.setOutput(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
     this.objectSelected = '';
@@ -2914,7 +2921,7 @@ Blockly.Blocks['vpython_create_box']= {
     init: function(){
         this.appendDummyInput()
             .appendField("box");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setNextStatement(true);
         this.setTooltip('');
         this.setHelpUrl('http://www.example.com/');
@@ -2925,7 +2932,7 @@ Blockly.Blocks['vpython_create_sphere']= {
     init: function(){
         this.appendDummyInput()
             .appendField("sphere");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setNextStatement(true);
         this.setTooltip('');
         this.setHelpUrl('http://www.example.com/');
@@ -2936,7 +2943,7 @@ Blockly.Blocks['vpython_create_cylinder']= {
     init: function(){
         this.appendDummyInput()
             .appendField("cylinder");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setNextStatement(true);
         this.setTooltip('');
         this.setHelpUrl('http://www.example.com/');
@@ -2947,7 +2954,7 @@ Blockly.Blocks['vpython_create_ring']= {
     init: function(){
         this.appendDummyInput()
             .appendField("ring");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setNextStatement(true);
         this.setTooltip('');
         this.setHelpUrl('http://www.example.com/');
@@ -2958,7 +2965,7 @@ Blockly.Blocks['vpython_create_arrow']= {
     init: function(){
         this.appendDummyInput()
             .appendField("arrow");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setNextStatement(true);
         this.setTooltip('');
         this.setHelpUrl('http://www.example.com/');
@@ -2969,7 +2976,7 @@ Blockly.Blocks['vpython_create_helix']= {
     init: function(){
         this.appendDummyInput()
             .appendField("helix");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setNextStatement(true);
         this.setTooltip('');
         this.setHelpUrl('http://www.example.com/');
@@ -2980,7 +2987,7 @@ Blockly.Blocks['pos']= {
     init: function(){
         this.appendDummyInput()
             .appendField("pos");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip('');
@@ -2992,7 +2999,7 @@ Blockly.Blocks['axis']= {
     init: function(){
         this.appendDummyInput()
             .appendField("axis");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip('');
@@ -3004,7 +3011,7 @@ Blockly.Blocks['length']= {
     init: function(){
         this.appendDummyInput()
             .appendField("length");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip('');
@@ -3016,7 +3023,7 @@ Blockly.Blocks['size']= {
     init: function(){
         this.appendDummyInput()
             .appendField("size");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip('');
@@ -3028,7 +3035,7 @@ Blockly.Blocks['up']= {
     init: function(){
         this.appendDummyInput()
             .appendField("up");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip('');
@@ -3040,7 +3047,7 @@ Blockly.Blocks['color']= {
     init: function(){
         this.appendDummyInput()
             .appendField("color");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip('');
@@ -3052,7 +3059,7 @@ Blockly.Blocks['texture']= {
     init: function(){
         this.appendDummyInput()
             .appendField("texture");
-        this.setColour(20);
+        this.setColour(Blockly.Blocks.shapes.HUE);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip('');
@@ -3064,7 +3071,7 @@ Blockly.Blocks['radius'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("radius");
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip('');
@@ -3078,7 +3085,7 @@ Blockly.Blocks['opacity'] = {
         .appendField("opacity");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }
@@ -3090,7 +3097,7 @@ Blockly.Blocks['make_trail'] = {
         .appendField("make trail");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }
@@ -3102,7 +3109,7 @@ Blockly.Blocks['shaftwidth'] = {
         .appendField("shaft width");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }
@@ -3114,7 +3121,7 @@ Blockly.Blocks['headwidth'] = {
         .appendField("head width");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }
@@ -3126,7 +3133,7 @@ Blockly.Blocks['headlength'] = {
         .appendField("head length");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }
@@ -3138,7 +3145,7 @@ Blockly.Blocks['thickness'] = {
         .appendField("thickness");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }
@@ -3150,7 +3157,7 @@ Blockly.Blocks['coils'] = {
         .appendField("coils");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }

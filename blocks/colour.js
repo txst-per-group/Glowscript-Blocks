@@ -32,7 +32,7 @@ goog.require('Blockly.Blocks');
 /**
  * Common HSV hue for all blocks in this category.
  */
-Blockly.Blocks.colour.HUE = 20;
+Blockly.Blocks.colour.HUE = 270;
 
 Blockly.Blocks['colour_picker'] = {
   /**
@@ -81,7 +81,7 @@ Blockly.Blocks['texture_picker'] = {
                                                 ["wood_old", "wood_old"], 
                                                 ["earth", "earth"]]), "TEXTURE_SELECTION");
     this.setOutput(true, "Texture");
-    this.setColour(20);
+    this.setColour(Blockly.Blocks.colour.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }

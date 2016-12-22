@@ -68,7 +68,7 @@ Blockly.Blocks['math_arithmetic'] = {
         {
           "type": "input_value",
           "name": "A",
-          "check": "Number"
+          "check": ["Number", "Vector"]
         },
         {
           "type": "field_dropdown",
@@ -83,7 +83,7 @@ Blockly.Blocks['math_arithmetic'] = {
         {
           "type": "input_value",
           "name": "B",
-          "check": "Number"
+          "check": ["Number", "Vector"]
         }
       ],
       "inputsInline": true,
@@ -91,6 +91,8 @@ Blockly.Blocks['math_arithmetic'] = {
       "colour": Blockly.Blocks.math.HUE,
       "helpUrl": Blockly.Msg.MATH_ARITHMETIC_HELPURL
     });
+
+    
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
@@ -104,6 +106,33 @@ Blockly.Blocks['math_arithmetic'] = {
       };
       return TOOLTIPS[mode];
     });
+  },
+
+  mutationToDom: function(){
+    var container = document.createElement('mutation');
+    var numVectors = 0;
+    var inputs = this.getChildren();
+
+    // count the number of vectors as inputs
+    try{
+      if(inputs[0].type == "vector")
+        numVectors += 1;
+    }
+    catch(err){}
+
+    try{
+      if(inputs[1].type == "vector")
+        numVectors += 1;
+    }
+    catch(err){}
+
+    container.setAttribute('num_vectors', numVectors);
+    return container;
+  },
+
+  domToMutation: function(xmlElement){
+    var numVectors = Number(xmlElement.getAttribute('num_vectors'));
+    console.log(numVectors);
   }
 };
 

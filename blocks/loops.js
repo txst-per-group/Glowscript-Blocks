@@ -32,7 +32,7 @@ goog.require('Blockly.Blocks');
 /**
  * Common HSV hue for all blocks in this category.
  */
-Blockly.Blocks.loops.HUE = 120;
+Blockly.Blocks.loops.HUE = 150;
 
 Blockly.Blocks['rate'] = {
   init: function() {
@@ -41,7 +41,7 @@ Blockly.Blocks['rate'] = {
         .appendField("rate");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(120);
+    this.setColour(Blockly.Blocks.loops.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }

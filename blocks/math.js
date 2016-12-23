@@ -32,7 +32,10 @@ goog.require('Blockly.Blocks');
 /**
  * Common HSV hue for all blocks in this category.
  */
-Blockly.Blocks.math.HUE = 180;
+//Blockly.Blocks.math.HUE = '#303F9F';
+//var arithmetics_color = '#1976D2';
+Blockly.Blocks.math.HUE = '#3F51B5';
+var arithmetics_color = '#2196F3';
 
 Blockly.Blocks['math_number'] = {
   /**
@@ -41,7 +44,7 @@ Blockly.Blocks['math_number'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.MATH_NUMBER_HELPURL);
-    this.setColour(Blockly.Blocks.math.HUE);
+    this.setColour(arithmetics_color);
     this.appendDummyInput()
         .appendField(new Blockly.FieldNumber('0'), 'NUM');
     this.setOutput(true, 'Number');
@@ -88,7 +91,7 @@ Blockly.Blocks['math_arithmetic'] = {
       ],
       "inputsInline": true,
       "output": "Number",
-      "colour": Blockly.Blocks.math.HUE,
+      "colour": arithmetics_color,
       "helpUrl": Blockly.Msg.MATH_ARITHMETIC_HELPURL
     });
     // Assign 'this' to a variable for use in the tooltip closure below.
@@ -106,6 +109,37 @@ Blockly.Blocks['math_arithmetic'] = {
     });
   }
 };
+
+Blockly.Blocks['math_modulo'] = {
+  /**
+   * Block for remainder of a division.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.MATH_MODULO_TITLE,
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "DIVIDEND",
+          "check": "Number"
+        },
+        {
+          "type": "input_value",
+          "name": "DIVISOR",
+          "check": "Number"
+        }
+      ],
+      "inputsInline": true,
+      "output": "Number",
+      "colour": arithmetics_color,
+      "tooltip": Blockly.Msg.MATH_MODULO_TOOLTIP,
+      "helpUrl": Blockly.Msg.MATH_MODULO_HELPURL
+    });
+  }
+};
+
+///////////////////////////////////////////////////////////////
 
 Blockly.Blocks['math_single'] = {
   /**
@@ -441,35 +475,6 @@ Blockly.Blocks['math_on_list'] = {
    */
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('op'));
-  }
-};
-
-Blockly.Blocks['math_modulo'] = {
-  /**
-   * Block for remainder of a division.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.MATH_MODULO_TITLE,
-      "args0": [
-        {
-          "type": "input_value",
-          "name": "DIVIDEND",
-          "check": "Number"
-        },
-        {
-          "type": "input_value",
-          "name": "DIVISOR",
-          "check": "Number"
-        }
-      ],
-      "inputsInline": true,
-      "output": "Number",
-      "colour": Blockly.Blocks.math.HUE,
-      "tooltip": Blockly.Msg.MATH_MODULO_TOOLTIP,
-      "helpUrl": Blockly.Msg.MATH_MODULO_HELPURL
-    });
   }
 };
 

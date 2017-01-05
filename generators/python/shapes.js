@@ -150,7 +150,7 @@ Blockly.Python['vpython_helix'] = function(block) {
                                                    'TEXTURE',
                                                    Blockly.Python.ORDER_ATOMIC);
 
-    code = code + 'textures=' + value_texture; 
+    code = code + 'texture=' + value_texture; 
   }
   if(block.hasOpacity){
 
@@ -173,7 +173,7 @@ Blockly.Python['vpython_helix'] = function(block) {
                                                    'TEXTURE',
                                                    Blockly.Python.ORDER_ATOMIC);
 
-    code = code + 'textures=' + value_texture; 
+    code = code + 'texture=' + value_texture; 
   }
   if(block.hasTrail){
 
@@ -326,7 +326,7 @@ Blockly.Python['vpython_arrow'] = function(block) {
                                                    'TEXTURE',
                                                    Blockly.Python.ORDER_ATOMIC);
 
-    code = code + 'textures=' + value_texture; 
+    code = code + 'texture=' + value_texture; 
   }
   if(block.hasTrail){
 
@@ -464,7 +464,7 @@ Blockly.Python['vpython_cylinder'] = function(block) {
                                                    'TEXTURE',
                                                    Blockly.Python.ORDER_ATOMIC);
 
-    code = code + 'textures=' + value_texture; 
+    code = code + 'texture=' + value_texture; 
   }
   if(block.hasTrail){
 
@@ -612,7 +612,7 @@ Blockly.Python['vpython_ring'] = function(block) {
                                                    'TEXTURE',
                                                    Blockly.Python.ORDER_ATOMIC);
 
-    code = code + 'textures=' + value_texture; 
+    code = code + 'texture=' + value_texture; 
   }
   if(block.hasTrail){
 
@@ -738,7 +738,7 @@ Blockly.Python['vpython_sphere'] = function(block) {
                                                    'TEXTURE',
                                                    Blockly.Python.ORDER_ATOMIC);
 
-    code = code + 'textures=' + value_texture; 
+    code = code + 'texture=' + value_texture; 
   }
   if(block.hasTrail){
 
@@ -841,7 +841,7 @@ Blockly.Python['vpython_box'] = function(block) {
                                                    'TEXTURE',
                                                    Blockly.Python.ORDER_ATOMIC);
 
-    code = code + 'textures=' + value_texture; 
+    code = code + 'texture=' + value_texture; 
   }
   if(block.hasOpacity){
 
@@ -864,7 +864,7 @@ Blockly.Python['vpython_box'] = function(block) {
                                                    'TEXTURE',
                                                    Blockly.Python.ORDER_ATOMIC);
 
-    code = code + 'textures=' + value_texture; 
+    code = code + 'texture=' + value_texture; 
   }
   if(block.hasTrail){
 

@@ -7,9 +7,9 @@ goog.require('Blockly.Blocks');
 /**
  * Common HSV hue for all blocks in this category.
  */
-Blockly.Blocks.vector.HUE = 60;
+//var vectors_color = '#0097A7';
+var vectors_color = '#00BCD4';
 
-var vector_color = 60;
 ////////////////////////////////////////////////
 
 Blockly.Blocks['vector'] = {
@@ -27,7 +27,7 @@ Blockly.Blocks['vector'] = {
         .appendField(")");
     this.setInputsInline(true);
     this.setOutput(true, "Vector");
-    this.setColour(vector_color);
+    this.setColour(vectors_color);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }
@@ -52,7 +52,7 @@ Blockly.Blocks['vector_math'] = {
                                                 }), 
                                                 "operation");
     this.setOutput(true, "Number");
-    this.setColour(60);
+    this.setColour(vectors_color);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
     this.selection = "";

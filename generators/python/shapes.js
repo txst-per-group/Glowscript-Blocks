@@ -164,6 +164,17 @@ Blockly.Python['vpython_helix'] = function(block) {
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
   }
+  if(block.hasTexture){
+
+    if(previousArg)
+      code = code +', ';
+
+    var value_texture = Blockly.Python.valueToCode(block,
+                                                   'TEXTURE',
+                                                   Blockly.Python.ORDER_ATOMIC);
+
+    code = code + 'texture=' + value_texture; 
+  }
   if(block.hasTrail){
 
     if(previousArg)
@@ -306,6 +317,17 @@ Blockly.Python['vpython_arrow'] = function(block) {
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
   }
+  if(block.hasTexture){
+
+    if(previousArg)
+      code = code +', ';
+
+    var value_texture = Blockly.Python.valueToCode(block,
+                                                   'TEXTURE',
+                                                   Blockly.Python.ORDER_ATOMIC);
+
+    code = code + 'texture=' + value_texture; 
+  }
   if(block.hasTrail){
 
     if(previousArg)
@@ -432,6 +454,17 @@ Blockly.Python['vpython_cylinder'] = function(block) {
 
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
+  }
+  if(block.hasTexture){
+
+    if(previousArg)
+      code = code +', ';
+
+    var value_texture = Blockly.Python.valueToCode(block,
+                                                   'TEXTURE',
+                                                   Blockly.Python.ORDER_ATOMIC);
+
+    code = code + 'texture=' + value_texture; 
   }
   if(block.hasTrail){
 
@@ -570,6 +603,17 @@ Blockly.Python['vpython_ring'] = function(block) {
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
   }
+  if(block.hasTexture){
+
+    if(previousArg)
+      code = code +', ';
+
+    var value_texture = Blockly.Python.valueToCode(block,
+                                                   'TEXTURE',
+                                                   Blockly.Python.ORDER_ATOMIC);
+
+    code = code + 'texture=' + value_texture; 
+  }
   if(block.hasTrail){
 
     if(previousArg)
@@ -685,6 +729,17 @@ Blockly.Python['vpython_sphere'] = function(block) {
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
   }
+  if(block.hasTexture){
+
+    if(previousArg)
+      code = code +', ';
+
+    var value_texture = Blockly.Python.valueToCode(block,
+                                                   'TEXTURE',
+                                                   Blockly.Python.ORDER_ATOMIC);
+
+    code = code + 'texture=' + value_texture; 
+  }
   if(block.hasTrail){
 
     if(previousArg)
@@ -799,6 +854,17 @@ Blockly.Python['vpython_box'] = function(block) {
 
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
+  }
+  if(block.hasTexture){
+
+    if(previousArg)
+      code = code +', ';
+
+    var value_texture = Blockly.Python.valueToCode(block,
+                                                   'TEXTURE',
+                                                   Blockly.Python.ORDER_ATOMIC);
+
+    code = code + 'texture=' + value_texture; 
   }
   if(block.hasTrail){
 

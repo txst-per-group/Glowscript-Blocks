@@ -7,8 +7,9 @@ goog.require('Blockly.Blocks');
 /**
  * Common HSV hue for all blocks in this category.
  */
-//Blockly.Blocks.shapes.HUE = 30;
-Blockly.Blocks.shapes.HUE = "#E91E63";
+//Blockly.Blocks.shapes.HUE = '#C2185B';
+Blockly.Blocks.shapes.HUE = '#E91E63';
+
 
 ////////////////////////////////////////////////
 
@@ -268,13 +269,11 @@ Blockly.Blocks['vpython_box'] = {
                     this.elementCount_++;
                     valueConnections.push(['color', clauseBlock.valueConnection_]);
                     break;
-
                 case 'texture':
                     this.hasTexture = true;
                     this.elementCount_++;
                     valueConnections.push(['texture', clauseBlock.valueConnection_]);
                     break;
-
                 case 'opacity':
                     this.hasOpacity = true;
                     this.elementCount_++;
@@ -459,6 +458,7 @@ Blockly.Blocks['vpython_sphere'] = {
                                          'size',
                                          'up',
                                          'color',
+                                         'texture',
                                          'opacity',
                                          'make_trail']));
     this.hasPos = false;
@@ -467,6 +467,7 @@ Blockly.Blocks['vpython_sphere'] = {
     this.hasSize = false;
     this.hasUp = false;
     this.hasColor = false;
+    this.hasTexture = false;
     this.hasOpacity = false;
     this.hasTrail = false;
     this.elementCount_ = 0;
@@ -500,6 +501,9 @@ Blockly.Blocks['vpython_sphere'] = {
         if(this.hasColor){
             container.setAttribute('color', 1);
         }
+        if(this.hasTexture){
+            container.setAttribute('texture', 1);
+        }
         if(this.hasOpacity){
             container.setAttribute('opacity', 1);
         }
@@ -522,6 +526,7 @@ Blockly.Blocks['vpython_sphere'] = {
         this.hasSize = parseInt(xmlElement.getAttribute('size'), 10) || 0;
         this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
+        this.hasTexture = parseInt(xmlElement.getAttribute('texture'), 10) || 0;
         this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
         this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
         this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
@@ -577,6 +582,13 @@ Blockly.Blocks['vpython_sphere'] = {
             connection = colorBlock.nextConnection;
         }
 
+        if(this.hasTexture){
+            var textureBlock = workspace.newBlock('texture');
+            textureBlock.initSvg();
+            connection.connect(textureBlock.previousConnection);
+            connection = textureBlock.nextConnection;
+        }
+
         if(this.hasOpacity){
             var opacityBlock = workspace.newBlock('opacity');
             opacityBlock.initSvg();
@@ -604,6 +616,7 @@ Blockly.Blocks['vpython_sphere'] = {
         this.hasSize = false;
         this.hasUp = false;
         this.hasColor = false;
+        this.hasTexture = false;
         this.hasOpacity = false;
         this.hasTrail = false;
         this.elementCount_ = 0;
@@ -644,6 +657,11 @@ Blockly.Blocks['vpython_sphere'] = {
                     this.hasColor = true;
                     this.elementCount_++;
                     valueConnections.push(['color', clauseBlock.valueConnection_]);
+                    break;
+                case 'texture':
+                    this.hasTexture = true;
+                    this.elementCount_++;
+                    valueConnections.push(['texture', clauseBlock.valueConnection_]);
                     break;
                 case 'opacity':
                     this.hasOpacity = true;
@@ -791,6 +809,12 @@ Blockly.Blocks['vpython_sphere'] = {
                 .setCheck(["Vector", "Colour"])
                 .appendField("color");
         }
+        
+        if(this.hasTexture){
+            this.appendValueInput("TEXTURE")
+                .setCheck("Texture")
+                .appendField("texture");
+        }
 
         if(this.hasOpacity){
             this.appendValueInput("OPACITY")
@@ -828,6 +852,7 @@ Blockly.Blocks['vpython_arrow'] = {
                                          'headlength',
                                          'up',
                                          'color',
+                                         'texture',
                                          'opacity',
                                          'make_trail']));
     this.hasPos = false;
@@ -838,6 +863,7 @@ Blockly.Blocks['vpython_arrow'] = {
     this.hasHeadLength = false;
     this.hasUp = false;
     this.hasColor = false;
+    this.hasTexture = false;
     this.hasOpacity = false;
     this.hasTrail = false;
     this.elementCount_ = 0;
@@ -877,6 +903,9 @@ Blockly.Blocks['vpython_arrow'] = {
         if(this.hasColor){
             container.setAttribute('color', 1);
         }
+        if(this.hasTexture){
+            container.setAttribute('texture', 1);
+        }
         if(this.hasOpacity){
             container.setAttribute('opacity', 1);
         }
@@ -901,6 +930,7 @@ Blockly.Blocks['vpython_arrow'] = {
         this.hasHeadLength = parseInt(xmlElement.getAttribute('headlength'), 10) || 0;
         this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
+        this.hasTexture = parseInt(xmlElement.getAttribute('texture'), 10) || 0;
         this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
         this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
         this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
@@ -969,6 +999,13 @@ Blockly.Blocks['vpython_arrow'] = {
             connection = colorBlock.nextConnection;
         }
 
+        if(this.hasTexture){
+            var textureBlock = workspace.newBlock('texture');
+            textureBlock.initSvg();
+            connection.connect(textureBlock.previousConnection);
+            connection = textureBlock.nextConnection;
+        }
+
         if(this.hasOpacity){
             var opacityBlock = workspace.newBlock('opacity');
             opacityBlock.initSvg();
@@ -998,6 +1035,7 @@ Blockly.Blocks['vpython_arrow'] = {
         this.hasHeadLength = false;
         this.hasUp = false;
         this.hasColor = false;
+        this.hasTexture = false;
         this.hasOpacity = false;
         this.hasTrail = false;
         this.elementCount_ = 0;
@@ -1048,6 +1086,11 @@ Blockly.Blocks['vpython_arrow'] = {
                     this.hasColor = true;
                     this.elementCount_++;
                     valueConnections.push(['color', clauseBlock.valueConnection_]);
+                    break;
+                case 'texture':
+                    this.hasTexture = true;
+                    this.elementCount_++;
+                    valueConnections.push(['texture', clauseBlock.valueConnection_]);
                     break;
                 case 'opacity':
                     this.hasOpacity = true;
@@ -1222,6 +1265,12 @@ Blockly.Blocks['vpython_arrow'] = {
                 .appendField("color");
         }
 
+        if(this.hasTexture){
+            this.appendValueInput("TEXTURE")
+                .setCheck("Texture")
+                .appendField("texture");
+        }
+
         if(this.hasOpacity){
             this.appendValueInput("OPACITY")
                 .setCheck("Number")
@@ -1256,6 +1305,7 @@ Blockly.Blocks['vpython_cylinder'] = {
                                          'size',
                                          'up',
                                          'color',
+                                         'texture',
                                          'opacity',
                                          'make_trail']));
     this.hasPos = false;
@@ -1265,6 +1315,7 @@ Blockly.Blocks['vpython_cylinder'] = {
     this.hasSize = false;
     this.hasUp = false;
     this.hasColor = false;
+    this.hasTexture = false;
     this.hasOpacity = false;
     this.hasTrail = false;
     this.elementCount_ = 0;
@@ -1301,6 +1352,9 @@ Blockly.Blocks['vpython_cylinder'] = {
         if(this.hasColor){
             container.setAttribute('color', 1);
         }
+        if(this.hasTexture){
+            container.setAttribute('texture', 1);
+        }
         if(this.hasOpacity){
             container.setAttribute('opacity', 1);
         }
@@ -1324,6 +1378,7 @@ Blockly.Blocks['vpython_cylinder'] = {
         this.hasSize = parseInt(xmlElement.getAttribute('size'), 10) || 0;
         this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
+        this.hasTexture = parseInt(xmlElement.getAttribute('texture'), 10) || 0;
         this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
         this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
         this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
@@ -1386,6 +1441,13 @@ Blockly.Blocks['vpython_cylinder'] = {
             connection = colorBlock.nextConnection;
         }
 
+        if(this.hasTexture){
+            var textureBlock = workspace.newBlock('texture');
+            textureBlock.initSvg();
+            connection.connect(textureBlock.previousConnection);
+            connection = textureBlock.nextConnection;
+        }
+
         if(this.hasOpacity){
             var opacityBlock = workspace.newBlock('opacity');
             opacityBlock.initSvg();
@@ -1414,6 +1476,7 @@ Blockly.Blocks['vpython_cylinder'] = {
         this.hasSize = false;
         this.hasUp = false;
         this.hasColor = false;
+        this.hasTexture = false;
         this.hasOpacity = false;
         this.hasTrail = false;
         this.elementCount_ = 0;
@@ -1459,6 +1522,11 @@ Blockly.Blocks['vpython_cylinder'] = {
                     this.hasColor = true;
                     this.elementCount_++;
                     valueConnections.push(['color', clauseBlock.valueConnection_]);
+                    break;
+                case 'texture':
+                    this.hasTexture = true;
+                    this.elementCount_++;
+                    valueConnections.push(['texture', clauseBlock.valueConnection_]);
                     break;
                 case 'opacity':
                     this.hasOpacity = true;
@@ -1619,6 +1687,12 @@ Blockly.Blocks['vpython_cylinder'] = {
                 .appendField("color");
         }
 
+        if(this.hasTexture){
+            this.appendValueInput("TEXTURE")
+                .setCheck("Texture")
+                .appendField("texture");
+        }
+
         if(this.hasOpacity){
             this.appendValueInput("OPACITY")
                 .setCheck("Number")
@@ -1655,6 +1729,7 @@ Blockly.Blocks['vpython_ring'] = {
                                          'size',
                                          'up',
                                          'color',
+                                         'texture',
                                          'opacity',
                                          'make_trail']));
     this.hasPos = false;
@@ -1665,6 +1740,7 @@ Blockly.Blocks['vpython_ring'] = {
     this.hasSize = false;
     this.hasUp = false;
     this.hasColor = false;
+    this.hasTexture = false;
     this.hasOpacity = false;
     this.hasTrail = false;
     this.elementCount_ = 0;
@@ -1704,6 +1780,9 @@ Blockly.Blocks['vpython_ring'] = {
         if(this.hasColor){
             container.setAttribute('color', 1);
         }
+        if(this.hasTexture){
+            container.setAttribute('texture', 1);
+        }
         if(this.hasOpacity){
             container.setAttribute('opacity', 1);
         }
@@ -1728,6 +1807,7 @@ Blockly.Blocks['vpython_ring'] = {
         this.hasSize = parseInt(xmlElement.getAttribute('size'), 10) || 0;
         this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
         this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
+        this.hasTexture = parseInt(xmlElement.getAttribute('texture'), 10) || 0;
         this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
         this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
         this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
@@ -1797,6 +1877,13 @@ Blockly.Blocks['vpython_ring'] = {
             connection = colorBlock.nextConnection;
         }
 
+        if(this.hasTexture){
+            var textureBlock = workspace.newBlock('texture');
+            textureBlock.initSvg();
+            connection.connect(textureBlock.previousConnection);
+            connection = textureBlock.nextConnection;
+        }
+
         if(this.hasOpacity){
             var opacityBlock = workspace.newBlock('opacity');
             opacityBlock.initSvg();
@@ -1826,6 +1913,7 @@ Blockly.Blocks['vpython_ring'] = {
         this.hasSize = false;
         this.hasUp = false;
         this.hasColor = false;
+        this.hasTexture = false;
         this.hasOpacity = false;
         this.hasTrail = false;
         this.elementCount_ = 0;
@@ -1876,6 +1964,11 @@ Blockly.Blocks['vpython_ring'] = {
                     this.hasColor = true;
                     this.elementCount_++;
                     valueConnections.push(['color', clauseBlock.valueConnection_]);
+                    break;
+                case 'texture':
+                    this.hasTexture = true;
+                    this.elementCount_++;
+                    valueConnections.push(['texture', clauseBlock.valueConnection_]);
                     break;
                 case 'opacity':
                     this.hasOpacity = true;
@@ -2048,6 +2141,12 @@ Blockly.Blocks['vpython_ring'] = {
             this.appendValueInput("COLOR")
                 .setCheck(["Vector", "Colour"])
                 .appendField("color");
+        }
+
+        if(this.hasTexture){
+            this.appendValueInput("TEXTURE")
+                .setCheck("Texture")
+                .appendField("texture");
         }
 
         if(this.hasOpacity){
@@ -2341,7 +2440,6 @@ Blockly.Blocks['vpython_helix'] = {
                     this.elementCount_++;
                     valueConnections.push(['color', clauseBlock.valueConnection_]);
                     break;
-
                 case 'texture':
                     this.hasTexture = true;
                     this.elementCount_++;

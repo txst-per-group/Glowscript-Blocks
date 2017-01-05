@@ -28,17 +28,11 @@ goog.provide('Blockly.Blocks.variables');
 
 goog.require('Blockly.Blocks');
 
-
-/** 
- * Global HSV saturation and value for all blocks
- * in every category.
- */
-Blockly.HSV_SATURATION = 0.65;
-Blockly.HSV_VALUE = 0.80;
 /**
  * Common HSV hue for all blocks in this category.
  */
-Blockly.Blocks.variables.HUE = 300;
+//Blockly.Blocks.variables.HUE = '#7B1FA2';
+Blockly.Blocks.variables.HUE = '#9C27B0';
 
 
 /////////////////////////////////////////////

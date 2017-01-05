@@ -34,6 +34,8 @@ goog.require('Blockly.Blocks');
  */
 Blockly.Blocks.math.HUE = 180;
 
+
+
 Blockly.Blocks['math_number'] = {
   /**
    * Block for numeric value.
@@ -133,7 +135,31 @@ Blockly.Blocks['math_arithmetic'] = {
   domToMutation: function(xmlElement){
     var numVectors = Number(xmlElement.getAttribute('num_vectors'));
     console.log(numVectors);
+  },
+
+  countVectors: function(){
+    var numVectors = 0;
+    var inputs = this.getChildren();
+
+    try{
+      if(inputs[0].type = "vector")
+        numVectors += 1;
+    }
+    catch(err){}
+    try{
+      if(inputs[1].type = "vector")
+        numVectors += 1;
+    }
+    catch(err){}
+    return numVectors;
+  },
+
+  updateDropDown: function(numVectors){
+
+
   }
+
+  
 };
 
 Blockly.Blocks['math_single'] = {

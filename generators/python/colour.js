@@ -39,7 +39,7 @@ Blockly.Python['colour_picker'] = function(block) {
 Blockly.Python['texture_picker'] = function(block) {
   var dropdown_texture_selection = block.getFieldValue('TEXTURE_SELECTION');
   // TODO: Assemble Python into code variable.
-  var code = "texture." + dropdown_texture_selection;
+  var code = "textures." + dropdown_texture_selection;
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.Python.ORDER_ATOMIC];
 };

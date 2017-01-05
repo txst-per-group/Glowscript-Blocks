@@ -9,6 +9,7 @@ goog.require('Blockly.Blocks');
  */
 Blockly.Blocks.vector.HUE = 60;
 
+var vector_color = 60;
 ////////////////////////////////////////////////
 
 Blockly.Blocks['vector'] = {
@@ -26,7 +27,7 @@ Blockly.Blocks['vector'] = {
         .appendField(")");
     this.setInputsInline(true);
     this.setOutput(true, "Vector");
-    this.setColour(60);
+    this.setColour(vector_color);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }

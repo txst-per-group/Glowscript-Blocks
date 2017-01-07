@@ -36,8 +36,11 @@ goog.require('Blockly.Blocks');
 //var arithmetics_color = '#1976D2';
 Blockly.Blocks.math.HUE = '#3F51B5';
 var arithmetics_color = '#2196F3';
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 9999e9e2ebe8168f386b128e005b6445f8b04cdb
 
 Blockly.Blocks['math_number'] = {
   /**
@@ -229,12 +232,61 @@ Blockly.Blocks['math_modulo'] = {
       "inputsInline": true,
       "output": "Number",
       "colour": arithmetics_color,
+<<<<<<< HEAD
+      "tooltip": Blockly.Msg.MATH_MODULO_TOOLTIP,
+      "helpUrl": Blockly.Msg.MATH_MODULO_HELPURL
+=======
+      "helpUrl": Blockly.Msg.MATH_ARITHMETIC_HELPURL
+    });
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip(function() {
+      var mode = thisBlock.getFieldValue('OP');
+      var TOOLTIPS = {
+        'ADD': Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_ADD,
+        'MINUS': Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MINUS,
+        'MULTIPLY': Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MULTIPLY,
+        'DIVIDE': Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_DIVIDE,
+        'POWER': Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_POWER
+      };
+      return TOOLTIPS[mode];
+>>>>>>> 9999e9e2ebe8168f386b128e005b6445f8b04cdb
+    });
+  }
+};
+
+<<<<<<< HEAD
+=======
+Blockly.Blocks['math_modulo'] = {
+  /**
+   * Block for remainder of a division.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.MATH_MODULO_TITLE,
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "DIVIDEND",
+          "check": "Number"
+        },
+        {
+          "type": "input_value",
+          "name": "DIVISOR",
+          "check": "Number"
+        }
+      ],
+      "inputsInline": true,
+      "output": "Number",
+      "colour": arithmetics_color,
       "tooltip": Blockly.Msg.MATH_MODULO_TOOLTIP,
       "helpUrl": Blockly.Msg.MATH_MODULO_HELPURL
     });
   }
 };
 
+>>>>>>> 9999e9e2ebe8168f386b128e005b6445f8b04cdb
 ///////////////////////////////////////////////////////////////
 
 Blockly.Blocks['math_single'] = {

@@ -9,6 +9,7 @@ goog.require('Blockly.Blocks');
  */
 //var vectors_color = '#0097A7';
 var vectors_color = '#00BCD4';
+Blockly.Blocks.vector.COLOR ='#00BCD4'; 
 
 ////////////////////////////////////////////////
 

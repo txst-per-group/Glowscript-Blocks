@@ -66,42 +66,29 @@ Blockly.Blocks['math_arithmetic'] = {
    * Block for basic arithmetic operator.
    * @this Blockly.Block
    */
-  init: function() {
-    this.jsonInit({
-      "message0": "%1 %2 %3",
-      "args0": [
-        {
-          "type": "input_value",
-          "name": "A",
-          "check": ["Number", "Vector"]
-        },
-        {
-          "type": "field_dropdown",
-          "name": "OP",
-          "options":
-            [['+', 'ADD'],
-             ['-', 'MINUS'],
-             ['*', 'MULTIPLY'],
-             ['/', 'DIVIDE'],
-             ['^', 'POWER']]
-        },
-        {
-          "type": "input_value",
-          "name": "B",
-          "check": ["Number", "Vector"]
-        }
-      ],
-      "inputsInline": true,
-      "output": "Number",
-      "colour": arithmetics_color,
-      "helpUrl": Blockly.Msg.MATH_ARITHMETIC_HELPURL
-    });
 
-    
+  init: function() {
+       
+    this.appendValueInput("A")
+        .setCheck(["Number", "Vector"]);
+    this.appendDummyInput("OP")
+        .appendField(new Blockly.FieldDropdown([['+', 'ADD'],
+                                                ['-', 'MINUS'],
+                                                ['*', 'MULTIPLY'],
+                                                ['/', 'DIVIDE'],
+                                                ['^', 'POWER']]), "op_list");
+    this.appendValueInput("B")
+        .setCheck(["Number", "Vector"]);
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(arithmetics_color);
+    this.setHelpUrl(Blockly.Msg.MATH_ARITHMETIC_HELPURL);
+    this.vecPos = "00";
+       
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
-      var mode = thisBlock.getFieldValue('OP');
+      var mode = thisBlock.getFieldValue('op_list');
       var TOOLTIPS = {
         'ADD': Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_ADD,
         'MINUS': Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MINUS,
@@ -115,55 +102,105 @@ Blockly.Blocks['math_arithmetic'] = {
 
   mutationToDom: function(){
     var container = document.createElement('mutation');
-    var ectors = 0;
-    var inputs = this.getChildren();
+    this.vecPos = this.vectorPositions();
 
-    // count the number of vectors as inputs
-    try{
-      if(inputs[0].type == "vector")
-        numVectors += 1;
-    }
-    catch(err){}
-
-    try{
-      if(inputs[1].type == "vector")
-        numVectors += 1;
-    }
-    catch(err){}
-
-    container.setAttribute('num_vectors', numVectors);
+    container.setAttribute('vector_pos', this.vecPos);
     return container;
   },
 
   domToMutation: function(xmlElement){
-    var numVectors = Number(xmlElement.getAttribute('num_vectors'));
-    console.log(numVectors);
+    this.vecPos = Number(xmlElement.getAttribute('vector_pos'));
+    this.updateDropDown(this.vecPos);
+    console.log(this.vecPos);
   },
 
   vectorPositions: function(){
     /*
-      vectorPositions finds the location of vectors in the inputs of the
-      arithmetic operator 
+      vectorPositions:
+          finds the location of vectors in the inputs of the
+          arithmetic operator
+
+      args:
+          none 
+
+      returns:
+          a string of binary values to indicate position
+          for the dom ex "01", "10", '00'
     */
     var vectorPos = "";
-    var inputs = this.getChildren();
+    var inputs = [this.getInput("A"), this.getInput("B")];
 
-//  use try to handle null inputs
-// if the type of input is vector append a 1 else append 0
+    //  use try to handle null inputs
+    // if the type of input is vector append a 1 else append 0
     try{
-      vectorPos + (inputs[0].type == "vector" ? '1' : '0');
+      vectorPos += (inputs[0].connection
+                             .targetConnection
+                             .sourceBlock_
+                             .type == "vector" ? '1' : '0');
     }
     catch(err){}
     try{
-      vectorPos + (inputs[1].type == "vector" ? '1' : '0');
+      vectorPos += (inputs[1].connection
+                             .targetConnection
+                             .sourceBlock_
+                             .type == "vector" ? '1' : '0');
     }
     catch(err){}
     return vectorPos;
   },
 
-  updateDropDown: function(numVectors){
+  updateDropDown: function(vectString){
+    var input = this.getInput("OP");
+    if(this.getFieldValue("op_list"))
+      input.removeField("op_list");
 
+    if(vectString[0] == "1"){
 
+      // two vectors
+      if(vectString[1] == "1"){
+        this.setOutput(true, "Vector");
+        input.appendField(new Blockly.FieldDropdown([["+", "PLUS"],
+                                                     ["-", "MINUS"]]), "op_list");
+        this.setColour('#00BCD4');
+      // first is vector second is scalar 
+      }
+      else{
+        this.setOutput(true, "Vector");
+        input.appendField(new Blockly.FieldDropdown([["*", "MULTIPLY"],
+                                                     ["/", "DIVIDE"]]), "op_list");
+        this.setColour('#00BCD4');
+      }
+    }
+    else{
+      // first is scalar second is vector
+      if(vectString[1] == "1"){
+        this.setOutput(true, "Vector")
+        input.appendField(new Blockly.FieldDropdown([["*", "MULTIPLY"]]), "op_list");
+        this.setColour('#00BCD4');
+      }
+      // scalar and scalar default
+      else{
+        this.setOutput(true, "Number");
+        input.appendField(new Blockly.FieldDropdown([['+', 'ADD'],
+                                                    ['-', 'MINUS'],
+                                                    ['*', 'MULTIPLY'],
+                                                    ['/', 'DIVIDE'],
+                                                    ['^', 'POWER']]), "op_list")
+        this.setColour(arithmetics_color);
+      }
+    }
+  },
+
+  onchange: function(e){
+
+    if(this.workspace.isDragging())
+      return;
+
+    var newVec = this.vectorPositions();
+    if(this.vecPos != newVec){
+      this.vecPos = newVec;
+      this.updateDropDown(this.vecPos);
+    }
   }
 
   

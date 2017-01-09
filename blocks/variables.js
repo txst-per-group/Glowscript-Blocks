@@ -76,6 +76,7 @@ Blockly.Blocks['variables_get'] = {
 
   dropdownTest: function(selection){
     console.log(selection);
+    //testing username
   }
 };
 

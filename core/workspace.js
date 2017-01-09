@@ -167,6 +167,32 @@ Blockly.Workspace.prototype.getAllBlocks = function() {
   return blocks;
 };
 
+// added copy-paste from google/blockly master
+
+/**
+ * Find all the uses of a named variable.
+ * @param {string} name Name of variable.
+ * @return {!Array.<!Blockly.Block>} Array of block usages.
+ */
+Blockly.Workspace.prototype.getVariableUses = function(name) {
+  var uses = [];
+  var blocks = this.getAllBlocks();
+  // Iterate through every block and check the name.
+  for (var i = 0; i < blocks.length; i++) {
+    var blockVariables = blocks[i].getVars();
+    if (blockVariables) {
+      for (var j = 0; j < blockVariables.length; j++) {
+        var varName = blockVariables[j];
+        // Variable name may be null if the block is only half-built.
+        if (varName && Blockly.Names.equals(varName, name)) {
+          uses.push(blocks[i]);
+        }
+      }
+    }
+  }
+  return uses;
+};
+
 /**
  * Dispose of all blocks in workspace.
  */

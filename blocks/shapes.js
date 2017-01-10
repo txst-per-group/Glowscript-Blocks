@@ -332,12 +332,10 @@ Blockly.Blocks['vpython_box'] = {
                     var inputColor = this.getInput('COLOR');
                     clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
                     break;
-
                 case 'texture':
                     var inputTexture = this.getInput('TEXTURE');
                     clauseBlock.valueConnection_ = inputTexture && inputTexture.connection.targetConnection;
                     break;
-
                 case 'opacity':
                     var inputOpacity = this.getInput('OPACITY');
                     clauseBlock.valueConnection_ = inputOpacity && inputOpacity.connection.targetConnection;
@@ -725,6 +723,10 @@ Blockly.Blocks['vpython_sphere'] = {
                     var inputColor = this.getInput('COLOR');
                     clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
                     break;
+                case 'texture':
+                    var inputTexture = this.getInput('TEXTURE');
+                    clauseBlock.valueConnection_ = inputTexture && inputTexture.connection.targetConnection;
+                    break;
                 case 'opacity':
                     var inputOpacity = this.getInput('OPACITY');
                     clauseBlock.valueConnection_ = inputOpacity && inputOpacity.connection.targetConnection;
@@ -765,6 +767,9 @@ Blockly.Blocks['vpython_sphere'] = {
         }
         if(this.getInput('COLOR')){
             this.removeInput('COLOR');
+        }
+        if(this.getInput('TEXTURE')){
+            this.removeInput('TEXTURE');
         }
         if(this.getInput('OPACITY')){
             this.removeInput('OPACITY');
@@ -1162,6 +1167,10 @@ Blockly.Blocks['vpython_arrow'] = {
                     var inputColor = this.getInput('COLOR');
                     clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
                     break;
+                case 'texture':
+                    var inputTexture = this.getInput('TEXTURE');
+                    clauseBlock.valueConnection_ = inputTexture && inputTexture.connection.targetConnection;
+                    break;
                 case 'opacity':
                     var inputOpacity = this.getInput('OPACITY');
                     clauseBlock.valueConnection_ = inputOpacity && inputOpacity.connection.targetConnection;
@@ -1208,6 +1217,9 @@ Blockly.Blocks['vpython_arrow'] = {
         }
         if(this.getInput('COLOR')){
             this.removeInput('COLOR');
+        }
+        if(this.getInput('TEXTURE')){
+            this.removeInput('TEXTURE');
         }
         if(this.getInput('OPACITY')){
             this.removeInput('OPACITY');
@@ -1594,6 +1606,10 @@ Blockly.Blocks['vpython_cylinder'] = {
                     var inputColor = this.getInput('COLOR');
                     clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
                     break;
+                case 'texture':
+                    var inputTexture = this.getInput('TEXTURE');
+                    clauseBlock.valueConnection_ = inputTexture && inputTexture.connection.targetConnection;
+                    break;
                 case 'opacity':
                     var inputOpacity = this.getInput('OPACITY');
                     clauseBlock.valueConnection_ = inputOpacity && inputOpacity.connection.targetConnection;
@@ -1637,6 +1653,9 @@ Blockly.Blocks['vpython_cylinder'] = {
         }
         if(this.getInput('COLOR')){
             this.removeInput('COLOR');
+        }
+        if(this.getInput('TEXTURE')){
+            this.removeInput('TEXTURE');
         }
         if(this.getInput('OPACITY')){
             this.removeInput('OPACITY');
@@ -2040,6 +2059,10 @@ Blockly.Blocks['vpython_ring'] = {
                     var inputColor = this.getInput('COLOR');
                     clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
                     break;
+                case 'texture':
+                    var inputTexture = this.getInput('TEXTURE');
+                    clauseBlock.valueConnection_ = inputTexture && inputTexture.connection.targetConnection;
+                    break;
                 case 'opacity':
                     var inputOpacity = this.getInput('OPACITY');
                     clauseBlock.valueConnection_ = inputOpacity && inputOpacity.connection.targetConnection;
@@ -2086,6 +2109,9 @@ Blockly.Blocks['vpython_ring'] = {
         }
         if(this.getInput('COLOR')){
             this.removeInput('COLOR');
+        }
+        if(this.getInput('TEXTURE')){
+            this.removeInput('TEXTURE');
         }
         if(this.getInput('OPACITY')){
             this.removeInput('OPACITY');

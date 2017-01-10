@@ -1256,7 +1256,7 @@ Blockly.Blocks['vpython_arrow'] = {
         if(this.hasHeadWidth){
             this.appendValueInput("HEADWIDTH")
                 .setCheck("Number")
-                .appendField("wead width");
+                .appendField("head width");
         }
 
         if(this.hasHeadLength){

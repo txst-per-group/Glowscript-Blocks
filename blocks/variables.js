@@ -94,12 +94,44 @@ Blockly.Blocks['variables_get'] = {
         for(var i = 0; i < children.length; i++){
           try{checkType = children[i].outputConnection.check_[0];}catch(e){}
           if(checkType)
-            this.setOutput(true, checkType);
+            //this.setOutput(true, checkType);
+            this.modifyBlock(checkType);
         }
       }
     }
     }catch(e){}
     
+  },
+
+  modifyBlock: function(newType){
+    switch(newType){
+      case 'Vector':
+        this.setColour(Blockly.Blocks.vectors.HUE);
+        this.setOutput(true, newType);
+        break;
+      case 'Number':
+        this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+        break;
+      case 'String':
+        this.setColour(Blockly.Blocks.texts.HUE);
+        this.setOutput(true, newType);
+        break;
+      case 'Boolean':
+        this.setColour(Blockly.Blocks.logic.HUE);
+        this.setOutput(true, newType);
+        break;
+      case 'Sphere':
+      case 'Box':
+      case 'Arrow':
+      case 'Ring':
+      case 'Cylinder':
+      case 'Helix':
+        this.setColour(Blockly.Blocks.shapes.HUE);
+        this.setOutput(true, newType);
+        break;
+      default:
+        throw "unknown data type";
+    }
   }
 };
 

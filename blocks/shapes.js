@@ -13,7 +13,7 @@ Blockly.Blocks.shapes.HUE = '#E91E63';
 
 ////////////////////////////////////////////////
 
-var objectDropDown = [["box", "box"], ["sphere", "sphere"],
+Blockly.Blocks.shapes.objectDropDown = [["box", "box"], ["sphere", "sphere"],
                       ["arrow", "arrow"], ["vector", "vector"],
                       ["ring", "ring"], ["cylinder", "cylinder"], 
                       ["helix", "helix"]];
@@ -78,7 +78,7 @@ Blockly.Blocks['vpython_box'] = {
     this.appendDummyInput()
         .appendField("box");
     this.setInputsInline(false);
-    this.setOutput(true, null);
+    this.setOutput(true, 'Box');
     this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.itemCount_ = 0;
@@ -447,7 +447,7 @@ Blockly.Blocks['vpython_sphere'] = {
     this.appendDummyInput()
         .appendField("sphere");
     this.setInputsInline(false);
-    this.setOutput(true, null);
+    this.setOutput(true, 'Sphere');
     this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.itemCount_ = 0;
@@ -839,7 +839,7 @@ Blockly.Blocks['vpython_arrow'] = {
     this.appendDummyInput()
         .appendField("arrow");
     this.setInputsInline(false);
-    this.setOutput(true, null);
+    this.setOutput(true, 'Arrow');
     this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.itemCount_ = 0;
@@ -1293,7 +1293,7 @@ Blockly.Blocks['vpython_cylinder'] = {
     this.appendDummyInput()
         .appendField("cylinder");
     this.setInputsInline(false);
-    this.setOutput(true, null);
+    this.setOutput(true, 'Cylinder');
     this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.itemCount_ = 0;
@@ -1716,7 +1716,7 @@ Blockly.Blocks['vpython_ring'] = {
     this.appendDummyInput()
         .appendField("ring");
     this.setInputsInline(false);
-    this.setOutput(true, null);
+    this.setOutput(true, 'Ring');
     this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.itemCount_ = 0;
@@ -2172,7 +2172,7 @@ Blockly.Blocks['vpython_helix'] = {
     this.appendDummyInput()
         .appendField("helix");
     this.setInputsInline(false);
-    this.setOutput(true, null);
+    this.setOutput(true, 'Helix');
     this.setColour(Blockly.Blocks.shapes.HUE);
     this.setTooltip('');
     this.itemCount_ = 0;
@@ -2684,7 +2684,7 @@ Blockly.Blocks['set_shape'] = {
 
     this.appendDummyInput("SHAPE_ATTRIBUTE")
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField(new Blockly.FieldDropdown(objectDropDown, function(objectSelected){
+        .appendField(new Blockly.FieldDropdown(Blockly.Blocks.shapes.objectDropDown, function(objectSelected){
             thisBlock.updateShape_(objectSelected);
         }), "OBJECT_TYPE")
         .appendField("->", "FIELD_TEXT")
@@ -2861,7 +2861,7 @@ Blockly.Blocks['get_shape'] = {
 
     this.appendDummyInput("SHAPE_ATTRIBUTE")
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField(new Blockly.FieldDropdown(objectDropDown, function(selection){
+        .appendField(new Blockly.FieldDropdown(Blockly.Blocks.shapes.objectDropDown, function(selection){
             thisBlock.updateShape_(selection);
         }), "OBJECT")
         .appendField('->', 'FIELD_TEXT')

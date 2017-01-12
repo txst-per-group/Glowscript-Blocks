@@ -29,13 +29,8 @@ goog.provide('Blockly.Blocks.math');
 goog.require('Blockly.Blocks');
 
 
-/**
- * Common HSV hue for all blocks in this category.
- */
-//Blockly.Blocks.math.MATH_HUE = '#303F9F';
-//Blockly.Blocks.math.ARITHMETICS_HUE = '#1976D2';
-Blockly.Blocks.math.MATH_HUE = '#3F51B5';
-Blockly.Blocks.math.ARITHMETICS_HUE = '#2196F3';
+Blockly.Blocks.math.MATH_HUE = '#4DD0E1';
+Blockly.Blocks.math.ARITHMETICS_HUE = '#4DD0E1';
 
 Blockly.Blocks['math_number'] = {
   /**

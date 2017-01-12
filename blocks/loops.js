@@ -29,11 +29,7 @@ goog.provide('Blockly.Blocks.loops');
 goog.require('Blockly.Blocks');
 
 
-/**
- * Common HSV hue for all blocks in this category.
- */
-//Blockly.Blocks.loops.HUE = '#00796B';
-Blockly.Blocks.loops.HUE = '#009688';
+Blockly.Blocks.loops.HUE = '#EF5350';
 
 Blockly.Blocks['rate'] = {
   init: function() {

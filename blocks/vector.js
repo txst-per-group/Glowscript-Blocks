@@ -4,12 +4,8 @@ goog.provide('Blockly.Blocks.vectors');
 
 goog.require('Blockly.Blocks');
 
-/**
- * Common HSV hue for all blocks in this category.
- */
 
-//Blockly.Blocks.vectors.HUE = '#0097A7';
-Blockly.Blocks.vectors.HUE = '#00BCD4'; 
+Blockly.Blocks.vectors.HUE = '#42A5F5'; 
 
 
 ////////////////////////////////////////////////

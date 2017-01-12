@@ -49,7 +49,7 @@ Blockly.Blocks['variables_get'] = {
     this.appendDummyInput()
         .appendField(new Blockly.FieldVariable(
         Blockly.Msg.VARIABLES_DEFAULT_NAME, function(selection){
-          thisBlock.dropdownTest(selection);
+          thisBlock.setNewType(selection);
         })
         , 'VAR');
     this.setOutput(true);
@@ -74,8 +74,31 @@ Blockly.Blocks['variables_get'] = {
     options.push(option);
   },
 
-  dropdownTest: function(selection){
-    console.log(selection);
+  setNewType: function(selection){
+    //if(selection === "item")
+    var variableUses = this.workspace.getVariableUses(selection);
+    try{
+    var topBlock = {index: null, height: null};
+    for(var i = 0; i < variableUses.length; i++){
+      // add the first value, then find the highest but only if it is not itself
+      if((topBlock.index == null || topBlock.height < variableUses[i].getRelativeToSurfaceXY().y) 
+          && (this.id != variableUses[i].id && variableUses[i].type == "variables_set") ){
+        topBlock["index"] = i;
+        topBlock["height"] = variableUses[i].getRelativeToSurfaceXY().y;
+      }
+
+      if(topBlock.index != null){
+        // find the type of the child that has a type and set output to that type
+        var checkType;
+        var children = variableUses[topBlock.index].getChildren();
+        for(var i = 0; i < children.length; i++){
+          try{checkType = children[i].outputConnection.check_[0];}catch(e){}
+          if(checkType)
+            this.setOutput(true, checkType);
+        }
+      }
+    }
+    }catch(e){}
     
   }
 };
@@ -106,6 +129,16 @@ Blockly.Blocks['variables_set'] = {
       "helpUrl": Blockly.Msg.VARIABLES_SET_HELPURL
     });
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
+  },
+
+  setNewType: function(selection){
+    //if(selection === "item")
+    var variableUses = this.workspace.getVariableUses(selection);
+    try{
+      if(variableUses.length <= 1){
+      return;
+      }
+    }catch(e){}
   },
   contextMenuType_: 'variables_get',
   customContextMenu: Blockly.Blocks['variables_get'].customContextMenu

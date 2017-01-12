@@ -91,11 +91,15 @@ Blockly.Blocks['variables_get'] = {
         // find the type of the child that has a type and set output to that type
         var checkType;
         var children = variableUses[topBlock.index].getChildren();
-        for(var i = 0; i < children.length; i++){
-          try{checkType = children[i].outputConnection.check_[0];}catch(e){}
-          if(checkType)
-            //this.setOutput(true, checkType);
-            this.modifyBlock(checkType);
+        if(children.length == 0){
+          this.modifyBlock("None");
+        }else{
+          for(var i = 0; i < children.length; i++){
+            try{checkType = children[i].outputConnection.check_[0];}catch(e){}
+            if(checkType)
+              //this.setOutput(true, checkType);
+              this.modifyBlock(checkType);
+          }
         }
       }
     }
@@ -119,6 +123,10 @@ Blockly.Blocks['variables_get'] = {
       case 'Boolean':
         this.setColour(Blockly.Blocks.logic.HUE);
         this.setOutput(true, newType);
+        break;
+      case 'None':
+        this.setColour(Blockly.Blocks.variables.HUE);
+        this.setOutput(true, null);
         break;
       case 'Sphere':
       case 'Box':

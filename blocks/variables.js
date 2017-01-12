@@ -115,6 +115,7 @@ Blockly.Blocks['variables_get'] = {
         break;
       case 'Number':
         this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+        this.setOutput(true, newType);
         break;
       case 'String':
         this.setColour(Blockly.Blocks.texts.HUE);

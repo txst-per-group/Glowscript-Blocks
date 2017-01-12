@@ -131,17 +131,20 @@ Blockly.Blocks['math_arithmetic'] = {
     //  use try to handle null inputs
     // if the type of input is vector append a 1 else append 0
     try{
+      
       vectorPos += (inputs[0].connection
                              .targetConnection
                              .sourceBlock_
-                             .type == "vector" ? '1' : '0');
+                             .outputConnection
+                             .check_[0] == "Vector" ? '1' : '0');
     }
     catch(err){}
     try{
       vectorPos += (inputs[1].connection
                              .targetConnection
                              .sourceBlock_
-                             .type == "vector" ? '1' : '0');
+                             .outputConnection
+                             .check_[0] == "Vector" ? '1' : '0');
     }
     catch(err){}
     return vectorPos;

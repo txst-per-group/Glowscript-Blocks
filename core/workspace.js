@@ -161,7 +161,8 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
  */
 Blockly.Workspace.prototype.getAllBlocks = function() {
   var blocks = this.getTopBlocks(false);
-  for (var i = 0; i < blocks.length; i++) {
+  var blocksLength = blocks.length;
+  for (var i = 0; i < blocksLength; i++) {
     blocks.push.apply(blocks, blocks[i].getChildren());
   }
   return blocks;
@@ -177,8 +178,9 @@ Blockly.Workspace.prototype.getAllBlocks = function() {
 Blockly.Workspace.prototype.getVariableUses = function(name) {
   var uses = [];
   var blocks = this.getAllBlocks();
+  var blocksLength = blocks.length
   // Iterate through every block and check the name.
-  for (var i = 0; i < blocks.length; i++) {
+  for (var i = 0; i < blocksLength; i++) {
     var blockVariables = blocks[i].getVars();
     if (blockVariables) {
       for (var j = 0; j < blockVariables.length; j++) {

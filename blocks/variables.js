@@ -53,6 +53,26 @@ Blockly.Blocks['variables_get'] = {
     this.setTooltip(Blockly.Msg.VARIABLES_GET_TOOLTIP);
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
   },
+
+  mutationToDom: function(){
+    var container = document.createElement('mutation');
+    // record current output type
+    var checkType = this.outputConnection.check_;
+    if(checkType == null){
+      container.setAttribute('type_', 'None');
+    }else{
+      container.setAttribute('type_', this.outputConnection.check_[0]);
+    }
+    return container;
+  },
+
+  domToMutation: function(xmlElement){
+    //this.vecPos = xmlElement.getAttribute('vector_pos');
+    //this.updateDropDown(this.vecPos);
+    console.log(xmlElement.getAttribute('type_'));
+    this.modifyBlock(xmlElement.getAttribute('type_'));
+  },
+
   contextMenuType_: 'variables_set',
   /**
    * Add menu option to create getter/setter block for this setter/getter.

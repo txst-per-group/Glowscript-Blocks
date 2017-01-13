@@ -102,7 +102,7 @@ Blockly.Blocks['math_arithmetic'] = {
   },
 
   domToMutation: function(xmlElement){
-    this.vecPos = Number(xmlElement.getAttribute('vector_pos'));
+    this.vecPos = xmlElement.getAttribute('vector_pos');
     this.updateDropDown(this.vecPos);
     console.log(this.vecPos);
   },

@@ -186,9 +186,23 @@ Blockly.Blocks['variables_set'] = {
       "tooltip": Blockly.Msg.VARIABLES_SET_TOOLTIP,
       "helpUrl": Blockly.Msg.VARIABLES_SET_HELPURL
     });
+    this.currentType = "None";
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
   },
 
+  mutationToDom: function(){
+    var container = document.createElement('mutation');
+    // record current output type
+    container.setAttribute('type_', this.currentType);
+    return container;
+  },
+
+  domToMutation: function(xmlElement){
+    //this.vecPos = xmlElement.getAttribute('vector_pos');
+    //this.updateDropDown(this.vecPos);
+    console.log(xmlElement.getAttribute('type_'));
+    this.modifyBlock(xmlElement.getAttribute('type_'));
+  },
   setNewType: function(selection){
     //if(selection === "item")
    var variableUses = this.workspace.getVariableUses(selection);
@@ -224,6 +238,7 @@ Blockly.Blocks['variables_set'] = {
 
   modifyBlock: function(newType){
     var input = this.getInput("VALUE");
+    this.currentType = newType;
     switch(newType){
       case 'Vector':
         this.setColour(Blockly.Blocks.vectors.HUE);

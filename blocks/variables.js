@@ -191,13 +191,74 @@ Blockly.Blocks['variables_set'] = {
 
   setNewType: function(selection){
     //if(selection === "item")
-    var variableUses = this.workspace.getVariableUses(selection);
+   var variableUses = this.workspace.getVariableUses(selection);
     try{
-      if(variableUses.length <= 1){
-      return;
+    var topBlock = {index: null, height: null};
+    for(var i = 0; i < variableUses.length; i++){
+      // add the first value, then find the highest but only if it is not itself
+      if((topBlock.index == null || topBlock.height < variableUses[i].getRelativeToSurfaceXY().y) 
+          && (this.id != variableUses[i].id && variableUses[i].type == "variables_set") ){
+        topBlock["index"] = i;
+        topBlock["height"] = variableUses[i].getRelativeToSurfaceXY().y;
       }
+
+      if(topBlock.index != null){
+        // find the type of the child that has a type and set output to that type
+        var checkType;
+        var children = variableUses[topBlock.index].getChildren();
+        if(children.length == 0){
+          this.modifyBlock("None");
+        }else{
+          for(var i = 0; i < children.length; i++){
+            try{checkType = children[i].outputConnection.check_[0];}catch(e){}
+            if(checkType)
+              //this.setOutput(true, checkType);
+              this.modifyBlock(checkType);
+          }
+        }
+      }
+    }
     }catch(e){}
+    
   },
+
+  modifyBlock: function(newType){
+    var input = this.getInput("VALUE");
+    switch(newType){
+      case 'Vector':
+        this.setColour(Blockly.Blocks.vectors.HUE);
+        input.setCheck(newType);
+        break;
+      case 'Number':
+        this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+        input.setCheck(newType);
+        break;
+      case 'String':
+        this.setColour(Blockly.Blocks.texts.HUE);
+        input.setCheck(newType);
+        break;
+      case 'Boolean':
+        this.setColour(Blockly.Blocks.logic.HUE);
+        input.setCheck(newType);
+        break;
+      case 'None':
+        this.setColour(Blockly.Blocks.variables.HUE);
+        input.setCheck(null);
+        break;
+      case 'Sphere':
+      case 'Box':
+      case 'Arrow':
+      case 'Ring':
+      case 'Cylinder':
+      case 'Helix':
+        this.setColour(Blockly.Blocks.shapes.HUE);
+        input.setCheck(newType);       
+        break;
+      default:
+        throw "unknown data type";
+    }
+  },
+
   contextMenuType_: 'variables_get',
   customContextMenu: Blockly.Blocks['variables_get'].customContextMenu
 };

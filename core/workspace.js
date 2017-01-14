@@ -161,8 +161,7 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
  */
 Blockly.Workspace.prototype.getAllBlocks = function() {
   var blocks = this.getTopBlocks(false);
-  var blocksLength = blocks.length;
-  for (var i = 0; i < blocksLength; i++) {
+  for (var i = 0; i < blocks.length; i++) {
     blocks.push.apply(blocks, blocks[i].getChildren());
   }
   return blocks;

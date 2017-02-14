@@ -155,7 +155,7 @@ Blockly.Blocks['math_arithmetic'] = {
       // two vectors
       if(vectString[1] == "1"){
         this.setOutput(true, "Vector");
-        input.appendField(new Blockly.FieldDropdown([["+", "PLUS"],
+        input.appendField(new Blockly.FieldDropdown([["+", "ADD"],
                                                      ["-", "MINUS"]]), "op_list");
         this.setColour(Blockly.Blocks.vectors.HUE);
       // first is vector second is scalar 

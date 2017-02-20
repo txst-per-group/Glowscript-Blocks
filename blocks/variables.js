@@ -368,6 +368,7 @@ Blockly.Blocks['variables_set'] = {
           "name": "VALUE"
         }
       ],
+      "inputsInline": false,
       "previousStatement": null,
       "nextStatement": null,
       "colour": Blockly.Blocks.variables.HUE,
@@ -424,13 +425,23 @@ Blockly.Blocks['variables_set'] = {
     
   },
 
-  modifyBlock: function(newType){
+  modifyBlock: function(newType = 'None', attribute = 'none', component = 'none'){
+
+    //this.attribute = attribute;
+    //this.component = component;
+    var att = this.getInput("Attribute");
+    if(att){
+      this.removeInput('Attribute');
+    }
+
+
     var input = this.getInput("VALUE");
     this.currentType = newType;
     switch(newType){
       case 'Vector':
         this.setColour(Blockly.Blocks.vectors.HUE);
         input.setCheck(newType);
+        this.addComponent(attribute, component);
         break;
       case 'Number':
         this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
@@ -454,11 +465,115 @@ Blockly.Blocks['variables_set'] = {
       case 'Ring':
       case 'Cylinder':
       case 'Helix':
-        this.setColour(Blockly.Blocks.shapes.HUE);
-        input.setCheck(newType);       
+        this.addAttribute(newType, attribute, component);      
         break;
       default:
         throw "unknown data type";
+    }
+  },
+  addAttribute: function(type , attribute = 'none', component = 'none'){
+    /**
+    @method addAttribute
+    @param {string} type - Object type. no default
+    @param {string} attribute - selection for attribute. default 'none'
+    @param {string} component - selection for attribute. default 'none'
+    @author Cody Blakeney <cjb92@txstate.edu>
+    */
+
+    if(type === undefined){
+      throw "please provide type to addAttribute()";
+    }
+
+    var thisBlock = this;
+
+    this.appendDummyInput("Attribute")
+        .appendField(new Blockly.FieldDropdown(shapeDropDowns[type], function(attribute){
+          this.attribute = attribute;
+          
+          if(attribute === shapeDropDowns[type][0][0]){
+            thisBlock.setColour(Blockly.Blocks.shapes.HUE);
+            thisBlock.getInput("VALUE").setCheck(type);
+            if(thisBlock.getInput("Attribute").fieldRow.length > 1){
+                thisBlock.getInput("Attribute").removeField("componentDropdown");
+            }
+            
+            // if selected attribute is a vector
+          }else if(vectorList.indexOf(attribute) > -1){
+          thisBlock.addComponent(attribute, component); //waiting on finishing component method.
+          }else if(numberList.indexOf(attribute) > -1){
+          //thisBlock.modifyBlock("Number");
+          thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+          thisBlock.getInput("VALUE").setCheck("Number");
+          if(thisBlock.getInput("Attribute").fieldRow.length > 1){
+            thisBlock.getInput("Attribute").removeField("componentDropdown");
+          }
+          }
+        }), "attributeDropdown");
+
+    
+    if(attribute !== 'none' && attribute !== shapeDropDowns[type][0][0]){
+      //var input = this.getInput("Attribute");
+      //var field = input.fieldRow[0];
+      //field.setValue(attribute);  
+      // these codes are logically equivalent I'm leaving this for now
+      // to make clear what it is doing (the uncommented is more efficient)
+      this.getInput("Attribute").fieldRow[0].setValue(attribute);
+    }else{
+        this.setColour(Blockly.Blocks.shapes.HUE);
+        this.getInput("VALUE").setCheck("Number");
+        this.attribute = shapeDropDowns[type][0][0];
+    }
+
+    // if selected attribute is a vector
+    if(vectorList.indexOf(attribute) > -1){
+      this.addComponent(attribute, component); //waiting on finishing component method.
+    }else if(numberList.indexOf(attribute) > -1){
+      //this.modifyBlock("Number");
+      this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+      this.getInput("VALUE").setCheck("Number");
+    }
+    
+  },
+
+  addComponent: function(attribute = "none", component = "none"){
+    var att = this.getInput("Attribute");
+    if(attribute === 'none'){
+        if(att){
+            this.removeInput("Attribute");
+        }
+            this.appendDummyInput("Attribute");
+            att = this.getInput("Attribute");
+        
+    }
+    var thisBlock = this;
+
+    if(att.fieldRow.length <= 1){
+        att.appendField(new Blockly.FieldDropdown(vectorDropDown, function(component){
+              if(component === 'all'){
+                thisBlock.setColour(Blockly.Blocks.vectors.HUE);
+                thisBlock.getInput("VALUE").setCheck('Vector');
+              }else{
+                //thisBlock.modifyBlock("Number");
+                thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+                thisBlock.getInput("VALUE").setCheck("Number");
+              }
+              thisBlock.component = component;
+            }), "componentDropdown");
+    }
+
+    if(component !== 'none' && component !== 'all'){
+        for(var field of this.getInput("Attribute").fieldRow){
+            if(field.name === "componentDropdown"){
+                field.setValue(component);
+            }
+        }
+        //this.modifyBlock("Number");
+        this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+        this.getInput("VALUE").setCheck("Number");
+    }else{
+        this.component == 'all';
+        thisBlock.setColour(Blockly.Blocks.vectors.HUE);
+        thisBlock.getInput("VALUE").setCheck('Vector');
     }
   },
 

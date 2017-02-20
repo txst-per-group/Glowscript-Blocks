@@ -197,7 +197,10 @@ Blockly.Blocks['variables_get'] = {
   },
 
   modifyBlock: function(newType = 'None', attribute = 'none', component = 'none'){
-
+    //**
+    /* @method modifyBlock
+    *  @param {string} newType
+    */
     //this.attribute = attribute;
     //this.component = component;
     var att = this.getInput("Attribute");
@@ -259,24 +262,27 @@ Blockly.Blocks['variables_get'] = {
     this.appendDummyInput("Attribute")
         .appendField(new Blockly.FieldDropdown(shapeDropDowns[type], function(attribute){
           this.attribute = attribute;
-          
+          // if selection is shape
           if(attribute === shapeDropDowns[type][0][0]){
             thisBlock.setColour(Blockly.Blocks.shapes.HUE);
             thisBlock.setOutput(true, type);
+            // if there is a component in Attribute remove it
             if(thisBlock.getInput("Attribute").fieldRow.length > 1){
                 thisBlock.getInput("Attribute").removeField("componentDropdown");
             }
             
-            // if selected attribute is a vector
+          // if selected attribute is a vector
           }else if(vectorList.indexOf(attribute) > -1){
-          thisBlock.addComponent(attribute, component); //waiting on finishing component method.
+          thisBlock.addComponent(attribute, component); 
+          // if selected attribute is a number
           }else if(numberList.indexOf(attribute) > -1){
-          //thisBlock.modifyBlock("Number");
           thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
           thisBlock.setOutput(true, "Number");
+          // if there is a component in Attribute remove it
           if(thisBlock.getInput("Attribute").fieldRow.length > 1){
             thisBlock.getInput("Attribute").removeField("componentDropdown");
           }
+          //else boolean (write me)
           }
         }), "attributeDropdown");
 
@@ -288,21 +294,18 @@ Blockly.Blocks['variables_get'] = {
       // these codes are logically equivalent I'm leaving this for now
       // to make clear what it is doing (the uncommented is more efficient)
       this.getInput("Attribute").fieldRow[0].setValue(attribute);
+      // if selected attribute is a vector
+      if(vectorList.indexOf(attribute) > -1){
+        this.addComponent(attribute, component); 
+      }else if(numberList.indexOf(attribute) > -1){
+        this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+        this.setOutput(true, "Number");
+      }
     }else{
         this.setColour(Blockly.Blocks.shapes.HUE);
         this.setOutput(true, "Number");
         this.attribute = shapeDropDowns[type][0][0];
-    }
-
-    // if selected attribute is a vector
-    if(vectorList.indexOf(attribute) > -1){
-      this.addComponent(attribute, component); //waiting on finishing component method.
-    }else if(numberList.indexOf(attribute) > -1){
-      //this.modifyBlock("Number");
-      this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
-      this.setOutput(true, "Number");
-    }
-    
+    }  
   },
 
   addComponent: function(attribute = "none", component = "none"){
@@ -536,11 +539,15 @@ Blockly.Blocks['variables_set'] = {
   },
 
   addComponent: function(attribute = "none", component = "none"){
+    // gets Attribute dummy input
     var att = this.getInput("Attribute");
+    // if there is no selected attribute (it is a vector)
     if(attribute === 'none'){
+        // if the Attribute input exists
         if(att){
             this.removeInput("Attribute");
         }
+            // make 'clean' input for vector to have only component
             this.appendDummyInput("Attribute");
             att = this.getInput("Attribute");
         

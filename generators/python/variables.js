@@ -101,6 +101,14 @@ Blockly.Python['variables_get'] = function(block) {
   // Variable getter.
   var code = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
+  var dropdown_attribute = block.getFieldValue('attributeDropdown');
+  var dropdown_vector = block.getFieldValue('componentDropdown');
+  if(dropdown_attribute){
+    code = code + '.' + dropdown_attribute;
+  }
+  if(dropdown_vector && dropdown_vector !== "all"){
+    code = code + '.' + dropdown_vector
+  }
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 

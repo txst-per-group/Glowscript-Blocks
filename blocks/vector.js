@@ -50,7 +50,7 @@ Blockly.Blocks['vector_math'] = {
                                                 }), 
                                                 "operation");
     this.setOutput(true, "Number");
-    this.setColour(Blockly.Blocks.vectors.HUE);
+    this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
     this.selection = "";
@@ -79,23 +79,27 @@ Blockly.Blocks['vector_math'] = {
         case 'MAG':
         case 'MAG2':
             this.setOutput(true, "Number");
+            this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
             break;
 
         case 'NORM':
             this.setOutput(true, "Vector");
+            this.setColour(Blockly.Blocks.vectors.HUE);
             break;
 
         case 'DOT':
         case 'COMP':
         case 'DIFF_ANGLE':
-            this.appendValueInput('vector2');
+            this.appendValueInput('vector2').setCheck("Vector");
             this.setOutput(true, "Number");
+            this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
             break;
 
         case 'CROSS':
         case 'PROJ':
-            this.appendValueInput('vector2');
+            this.appendValueInput('vector2').setCheck("Vector");
             this.setOutput(true, "Vector");
+            this.setColour(Blockly.Blocks.vectors.HUE);
             break;
 
     }

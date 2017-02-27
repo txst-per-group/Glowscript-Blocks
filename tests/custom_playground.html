@@ -348,16 +348,17 @@ h1 {
 }
 #blocklyDiv {
   font-family: monospace;
-  float: right;
+  float: left;
   height: 95%;
   width: 60%;
 }
 #importExport {
   font-family: monospace;
-  float: left;
+  float: right;
 }
 #glowscript {
-  position: fixed;
+  float: right;
+  position: relative;
   width: 40%;
   overflow-x:scroll;
   
@@ -387,7 +388,7 @@ h1 {
 
 <!-- Vpython/Glowscript canvas divs -->
     
-  <button id="sphere" onclick="runCode();">Play</button>
+  <button id="sphere" onclick="runAndSet()">Play</button>
     
   <div id="glowscript">
   </div>
@@ -397,6 +398,10 @@ h1 {
     
   <script type="text/javascript">
     //This is the addition that puts the rendering actions into a function only called when the Play button is pressed, writing code into the 'glowscript_source' div and then rendering
+    function runAndSet(){
+      runCode();
+      $('#glowscript').attr("tabindex",-1).focus();
+    }
     function runCode() {
         // Grabs existing code in from textarea
         var code = document.getElementById('importExport');

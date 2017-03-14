@@ -244,42 +244,42 @@ Blockly.Blocks['vpython_box'] = {
                 case 'pos':
                     this.hasPos = true;
                     this.elementCount_++;
-                    valueConnections.push(['pos', clauseBlock.valueConnection_]);
+                    valueConnections.push(['POS', clauseBlock.valueConnection_]);
                     break;
                 case 'axis':
                     this.hasAxis = true;
                     this.elementCount_++;
-                    valueConnections.push(['axis', clauseBlock.valueConnections_]);
+                    valueConnections.push(['AXIS', clauseBlock.valueConnection_]);
                     break;
                 case 'size':
                     this.hasSize = true;
                     this.elementCount_++;
-                    valueConnections.push(['size', clauseBlock.valueConnection_]);
+                    valueConnections.push(['SIZE', clauseBlock.valueConnection_]);
                     break;
                 case 'up':
                     this.hasUp = true;
                     this.elementCount_++;
-                    valueConnections.push(['up', clauseBlock.valueConnection_]);
+                    valueConnections.push(['UP', clauseBlock.valueConnection_]);
                     break;
                 case 'color':
                     this.hasColor = true;
                     this.elementCount_++;
-                    valueConnections.push(['color', clauseBlock.valueConnection_]);
+                    valueConnections.push(['COLOR', clauseBlock.valueConnection_]);
                     break;
                 case 'texture':
                     this.hasTexture = true;
                     this.elementCount_++;
-                    valueConnections.push(['texture', clauseBlock.valueConnection_]);
+                    valueConnections.push(['TEXTURE', clauseBlock.valueConnection_]);
                     break;
                 case 'opacity':
                     this.hasOpacity = true;
                     this.elementCount_++;
-                    valueConnections.push(['opacity', clauseBlock.valueConnection_]);
+                    valueConnections.push(['OPACITY', clauseBlock.valueConnection_]);
                     break;
                 case 'make_trail':
                     this.hasTrail = true;
                     this.elementCount_++;
-                    valueConnections.push(['make_trail', clauseBlock.valueConnection_]);
+                    valueConnections.push(['TRAIL', clauseBlock.valueConnection_]);
                     break;
 
                 default:
@@ -293,11 +293,12 @@ Blockly.Blocks['vpython_box'] = {
         
         this.updateShape_();
 
-        /*for(var i = 0; i <= this.elementCount_ - 1; i++){
+        for(var i = 0; i <= this.elementCount_ - 1; i++){
             Blockly.Mutator.reconnect(valueConnections[i][1], 
                                       this, 
                                       valueConnections[i][0]);
-        }*/
+        }
+        
 
     },
 

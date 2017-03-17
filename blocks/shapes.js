@@ -82,13 +82,24 @@ var boxInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  }
 
 Blockly.Blocks.Shape = function(info, mutator, inputs, hasXml){
+
+    /**
+     *   used for creating new shape in Blockly.Blocks
+     */
+
     this.info = info;
     this.mutatorName = mutator;
     this.inputs = inputs;
     this.hasXml = hasXml;
 };
 
+/**
+ * Block for Shapes
+ * @this Blockly.Block
+ */
+
 Blockly.Blocks.Shape.prototype.init = function(){
+
     this.appendDummyInput()
         .appendField(this.info.name);
     this.setInputsInline(false);
@@ -102,6 +113,12 @@ Blockly.Blocks.Shape.prototype.init = function(){
     this.element_count_ = 0;
 };
 
+/**
+ * Create XML to represent if block is supposed to have inputs 
+ * from hasXml List and keeps element count
+ * @return {Element} XML storage element.
+ * @this Blockly.Block
+ */
 
 Blockly.Blocks.Shape.prototype.mutationToDom = function(){
 
@@ -122,6 +139,12 @@ Blockly.Blocks.Shape.prototype.mutationToDom = function(){
     return container;
 };
 
+/**
+ * Parse XML to restore the hasXml of Boolean values
+ * @param {!Element} xmlElement XML storage element.
+ * @this Blockly.Block
+ */
+
 Blockly.Blocks.Shape.prototype.domToMutation = function(xmlElement){
 
     for (var attribute in this.hasXml){
@@ -132,6 +155,13 @@ Blockly.Blocks.Shape.prototype.domToMutation = function(xmlElement){
     this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
     this.updateShape_();
 };
+
+/**
+ * Populate the mutator's dialog with this block's components.
+ * @param {!Blockly.Workspace} workspace Mutator's workspace.
+ * @return {!Blockly.Block} Root block in mutator.
+ * @this Blockly.Block
+ */
 
 Blockly.Blocks.Shape.prototype.decompose = function(workspace){
 
@@ -152,6 +182,11 @@ Blockly.Blocks.Shape.prototype.decompose = function(workspace){
     return containerBlock;
 };
 
+/**
+ * Reconfigure this block based on the mutator dialog's components.
+ * @param {!Blockly.Block} containerBlock Root block in mutator.
+ * @this Blockly.Block
+ */
 
 Blockly.Blocks.Shape.prototype.compose = function(containerBlock){
     var clauseBlock = containerBlock.nextConnection.targetBlock();
@@ -183,6 +218,12 @@ Blockly.Blocks.Shape.prototype.compose = function(containerBlock){
     }
 };
 
+/**
+ * Store pointers to any connected child blocks.
+ * @param {!Blockly.Block} containerBlock Root block in mutator.
+ * @this Blockly.Block
+ */
+
 Blockly.Blocks.Shape.prototype.saveConnections = function(containerBlock){
     var clauseBlock = containerBlock.nextConnection.targetBlock();
     
@@ -196,6 +237,12 @@ Blockly.Blocks.Shape.prototype.saveConnections = function(containerBlock){
     }
 };
 
+/**
+ * Modify this block to have the correct number of inputs.
+ * @private
+ * @this Blockly.Block
+ */
+ 
 Blockly.Blocks.Shape.prototype.updateShape_ = function(){
     
     // reset all inputs

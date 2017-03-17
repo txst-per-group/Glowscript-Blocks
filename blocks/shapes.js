@@ -18,7 +18,7 @@ Blockly.Blocks.shapes.objectDropDown = [["box", "box"], ["sphere", "sphere"],
 var boxDropDown = [["pos", "pos"], ["axis", "axis"],
                    ["size", "size"], ["up", "up"],
                    ["color","color"],["texture", "texture"],
-                   ["trail", "trail"],
+                   ["make_trail", "make_trail"],
                    ["retain", "retain"]];
 
 var vectorDropDown = [["all", "all"],["x", "x"], ["y", "y"],
@@ -29,14 +29,14 @@ var vectorList = ["pos", "axis", "up", "size"];
 var cylinderDropDown = [["pos", "pos"], ["axis", "axis"], 
                       ["radius", "radius"],["length", "length"],
                       ["up", "up"], ["color", "color"], ["texture", "texture"],
-                      ["opacity", "opacity"], ["trail", "trail"],
+                      ["opacity", "opacity"], ["make_trail", "make_trail"],
                       ["retain", "retain"]];
 
 var sphereDropDown = [["pos", "pos"], ["axis", "axis"], 
                       ["radius", "radius"], ["up", "up"],
                       ["color", "color"], ["texture", "texture"],
                       ["opacity", "opacity"],
-                      ["trail", "trail"], ["retain", "retain"]
+                      ["make_trail", "make_trail"], ["retain", "retain"]
                       ];
 
 var arrowDropDown = [["pos", "pos"], ["axis", "axis"], ["length", "length"],
@@ -429,7 +429,7 @@ Blockly.Blocks['vpython_box'] = {
         if(this.hasTrail){
             this.appendValueInput("TRAIL")
                 .setCheck("Boolean")
-                .appendField("make trail");
+                .appendField("make_trail");
             this.appendDummyInput("RETAIN_INPUT")
                 .appendField("retain")
                 .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
@@ -3217,7 +3217,7 @@ Blockly.Blocks['opacity'] = {
 Blockly.Blocks['make_trail'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("make trail");
+        .appendField("make_trail");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(Blockly.Blocks.shapes.HUE);

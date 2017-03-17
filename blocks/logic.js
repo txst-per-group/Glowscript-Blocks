@@ -30,7 +30,7 @@ goog.require('Blockly.Blocks');
 
 
 Blockly.Blocks.logic.HUE = '#5C6BC0';
-Blockly.Blocks.logic.VARIABLE_HUE = '#3949AB';
+Blockly.Blocks.logic.VARIABLE_HUE = '#9FA8DA';
 
 Blockly.Blocks['controls_if'] = {
   /**

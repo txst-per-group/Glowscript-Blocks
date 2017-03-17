@@ -30,9 +30,9 @@ goog.require('Blockly.Blocks');
 
 
 Blockly.Blocks.math.MATH_HUE = '#4DD0E1';
-Blockly.Blocks.math.VAR_MATH_HUE = '#00BCD4';
+Blockly.Blocks.math.VAR_MATH_HUE = '#B2EBF2';
 Blockly.Blocks.math.ARITHMETICS_HUE = '#4DD0E1';
-Blockly.Blocks.math.VAR_ARITHMETICS_HUE = '#00BCD4';
+Blockly.Blocks.math.VAR_ARITHMETICS_HUE = '#B2EBF2';
 
 Blockly.Blocks['math_number'] = {
   /**

@@ -210,20 +210,20 @@ Blockly.Blocks['variables_get'] = {
 
     switch(newType){
       case 'Vector':
-        this.setColour(Blockly.Blocks.vectors.HUE);
+        this.setColour(Blockly.Blocks.vectors.VARIABLE_HUE);
         this.setOutput(true, newType);
         this.addComponent(attribute, component);
         break;
       case 'Number':
-        this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+        this.setColour(Blockly.Blocks.math.VAR_ARITHMETICS_HUE);
         this.setOutput(true, newType);
         break;
       case 'String':
-        this.setColour(Blockly.Blocks.texts.HUE);
+        this.setColour(Blockly.Blocks.texts.VARIABLE_HUE);
         this.setOutput(true, newType);
         break;
       case 'Boolean':
-        this.setColour(Blockly.Blocks.logic.HUE);
+        this.setColour(Blockly.Blocks.logic.VARIABLE_HUE);
         this.setOutput(true, newType);
         break;
       case 'None':
@@ -264,7 +264,7 @@ Blockly.Blocks['variables_get'] = {
           this.attribute = attribute;
           // if selection is shape
           if(attribute === shapeDropDowns[type][0][0]){
-            thisBlock.setColour(Blockly.Blocks.shapes.HUE);
+            thisBlock.setColour(Blockly.Blocks.shapes.VARIABLE_HUE);
             thisBlock.setOutput(true, type);
             // if there is a component in Attribute remove it
             if(thisBlock.getInput("Attribute").fieldRow.length > 1){
@@ -276,7 +276,7 @@ Blockly.Blocks['variables_get'] = {
           thisBlock.addComponent(attribute, component); 
           // if selected attribute is a number
           }else if(numberList.indexOf(attribute) > -1){
-          thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+          thisBlock.setColour(Blockly.Blocks.math.VAR_ARITHMETICS_HUE);
           thisBlock.setOutput(true, "Number");
           // if there is a component in Attribute remove it
           if(thisBlock.getInput("Attribute").fieldRow.length > 1){
@@ -298,11 +298,11 @@ Blockly.Blocks['variables_get'] = {
       if(vectorList.indexOf(attribute) > -1){
         this.addComponent(attribute, component); 
       }else if(numberList.indexOf(attribute) > -1){
-        this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+        this.setColour(Blockly.Blocks.math.VAR_ARITHMETICS_HUE);
         this.setOutput(true, "Number");
       }
     }else{
-        this.setColour(Blockly.Blocks.shapes.HUE);
+        this.setColour(Blockly.Blocks.shapes.VARIABLE_HUE);
         this.setOutput(true, "Number");
         this.attribute = shapeDropDowns[type][0][0];
     }  
@@ -323,11 +323,11 @@ Blockly.Blocks['variables_get'] = {
     if(att.fieldRow.length <= 1){
         att.appendField(new Blockly.FieldDropdown(vectorDropDown, function(component){
               if(component === 'all'){
-                thisBlock.setColour(Blockly.Blocks.vectors.HUE);
+                thisBlock.setColour(Blockly.Blocks.vectors.VARIABLE_HUE);
                 thisBlock.setOutput(true, 'Vector');
               }else{
                 //thisBlock.modifyBlock("Number");
-                thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+                thisBlock.setColour(Blockly.Blocks.math.VAR_ARITHMETICS_HUE);
                 thisBlock.setOutput(true, "Number");
               }
               thisBlock.component = component;
@@ -341,11 +341,11 @@ Blockly.Blocks['variables_get'] = {
             }
         }
         //this.modifyBlock("Number");
-        this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+        this.setColour(Blockly.Blocks.math.VAR_ARITHMETICS_HUE);
         this.setOutput(true, "Number");
     }else{
         this.component == 'all';
-        thisBlock.setColour(Blockly.Blocks.vectors.HUE);
+        thisBlock.setColour(Blockly.Blocks.vectors.VARIABLE_HUE);
         thisBlock.setOutput(true, 'Vector');
     }
   }

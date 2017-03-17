@@ -6,6 +6,7 @@ goog.require('Blockly.Blocks');
 
 
 Blockly.Blocks.shapes.HUE = '#FFC107';
+Blockly.Blocks.shapes.VARIABLE_HUE = '#FFA000';
 
 
 ////////////////////////////////////////////////

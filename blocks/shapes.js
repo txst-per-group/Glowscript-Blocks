@@ -6,6 +6,7 @@ goog.require('Blockly.Blocks');
 
 
 Blockly.Blocks.shapes.HUE = '#FFC107';
+Blockly.Blocks.shapes.VARIABLE_HUE = '#FFD54F';
 
 
 ////////////////////////////////////////////////
@@ -18,7 +19,7 @@ Blockly.Blocks.shapes.objectDropDown = [["box", "box"], ["sphere", "sphere"],
 var boxDropDown = [["pos", "pos"], ["axis", "axis"],
                    ["size", "size"], ["up", "up"],
                    ["color","color"],["texture", "texture"],
-                   ["make_trail", "make_trail"],
+                   ["trail", "trail"],
                    ["retain", "retain"]];
 
 var vectorDropDown = [["all", "all"],["x", "x"], ["y", "y"],
@@ -29,14 +30,14 @@ var vectorList = ["pos", "axis", "up", "size"];
 var cylinderDropDown = [["pos", "pos"], ["axis", "axis"], 
                       ["radius", "radius"],["length", "length"],
                       ["up", "up"], ["color", "color"], ["texture", "texture"],
-                      ["opacity", "opacity"], ["make_trail", "make_trail"],
+                      ["opacity", "opacity"], ["trail", "trail"],
                       ["retain", "retain"]];
 
 var sphereDropDown = [["pos", "pos"], ["axis", "axis"], 
                       ["radius", "radius"], ["up", "up"],
                       ["color", "color"], ["texture", "texture"],
                       ["opacity", "opacity"],
-                      ["make_trail", "make_trail"], ["retain", "retain"]
+                      ["trail", "trail"], ["retain", "retain"]
                       ];
 
 var arrowDropDown = [["pos", "pos"], ["axis", "axis"], ["length", "length"],
@@ -60,6 +61,185 @@ var helixDropDown = [["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
                     ["retain", "retain"]];
 
 
+var boxInfo = {name: "box", type: "Box"};
+
+var boxMutator = ['pos', 'axis', 'size', 'up', 
+                  'color', 'texture', 'opacity', 
+                  'make_trail'];
+
+var boxXml = {pos: 0, axis: 0, size:0, 
+              up: 0, color: 0, texture: 0, opacity: 0, 
+              make_trail: 0};
+
+var boxInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 }
+
+Blockly.Blocks.Shape = function(info, mutator, inputs, hasXml){
+    this.info = info;
+    this.mutatorName = mutator;
+    this.inputs = inputs;
+    this.hasXml = hasXml;
+};
+
+Blockly.Blocks.Shape.prototype.init = function(){
+    this.appendDummyInput()
+        .appendField(this.info.name);
+    this.setInputsInline(false);
+    this.setOutput(true, this.info.type);
+    this.setColour(Blockly.Blocks.shapes.HUE);
+    this.setMutator(new Blockly.Mutator(this.mutatorName));
+    for (var attribute in this.hasXml){
+        this.hasXml[attribute] = false
+    }
+
+    this.element_count_ = 0;
+};
+
+
+Blockly.Blocks.Shape.prototype.mutationToDom = function(){
+
+    if(!this.elementCount_){
+        return null;
+    }
+
+    var container = document.createElement('mutation');
+
+    for (var attribute in this.hasXml){
+        if (this.hasXml[attribute]){
+            container.setAttribute(attribute, 1);
+        }
+    }
+   
+    container.setAttribute('element_count', this.elementCount_)
+
+    return container;
+};
+
+Blockly.Blocks.Shape.prototype.domToMutation = function(xmlElement){
+
+    for (var attribute in this.hasXml){
+        attribute = parseInt(xmlElement.getAttribute(attribute), 10) || 0;
+    }
+
+
+    this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
+    this.updateShape_();
+};
+
+Blockly.Blocks.Shape.prototype.decompose = function(workspace){
+
+    var containerBlock = workspace.newBlock('vpython_create_' + this.info.name);
+    containerBlock.initSvg();
+    var connection = containerBlock.nextConnection;
+
+
+    for (var attribute in this.hasXml){
+        if(this.hasXml[attribute]){
+            var mutatorBlock = workspace.newBlock(attribute);
+            mutatorBlock.initSvg();
+            connection.connect(mutatorBlock.previousConnection);
+            connection = mutatorBlock.nextConnection;
+        }
+    }
+
+    return containerBlock;
+};
+
+
+Blockly.Blocks.Shape.prototype.compose = function(containerBlock){
+    var clauseBlock = containerBlock.nextConnection.targetBlock();
+    for (var attribute in this.hasXml){
+        this.hasXml[attribute] = false;
+    }
+
+    this.elementCount_ = 0;
+
+    var valueConnections = [];
+    while (clauseBlock){
+        try{
+            this.hasXml[clauseBlock.type] = true;
+            this.elementCount_++;
+            valueConnections.push([clauseBlock.type.toUpperCase(), clauseBlock.valueConnection_]);
+        }catch(err){
+            console.log("error in Shape compose");
+        }
+
+        clauseBlock = clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();      
+    }
+
+    this.updateShape_();
+
+    for(var i = 0; i <= this.elementCount_ - 1; i++){
+        Blockly.Mutator.reconnect(valueConnections[i][1], 
+                                  this, 
+                                  valueConnections[i][0]);
+    }
+};
+
+Blockly.Blocks.Shape.prototype.saveConnections = function(containerBlock){
+    var clauseBlock = containerBlock.nextConnection.targetBlock();
+    
+    while(clauseBlock){
+
+        var valueInput = this.getInput(this.inputs[clauseBlock.type].inputName);
+        clauseBlock.valueConnection_ = valueInput && valueInput.connection.targetConnection;
+       
+        clauseBlock = clauseBlock.nextConnection &&
+            clauseBlock.nextConnection.targetBlock(); 
+    }
+};
+
+Blockly.Blocks.Shape.prototype.updateShape_ = function(){
+    
+    // reset all inputs
+    for (var input in this.inputs){
+
+        // special case for make trail 
+        if (input === "make_trail"){
+            if(this.getInput(this.inputs[input].inputName)){
+                this.removeInput(this.inputs[input].inputName);
+                this.removeInput("RETAIN_INPUT");
+            }
+        }else{
+            if(this.getInput(this.inputs[input].inputName))
+                this.removeInput(this.inputs[input].inputName);
+        }
+    }
+
+    // create inputs based on what is recorded
+    for (var has in this.hasXml){
+        if(has === "make_trail"){   
+            if (this.hasXml[has]){
+                this.appendValueInput(this.inputs[has].inputName)
+                    .setCheck(this.inputs[has].check)
+                    .appendField(this.inputs[has].field);
+                this.appendDummyInput("RETAIN_INPUT")
+                .appendField("retain")
+                .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
+            }
+        }else{
+            if (this.hasXml[has]){
+                this.appendValueInput(this.inputs[has].inputName)
+                    .setCheck(this.inputs[has].check)
+                    .appendField(this.inputs[has].field);
+            }   
+        }
+        
+    }
+};
+
+
+Blockly.Blocks['vpython_box_test'] = new Blockly.Blocks.Shape(boxInfo, 
+                                                          boxMutator,
+                                                          boxInputs,
+                                                          boxXml);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -429,7 +609,7 @@ Blockly.Blocks['vpython_box'] = {
         if(this.hasTrail){
             this.appendValueInput("TRAIL")
                 .setCheck("Boolean")
-                .appendField("make_trail");
+                .appendField("make trail");
             this.appendDummyInput("RETAIN_INPUT")
                 .appendField("retain")
                 .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
@@ -3217,7 +3397,7 @@ Blockly.Blocks['opacity'] = {
 Blockly.Blocks['make_trail'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("make_trail");
+        .appendField("make trail");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(Blockly.Blocks.shapes.HUE);

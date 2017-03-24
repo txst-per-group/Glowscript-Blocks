@@ -31,7 +31,60 @@ goog.require('Blockly.Blocks');
 
 Blockly.Blocks.variables.HUE = '#607D8B';
 
+var boxDropDown = [["box", "box"],["pos", "pos"], ["axis", "axis"],
+                   ["size", "size"], ["up", "up"],
+                   ["color","color"],["texture", "texture"],
+                   ["trail", "trail"],
+                   ["retain", "retain"]];
 
+var vectorDropDown = [["all", "all"],["x", "x"], ["y", "y"],
+                      ["z", "z"]];
+
+var vectorList = ["pos", "axis", "up", "size", "all"];
+var numberList = ["radius", "opacity", "retain", "shaftwidth", 
+                  "headwidth", "headlength", "thickness", "x", "y", "z"];
+
+var cylinderDropDown = [["cylinder", "cylinder"],["pos", "pos"], ["axis", "axis"], 
+                      ["radius", "radius"],["length", "length"],
+                      ["up", "up"], ["color", "color"], ["texture", "texture"],
+                      ["opacity", "opacity"], ["trail", "trail"],
+                      ["retain", "retain"]];
+
+var sphereDropDown = [["sphere", "sphere"],["pos", "pos"], ["axis", "axis"], 
+                      ["radius", "radius"], ["up", "up"],
+                      ["color", "color"], ["texture", "texture"],
+                      ["opacity", "opacity"],
+                      ["trail", "trail"], ["retain", "retain"]
+                      ];
+
+var arrowDropDown = [["arrow", "arrow"],["pos", "pos"], ["axis", "axis"], ["length", "length"],
+                     ["shaftwidth", "shaftwidth"], ["headwidth", "headwidth"],
+                     ["headlength", "headlength"], ["up", "up"], 
+                     ["color", "color"], ["texture", "texture"],
+                     ["opacity", "opacity"],
+                     ["make_trail"], ["retain", "retain"]];
+
+var ringDropDown = [["ring", "ring"],["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
+                    ["length", "length"], ["thickness", "thickness"], 
+                    ["size", "size"], ["up", "up"], ["color", "color"],
+                    ["texture", "texture"],["opacity", "opacity"], ["make_trail", "make_trail"],
+                    ["retain", "retain"]];
+
+var helixDropDown = [["helix", "helix"],["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
+                    ["length", "length"], ["coils", "coils"],
+                    ["thickness", "thickness"], ["size", "size"],
+                    ["up", "up"], ["color", "color"], ["texture", "texture"],
+                    ["opacity", "opacity"], ["make_trail", "make_trail"],
+                    ["retain", "retain"]];
+
+var shapeDropDowns = {};
+
+shapeDropDowns["Box"] = boxDropDown;
+shapeDropDowns["Cylinder"] = cylinderDropDown;
+shapeDropDowns["Sphere"] = sphereDropDown;
+shapeDropDowns["Arrow"] = arrowDropDown;
+shapeDropDowns["Ring"] = ringDropDown;
+shapeDropDowns["Helix"] = helixDropDown;
 /////////////////////////////////////////////
 
 Blockly.Blocks['variables_get'] = {
@@ -52,25 +105,43 @@ Blockly.Blocks['variables_get'] = {
     this.setOutput(true);
     this.setTooltip(Blockly.Msg.VARIABLES_GET_TOOLTIP);
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
+    this.selectedType = null;
+    this.attribute = 'none';
+    this.component = 'none';
   },
 
   mutationToDom: function(){
     var container = document.createElement('mutation');
     // record current output type
-    var checkType = this.outputConnection.check_;
-    if(checkType == null){
+    
+    var attributeInput = this.getInput("Attribute");
+    if(attributeInput){
+      container.setAttribute('attribute_', 
+                              attributeInput.fieldRow[0].name == "attributeDropdown" ? 
+                              attributeInput.fieldRow[0].getText() : 'none');
+    }else{
+      container.setAttribute('attribute_', 'none');
+    }
+
+    if(this.selectedType == null){
       container.setAttribute('type_', 'None');
     }else{
-      container.setAttribute('type_', this.outputConnection.check_[0]);
+      container.setAttribute('type_', this.selectedType);
     }
+    container.setAttribute('component_', this.component);
+
     return container;
   },
 
   domToMutation: function(xmlElement){
     //this.vecPos = xmlElement.getAttribute('vector_pos');
     //this.updateDropDown(this.vecPos);
+    this.selectedType = xmlElement.getAttribute('type_');
+    this.selectedType = this.selectedType ? this.selectedType : 'None';
+    this.attribute = xmlElement.getAttribute('attribute_');
+    this.component = xmlElement.getAttribute('component_');
     console.log(xmlElement.getAttribute('type_'));
-    this.modifyBlock(xmlElement.getAttribute('type_'));
+    this.modifyBlock(this.selectedType, this.attribute, this.component);
   },
 
   contextMenuType_: 'variables_set',
@@ -115,6 +186,7 @@ Blockly.Blocks['variables_get'] = {
             try{checkType = children[i].outputConnection.check_[0];}catch(e){}
             if(checkType)
               //this.setOutput(true, checkType);
+              this.selectedType = checkType;
               this.modifyBlock(checkType);
           }
         }
@@ -124,11 +196,23 @@ Blockly.Blocks['variables_get'] = {
     
   },
 
-  modifyBlock: function(newType){
+  modifyBlock: function(newType = 'None', attribute = 'none', component = 'none'){
+    //**
+    /* @method modifyBlock
+    *  @param {string} newType
+    */
+    //this.attribute = attribute;
+    //this.component = component;
+    var att = this.getInput("Attribute");
+    if(att){
+      this.removeInput('Attribute');
+    }
+
     switch(newType){
       case 'Vector':
         this.setColour(Blockly.Blocks.vectors.HUE);
         this.setOutput(true, newType);
+        this.addComponent(attribute, component);
         break;
       case 'Number':
         this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
@@ -152,13 +236,120 @@ Blockly.Blocks['variables_get'] = {
       case 'Ring':
       case 'Cylinder':
       case 'Helix':
-        this.setColour(Blockly.Blocks.shapes.HUE);
-        this.setOutput(true, newType);
+        this.addAttribute(newType, attribute, component);
+        //this.addAttribute(newType); function call when implemented
         break;
       default:
         throw "unknown data type";
     }
+  },
+
+  addAttribute: function(type , attribute = 'none', component = 'none'){
+    /**
+    @method addAttribute
+    @param {string} type - Object type. no default
+    @param {string} attribute - selection for attribute. default 'none'
+    @param {string} component - selection for attribute. default 'none'
+    @author Cody Blakeney <cjb92@txstate.edu>
+    */
+
+    if(type === undefined){
+      throw "please provide type to addAttribute()";
+    }
+
+    var thisBlock = this;
+
+    this.appendDummyInput("Attribute")
+        .appendField(new Blockly.FieldDropdown(shapeDropDowns[type], function(attribute){
+          this.attribute = attribute;
+          // if selection is shape
+          if(attribute === shapeDropDowns[type][0][0]){
+            thisBlock.setColour(Blockly.Blocks.shapes.HUE);
+            thisBlock.setOutput(true, type);
+            // if there is a component in Attribute remove it
+            if(thisBlock.getInput("Attribute").fieldRow.length > 1){
+                thisBlock.getInput("Attribute").removeField("componentDropdown");
+            }
+            
+          // if selected attribute is a vector
+          }else if(vectorList.indexOf(attribute) > -1){
+          thisBlock.addComponent(attribute, component); 
+          // if selected attribute is a number
+          }else if(numberList.indexOf(attribute) > -1){
+          thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+          thisBlock.setOutput(true, "Number");
+          // if there is a component in Attribute remove it
+          if(thisBlock.getInput("Attribute").fieldRow.length > 1){
+            thisBlock.getInput("Attribute").removeField("componentDropdown");
+          }
+          //else boolean (write me)
+          }
+        }), "attributeDropdown");
+
+    
+    if(attribute !== 'none' && attribute !== shapeDropDowns[type][0][0]){
+      //var input = this.getInput("Attribute");
+      //var field = input.fieldRow[0];
+      //field.setValue(attribute);  
+      // these codes are logically equivalent I'm leaving this for now
+      // to make clear what it is doing (the uncommented is more efficient)
+      this.getInput("Attribute").fieldRow[0].setValue(attribute);
+      // if selected attribute is a vector
+      if(vectorList.indexOf(attribute) > -1){
+        this.addComponent(attribute, component); 
+      }else if(numberList.indexOf(attribute) > -1){
+        this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+        this.setOutput(true, "Number");
+      }
+    }else{
+        this.setColour(Blockly.Blocks.shapes.HUE);
+        this.setOutput(true, "Number");
+        this.attribute = shapeDropDowns[type][0][0];
+    }  
+  },
+
+  addComponent: function(attribute = "none", component = "none"){
+    var att = this.getInput("Attribute");
+    if(attribute === 'none'){
+        if(att){
+            this.removeInput("Attribute");
+        }
+            this.appendDummyInput("Attribute");
+            att = this.getInput("Attribute");
+        
+    }
+    var thisBlock = this;
+
+    if(att.fieldRow.length <= 1){
+        att.appendField(new Blockly.FieldDropdown(vectorDropDown, function(component){
+              if(component === 'all'){
+                thisBlock.setColour(Blockly.Blocks.vectors.HUE);
+                thisBlock.setOutput(true, 'Vector');
+              }else{
+                //thisBlock.modifyBlock("Number");
+                thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+                thisBlock.setOutput(true, "Number");
+              }
+              thisBlock.component = component;
+            }), "componentDropdown");
+    }
+
+    if(component !== 'none' && component !== 'all'){
+        for(var field of this.getInput("Attribute").fieldRow){
+            if(field.name === "componentDropdown"){
+                field.setValue(component);
+            }
+        }
+        //this.modifyBlock("Number");
+        this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+        this.setOutput(true, "Number");
+    }else{
+        this.component == 'all';
+        thisBlock.setColour(Blockly.Blocks.vectors.HUE);
+        thisBlock.setOutput(true, 'Vector');
+    }
   }
+
 };
 
 Blockly.Blocks['variables_set'] = {
@@ -180,6 +371,7 @@ Blockly.Blocks['variables_set'] = {
           "name": "VALUE"
         }
       ],
+      "inputsInline": false,
       "previousStatement": null,
       "nextStatement": null,
       "colour": Blockly.Blocks.variables.HUE,
@@ -236,13 +428,23 @@ Blockly.Blocks['variables_set'] = {
     
   },
 
-  modifyBlock: function(newType){
+  modifyBlock: function(newType = 'None', attribute = 'none', component = 'none'){
+
+    //this.attribute = attribute;
+    //this.component = component;
+    var att = this.getInput("Attribute");
+    if(att){
+      this.removeInput('Attribute');
+    }
+
+
     var input = this.getInput("VALUE");
     this.currentType = newType;
     switch(newType){
       case 'Vector':
         this.setColour(Blockly.Blocks.vectors.HUE);
         input.setCheck(newType);
+        this.addComponent(attribute, component);
         break;
       case 'Number':
         this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
@@ -266,11 +468,119 @@ Blockly.Blocks['variables_set'] = {
       case 'Ring':
       case 'Cylinder':
       case 'Helix':
-        this.setColour(Blockly.Blocks.shapes.HUE);
-        input.setCheck(newType);       
+        this.addAttribute(newType, attribute, component);      
         break;
       default:
         throw "unknown data type";
+    }
+  },
+  addAttribute: function(type , attribute = 'none', component = 'none'){
+    /**
+    @method addAttribute
+    @param {string} type - Object type. no default
+    @param {string} attribute - selection for attribute. default 'none'
+    @param {string} component - selection for attribute. default 'none'
+    @author Cody Blakeney <cjb92@txstate.edu>
+    */
+
+    if(type === undefined){
+      throw "please provide type to addAttribute()";
+    }
+
+    var thisBlock = this;
+
+    this.appendDummyInput("Attribute")
+        .appendField(new Blockly.FieldDropdown(shapeDropDowns[type], function(attribute){
+          this.attribute = attribute;
+          
+          if(attribute === shapeDropDowns[type][0][0]){
+            thisBlock.setColour(Blockly.Blocks.shapes.HUE);
+            thisBlock.getInput("VALUE").setCheck(type);
+            if(thisBlock.getInput("Attribute").fieldRow.length > 1){
+                thisBlock.getInput("Attribute").removeField("componentDropdown");
+            }
+            
+            // if selected attribute is a vector
+          }else if(vectorList.indexOf(attribute) > -1){
+          thisBlock.addComponent(attribute, component); //waiting on finishing component method.
+          }else if(numberList.indexOf(attribute) > -1){
+          //thisBlock.modifyBlock("Number");
+          thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+          thisBlock.getInput("VALUE").setCheck("Number");
+          if(thisBlock.getInput("Attribute").fieldRow.length > 1){
+            thisBlock.getInput("Attribute").removeField("componentDropdown");
+          }
+          }
+        }), "attributeDropdown");
+
+    
+    if(attribute !== 'none' && attribute !== shapeDropDowns[type][0][0]){
+      //var input = this.getInput("Attribute");
+      //var field = input.fieldRow[0];
+      //field.setValue(attribute);  
+      // these codes are logically equivalent I'm leaving this for now
+      // to make clear what it is doing (the uncommented is more efficient)
+      this.getInput("Attribute").fieldRow[0].setValue(attribute);
+    }else{
+        this.setColour(Blockly.Blocks.shapes.HUE);
+        this.getInput("VALUE").setCheck("Number");
+        this.attribute = shapeDropDowns[type][0][0];
+    }
+
+    // if selected attribute is a vector
+    if(vectorList.indexOf(attribute) > -1){
+      this.addComponent(attribute, component); //waiting on finishing component method.
+    }else if(numberList.indexOf(attribute) > -1){
+      //this.modifyBlock("Number");
+      this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+      this.getInput("VALUE").setCheck("Number");
+    }
+    
+  },
+
+  addComponent: function(attribute = "none", component = "none"){
+    // gets Attribute dummy input
+    var att = this.getInput("Attribute");
+    // if there is no selected attribute (it is a vector)
+    if(attribute === 'none'){
+        // if the Attribute input exists
+        if(att){
+            this.removeInput("Attribute");
+        }
+            // make 'clean' input for vector to have only component
+            this.appendDummyInput("Attribute");
+            att = this.getInput("Attribute");
+        
+    }
+    var thisBlock = this;
+
+    if(att.fieldRow.length <= 1){
+        att.appendField(new Blockly.FieldDropdown(vectorDropDown, function(component){
+              if(component === 'all'){
+                thisBlock.setColour(Blockly.Blocks.vectors.HUE);
+                thisBlock.getInput("VALUE").setCheck('Vector');
+              }else{
+                //thisBlock.modifyBlock("Number");
+                thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+                thisBlock.getInput("VALUE").setCheck("Number");
+              }
+              thisBlock.component = component;
+            }), "componentDropdown");
+    }
+
+    if(component !== 'none' && component !== 'all'){
+        for(var field of this.getInput("Attribute").fieldRow){
+            if(field.name === "componentDropdown"){
+                field.setValue(component);
+            }
+        }
+        //this.modifyBlock("Number");
+        this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+        this.getInput("VALUE").setCheck("Number");
+    }else{
+        this.component == 'all';
+        thisBlock.setColour(Blockly.Blocks.vectors.HUE);
+        thisBlock.getInput("VALUE").setCheck('Vector');
     }
   },
 

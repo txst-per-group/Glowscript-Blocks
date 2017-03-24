@@ -18,7 +18,7 @@ Blockly.Blocks.shapes.objectDropDown = [["box", "box"], ["sphere", "sphere"],
 var boxDropDown = [["pos", "pos"], ["axis", "axis"],
                    ["size", "size"], ["up", "up"],
                    ["color","color"],["texture", "texture"],
-                   ["trail", "trail"],
+                   ["make_trail", "make_trail"],
                    ["retain", "retain"]];
 
 var vectorDropDown = [["all", "all"],["x", "x"], ["y", "y"],
@@ -29,14 +29,14 @@ var vectorList = ["pos", "axis", "up", "size"];
 var cylinderDropDown = [["pos", "pos"], ["axis", "axis"], 
                       ["radius", "radius"],["length", "length"],
                       ["up", "up"], ["color", "color"], ["texture", "texture"],
-                      ["opacity", "opacity"], ["trail", "trail"],
+                      ["opacity", "opacity"], ["make_trail", "make_trail"],
                       ["retain", "retain"]];
 
 var sphereDropDown = [["pos", "pos"], ["axis", "axis"], 
                       ["radius", "radius"], ["up", "up"],
                       ["color", "color"], ["texture", "texture"],
                       ["opacity", "opacity"],
-                      ["trail", "trail"], ["retain", "retain"]
+                      ["make_trail", "make_trail"], ["retain", "retain"]
                       ];
 
 var arrowDropDown = [["pos", "pos"], ["axis", "axis"], ["length", "length"],
@@ -244,42 +244,42 @@ Blockly.Blocks['vpython_box'] = {
                 case 'pos':
                     this.hasPos = true;
                     this.elementCount_++;
-                    valueConnections.push(['pos', clauseBlock.valueConnection_]);
+                    valueConnections.push(['POS', clauseBlock.valueConnection_]);
                     break;
                 case 'axis':
                     this.hasAxis = true;
                     this.elementCount_++;
-                    valueConnections.push(['axis', clauseBlock.valueConnections_]);
+                    valueConnections.push(['AXIS', clauseBlock.valueConnection_]);
                     break;
                 case 'size':
                     this.hasSize = true;
                     this.elementCount_++;
-                    valueConnections.push(['size', clauseBlock.valueConnection_]);
+                    valueConnections.push(['SIZE', clauseBlock.valueConnection_]);
                     break;
                 case 'up':
                     this.hasUp = true;
                     this.elementCount_++;
-                    valueConnections.push(['up', clauseBlock.valueConnection_]);
+                    valueConnections.push(['UP', clauseBlock.valueConnection_]);
                     break;
                 case 'color':
                     this.hasColor = true;
                     this.elementCount_++;
-                    valueConnections.push(['color', clauseBlock.valueConnection_]);
+                    valueConnections.push(['COLOR', clauseBlock.valueConnection_]);
                     break;
                 case 'texture':
                     this.hasTexture = true;
                     this.elementCount_++;
-                    valueConnections.push(['texture', clauseBlock.valueConnection_]);
+                    valueConnections.push(['TEXTURE', clauseBlock.valueConnection_]);
                     break;
                 case 'opacity':
                     this.hasOpacity = true;
                     this.elementCount_++;
-                    valueConnections.push(['opacity', clauseBlock.valueConnection_]);
+                    valueConnections.push(['OPACITY', clauseBlock.valueConnection_]);
                     break;
                 case 'make_trail':
                     this.hasTrail = true;
                     this.elementCount_++;
-                    valueConnections.push(['make_trail', clauseBlock.valueConnection_]);
+                    valueConnections.push(['TRAIL', clauseBlock.valueConnection_]);
                     break;
 
                 default:
@@ -293,11 +293,12 @@ Blockly.Blocks['vpython_box'] = {
         
         this.updateShape_();
 
-        /*for(var i = 0; i <= this.elementCount_ - 1; i++){
+        for(var i = 0; i <= this.elementCount_ - 1; i++){
             Blockly.Mutator.reconnect(valueConnections[i][1], 
                                       this, 
                                       valueConnections[i][0]);
-        }*/
+        }
+        
 
     },
 
@@ -428,7 +429,7 @@ Blockly.Blocks['vpython_box'] = {
         if(this.hasTrail){
             this.appendValueInput("TRAIL")
                 .setCheck("Boolean")
-                .appendField("make trail");
+                .appendField("make_trail");
             this.appendDummyInput("RETAIN_INPUT")
                 .appendField("retain")
                 .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
@@ -3216,7 +3217,7 @@ Blockly.Blocks['opacity'] = {
 Blockly.Blocks['make_trail'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("make trail");
+        .appendField("make_trail");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(Blockly.Blocks.shapes.HUE);

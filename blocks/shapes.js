@@ -148,7 +148,7 @@ Blockly.Blocks.Shape.prototype.mutationToDom = function(){
 Blockly.Blocks.Shape.prototype.domToMutation = function(xmlElement){
 
     for (var attribute in this.hasXml){
-        attribute = parseInt(xmlElement.getAttribute(attribute), 10) || 0;
+        this.hasXml[attribute] = parseInt(xmlElement.getAttribute(attribute), 10) || 0;
     }
 
 

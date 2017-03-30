@@ -61,25 +61,6 @@ var helixDropDown = [["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
                     ["retain", "retain"]];
 
 
-var boxInfo = {name: "box", type: "Box"};
-
-var boxMutator = ['pos', 'axis', 'size', 'up', 
-                  'color', 'texture', 'opacity', 
-                  'make_trail'];
-
-var boxXml = {pos: 0, axis: 0, size:0, 
-              up: 0, color: 0, texture: 0, opacity: 0, 
-              make_trail: 0};
-
-var boxInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
-                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
-                 size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
-                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
-                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
-                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
-                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
-                 }
 
 Blockly.Blocks.Shape = function(info, mutator, inputs, hasXml){
 
@@ -282,11 +263,180 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
     }
 };
 
+var boxInfo = {name: "box", type: "Box"};
+
+var boxMutator = ['pos', 'axis', 'size', 'up', 
+                  'color', 'texture', 'opacity', 
+                  'make_trail'];
+
+var boxXml = {pos: 0, axis: 0, size:0, 
+              up: 0, color: 0, texture: 0, opacity: 0, 
+              make_trail: 0};
+
+var boxInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 }
+
 
 Blockly.Blocks['vpython_box_test'] = new Blockly.Blocks.Shape(boxInfo, 
                                                           boxMutator,
                                                           boxInputs,
                                                           boxXml);
+
+
+var sphereInfo = {name: "sphere", type: "Sphere"};
+
+var sphereMutator = ['pos', 'axis', 'radius', 'up', 
+                  'color', 'texture', 'opacity', 
+                  'make_trail'];
+
+var sphereXml = {pos: 0, axis: 0, radius:0, 
+              up: 0, color: 0, texture: 0, opacity: 0, 
+              make_trail: 0};
+
+var sphereInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 radius: {inputName: 'RADIUS', check: 'Vector', field: 'radius'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 }
+
+
+Blockly.Blocks['vpython_sphere_test'] = new Blockly.Blocks.Shape(sphereInfo, 
+                                                          sphereMutator,
+                                                          sphereInputs,
+                                                          sphereXml);
+
+
+var arrowInfo = {name: "arrow", type: "Arrow"};
+
+var arrowMutator = ['pos', 'axis', 'length', 'shaftwidth', 
+                  'headwidth', 'headlength', 'up',
+                  'color', 'texture', 'opacity', 
+                  'make_trail'];
+
+var arrowXml = {pos: 0, axis: 0, length:0, shaftwidth:0,
+              headwidth:0, headlength:0, up:0,
+              color: 0, texture: 0, opacity: 0, 
+              make_trail: 0};
+
+var arrowInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
+                 shaftwidth: {inputName: 'SHAFTWIDTH', check: 'Number', field: 'shaftwidth'},
+                 headwidth: {inputName: 'HEADWIDTH', check: 'Number', field: 'headwidth'},
+                 headlength: {inputName: 'HEADLENGTH', check: 'Number', field: 'headlength'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 }
+
+
+Blockly.Blocks['vpython_arrow_test'] = new Blockly.Blocks.Shape(arrowInfo, 
+                                                          arrowMutator,
+                                                          arrowInputs,
+                                                          arrowXml);
+
+
+var cylinderInfo = {name: "cylinder", type: "Cylinder"};
+
+var cylinderMutator = ['pos', 'axis', 'radius', 'length', 
+                  'up', 'color', 'texture', 'opacity', 
+                  'make_trail'];
+
+var cylinderXml = {pos: 0, axis: 0, radius:0, length:0,
+              up: 0, color: 0, texture: 0, opacity: 0, 
+              make_trail: 0};
+
+var cylinderInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 radius: {inputName: 'RADIUS', check: 'Vector', field: 'radius'},
+                 length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 }
+
+
+Blockly.Blocks['vpython_cylinder_test'] = new Blockly.Blocks.Shape(cylinderInfo, 
+                                                          cylinderMutator,
+                                                          cylinderInputs,
+                                                          cylinderXml);
+
+
+var ringInfo = {name: "ring", type: "Ring"};
+
+var ringMutator = ['pos', 'axis', 'radius', 'length', 
+                  'thickness', 'size', 'up', 'color',
+                  'texture', 'opacity', 'make_trail'];
+
+var ringXml = {pos: 0, axis: 0, radius:0, length:0,
+              thickness:0, size:0, up: 0, color: 0, 
+              texture: 0, opacity: 0, make_trail: 0};
+
+var ringInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 radius: {inputName: 'RADIUS', check: 'Vector', field: 'radius'},
+                 length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
+                 thickness: {inputName: 'THICKNESS', check: 'Number', field: 'thickness'},
+                 size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 }
+
+
+Blockly.Blocks['vpython_ring_test'] = new Blockly.Blocks.Shape(ringInfo, 
+                                                          ringMutator,
+                                                          ringInputs,
+                                                          ringXml);
+
+
+var helixInfo = {name: "helix", type: "Helix"};
+
+var helixMutator = ['pos', 'axis', 'radius', 'length', 'coils',
+                  'thickness', 'size', 'up', 'color',
+                  'texture', 'opacity', 'make_trail'];
+
+var helixXml = {pos: 0, axis: 0, radius:0, length:0, coils:0,
+              thickness:0, size:0, up: 0, color: 0, 
+              texture: 0, opacity: 0, make_trail: 0};
+
+var helixInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 radius: {inputName: 'RADIUS', check: 'Vector', field: 'radius'},
+                 length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
+                 coils: {inputName: 'COILS', check: 'Number', field: 'coils'},
+                 thickness: {inputName: 'THICKNESS', check: 'Number', field: 'thickness'},
+                 size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 }
+
+
+Blockly.Blocks['vpython_helix_test'] = new Blockly.Blocks.Shape(helixInfo, 
+                                                          helixMutator,
+                                                          helixInputs,
+                                                          helixXml);
+
 
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -249,6 +249,7 @@ var boxXml = {pos: 0, axis: 0, size:0,
               make_trail: 0};
 
 var boxInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
                  axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
                  size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
                  up: {inputName: 'UP', check: 'Vector', field: 'up'},

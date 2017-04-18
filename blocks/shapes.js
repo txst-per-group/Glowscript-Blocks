@@ -502,6 +502,18 @@ Blockly.Blocks['pos']= {
     }
 };
 
+Blockly.Blocks['vel']= {
+    init: function(){
+        this.appendDummyInput()
+            .appendField("vel");
+        this.setColour(Blockly.Blocks.shapes.HUE);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setTooltip('');
+        this.setHelpUrl('http://www.example.com/');
+    }
+};
+
 Blockly.Blocks['axis']= {
     init: function(){
         this.appendDummyInput()

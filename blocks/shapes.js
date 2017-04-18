@@ -240,11 +240,11 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
 
 var boxInfo = {name: "box", type: "Box"};
 
-var boxMutator = ['pos', 'axis', 'size', 'up', 
+var boxMutator = ['pos', 'vel', 'axis', 'size', 'up', 
                   'color', 'texture', 'opacity', 
                   'make_trail'];
 
-var boxXml = {pos: 0, axis: 0, size:0, 
+var boxXml = {pos: 0, vel: 0, axis: 0, size:0, 
               up: 0, color: 0, texture: 0, opacity: 0, 
               make_trail: 0};
 

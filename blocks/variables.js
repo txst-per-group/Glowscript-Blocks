@@ -407,6 +407,11 @@ Blockly.Blocks['variables_set'] = {
     console.log(xmlElement.getAttribute('type_'));
     this.modifyBlock(xmlElement.getAttribute('type_'));
   },
+
+  onchange: function(){
+    this.setNewType(this.getInput("VALUE").fieldRow[1].value_);
+  },
+
   setNewType: function(selection){
     //if(selection === "item")
    var variableUses = this.workspace.getVariableUses(selection);
@@ -415,7 +420,7 @@ Blockly.Blocks['variables_set'] = {
     for(var i = 0; i < variableUses.length; i++){
       // add the first value, then find the highest but only if it is not itself
       if((topBlock.index == null || topBlock.height < variableUses[i].getRelativeToSurfaceXY().y) 
-          && (this.id != variableUses[i].id && variableUses[i].type == "variables_set") ){
+           && variableUses[i].type == "variables_set") {
         topBlock["index"] = i;
         topBlock["height"] = variableUses[i].getRelativeToSurfaceXY().y;
       }
@@ -429,9 +434,13 @@ Blockly.Blocks['variables_set'] = {
         }else{
           for(var i = 0; i < children.length; i++){
             try{checkType = children[i].outputConnection.check_[0];}catch(e){}
-            if(checkType)
-              //this.setOutput(true, checkType);
-              this.modifyBlock(checkType);
+            if(checkType && this.id != variableUses[topBlock.index].id)
+              if(this.currentType != checkType){
+                //this.setOutput(true, checkType);
+                this.currentType = checkType;
+                this.modifyBlock(checkType);
+              }
+              
           }
         }
       }

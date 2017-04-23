@@ -102,7 +102,7 @@ Blockly.Blocks['variables_get'] = {
     var thisBlock = this;
     this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
     this.setColour(Blockly.Blocks.variables.HUE);
-    this.appendDummyInput()
+    this.appendDummyInput("FieldVariable")
         .appendField(new Blockly.FieldVariable(
         Blockly.Msg.VARIABLES_DEFAULT_NAME, function(selection){
           thisBlock.setNewType(selection);
@@ -168,6 +168,10 @@ Blockly.Blocks['variables_get'] = {
     options.push(option);
   },
 
+  onchange: function(){
+    this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
+  },
+
   setNewType: function(selection){
     //if(selection === "item")
     var variableUses = this.workspace.getVariableUses(selection);
@@ -192,8 +196,10 @@ Blockly.Blocks['variables_get'] = {
             try{checkType = children[i].outputConnection.check_[0];}catch(e){}
             if(checkType)
               //this.setOutput(true, checkType);
+            if(checkType != this.selectedType){
               this.selectedType = checkType;
               this.modifyBlock(checkType);
+            }
           }
         }
       }

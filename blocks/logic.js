@@ -206,7 +206,6 @@ Blockly.Blocks['controls_if'] = {
     }
     // Rebuild block.
     for (var i = 1; i <= this.elseifCount_; i++) {
-      alert("append if");
       this.appendValueInput('IF' + i)
           .setCheck('Boolean')
           .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);

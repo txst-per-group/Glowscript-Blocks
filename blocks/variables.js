@@ -31,7 +31,8 @@ goog.require('Blockly.Blocks');
 
 Blockly.Blocks.variables.HUE = '#607D8B';
 
-var boxDropDown = [["box", "box"],["pos", "pos"], ["axis", "axis"],
+var boxDropDown = [["box", "box"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                   ["axis", "axis"], ["mass", "mass"], ["charge", "charge"],
                    ["size", "size"], ["up", "up"],
                    ["color","color"],["texture", "texture"],
                    ["trail", "trail"],
@@ -40,37 +41,42 @@ var boxDropDown = [["box", "box"],["pos", "pos"], ["axis", "axis"],
 var vectorDropDown = [["all", "all"],["x", "x"], ["y", "y"],
                       ["z", "z"]];
 
-var vectorList = ["pos", "axis", "up", "size", "all"];
-var numberList = ["radius", "opacity", "retain", "shaftwidth", 
+var vectorList = ["pos", "vel", "acc", "axis", "up", "size", "all"];
+var numberList = ["radius", "mass", "charge", "opacity", "retain", "shaftwidth", 
                   "headwidth", "headlength", "thickness", "x", "y", "z"];
 
-var cylinderDropDown = [["cylinder", "cylinder"],["pos", "pos"], ["axis", "axis"], 
+var cylinderDropDown = [["cylinder", "cylinder"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                      ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
                       ["radius", "radius"],["length", "length"],
                       ["up", "up"], ["color", "color"], ["texture", "texture"],
                       ["opacity", "opacity"], ["trail", "trail"],
                       ["retain", "retain"]];
 
-var sphereDropDown = [["sphere", "sphere"],["pos", "pos"], ["axis", "axis"], 
+var sphereDropDown = [["sphere", "sphere"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                      ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
                       ["radius", "radius"], ["up", "up"],
                       ["color", "color"], ["texture", "texture"],
                       ["opacity", "opacity"],
                       ["trail", "trail"], ["retain", "retain"]
                       ];
 
-var arrowDropDown = [["arrow", "arrow"],["pos", "pos"], ["axis", "axis"], ["length", "length"],
+var arrowDropDown = [["arrow", "arrow"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                     ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["length", "length"],
                      ["shaftwidth", "shaftwidth"], ["headwidth", "headwidth"],
                      ["headlength", "headlength"], ["up", "up"], 
                      ["color", "color"], ["texture", "texture"],
                      ["opacity", "opacity"],
                      ["make_trail"], ["retain", "retain"]];
 
-var ringDropDown = [["ring", "ring"],["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
+var ringDropDown = [["ring", "ring"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                    ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["radius", "radius"],
                     ["length", "length"], ["thickness", "thickness"], 
                     ["size", "size"], ["up", "up"], ["color", "color"],
                     ["texture", "texture"],["opacity", "opacity"], ["make_trail", "make_trail"],
                     ["retain", "retain"]];
 
-var helixDropDown = [["helix", "helix"],["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
+var helixDropDown = [["helix", "helix"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                    ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["radius", "radius"],
                     ["length", "length"], ["coils", "coils"],
                     ["thickness", "thickness"], ["size", "size"],
                     ["up", "up"], ["color", "color"], ["texture", "texture"],

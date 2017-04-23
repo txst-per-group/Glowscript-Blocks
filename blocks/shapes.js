@@ -240,7 +240,7 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
 
 var boxInfo = {name: "box", type: "Box"};
 
-var boxMutator = ['pos', 'vel', 'axis', 'size', 'up', 
+var boxMutator = ['pos','axis', 'size', 'up', 
                   'color', 'texture', 'opacity', 
                   'make_trail'];
 
@@ -249,7 +249,6 @@ var boxXml = {pos: 0, vel: 0, axis: 0, size:0,
               make_trail: 0};
 
 var boxInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
-                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
                  axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
                  size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
                  up: {inputName: 'UP', check: 'Vector', field: 'up'},
@@ -502,17 +501,6 @@ Blockly.Blocks['pos']= {
     }
 };
 
-Blockly.Blocks['vel']= {
-    init: function(){
-        this.appendDummyInput()
-            .appendField("vel");
-        this.setColour(Blockly.Blocks.shapes.HUE);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setTooltip('');
-        this.setHelpUrl('http://www.example.com/');
-    }
-};
 
 Blockly.Blocks['axis']= {
     init: function(){

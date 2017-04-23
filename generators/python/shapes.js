@@ -40,14 +40,14 @@ Blockly.Python['vpython_helix'] = function(block) {
   var code = 'helix('; 
   var previousArg = false; 
 
-  if(block.hasPos){
+  if(block.hasXml['pos']){
     var value_pos = Blockly.Python.valueToCode(block, 
                                                'POS', 
                                                Blockly.Python.ORDER_ATOMIC);
     code = code + 'pos=' + value_pos;
     previousArg = true;
   }
-  if(block.hasAxis){
+  if(block.hasXml['axis']){
 
     if(previousArg)
         code = code + ', ';
@@ -58,7 +58,7 @@ Blockly.Python['vpython_helix'] = function(block) {
     code = code +'axis=' + value_axis;
     previousArg = true;
   }
-  if(block.hasRadius){
+  if(block.hasXml['radius']){
 
     if(previousArg)
         code = code + ', ';
@@ -69,7 +69,7 @@ Blockly.Python['vpython_helix'] = function(block) {
     code = code + 'radius=' + value_radius;
     previousArg = true;
   }
-  if(block.hasLength){
+  if(block.hasXml['length']){
 
     if(previousArg)
         code = code + ', ';
@@ -80,7 +80,7 @@ Blockly.Python['vpython_helix'] = function(block) {
     code = code + 'length=' + value_length;
     previousArg = true;
   }
-  if(block.hasCoils){
+  if(block.hasXml['coils']){
 
     if(previousArg)
         code = code + ', ';
@@ -91,7 +91,7 @@ Blockly.Python['vpython_helix'] = function(block) {
     code = code + 'coils=' + value_coils;
     previousArg = true;
   }
-  if(block.hasThickness){
+  if(block.hasXml['thickness']){
 
     if(previousArg)
         code = code + ', ';
@@ -102,7 +102,7 @@ Blockly.Python['vpython_helix'] = function(block) {
     code = code + 'thickness=' + value_thickness;
     previousArg = true;
   }
-  if(block.hasSize){
+  if(block.hasXml['size']){
 
     if(previousArg)
         code = code + ', ';
@@ -113,7 +113,7 @@ Blockly.Python['vpython_helix'] = function(block) {
     code = code + 'size=' + value_size;
     previousArg = true;
   }
-  if(block.hasUp){
+  if(block.hasXml['up']){
 
     if(previousArg)
         code = code + ', ';
@@ -124,7 +124,7 @@ Blockly.Python['vpython_helix'] = function(block) {
     code = code +'up=' + value_up;
     previousArg = true;
   }
-  if(block.hasColor){
+  if(block.hasXml['color']){
 
     if(previousArg)
         code = code + ', ';
@@ -141,7 +141,7 @@ Blockly.Python['vpython_helix'] = function(block) {
     code = code + 'color=vector(' + R + '/255 ,' + G + '/255 ,' + B + '/255)'
     previousArg = true;
   }
-  if(block.hasTexture){
+  if(block.hasXml['texture']){
 
     if(previousArg)
       code = code +', ';
@@ -152,7 +152,7 @@ Blockly.Python['vpython_helix'] = function(block) {
 
     code = code + 'texture=' + value_texture; 
   }
-  if(block.hasOpacity){
+  if(block.hasXml['opacity']){
 
     if(previousArg)
         code = code + ', ';
@@ -164,7 +164,7 @@ Blockly.Python['vpython_helix'] = function(block) {
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
   }
-  if(block.hasTexture){
+  if(block.hasXml['texture']){
 
     if(previousArg)
       code = code +', ';
@@ -175,7 +175,7 @@ Blockly.Python['vpython_helix'] = function(block) {
 
     code = code + 'texture=' + value_texture; 
   }
-  if(block.hasTrail){
+  if(block.hasXml['make_trail']){
 
     if(previousArg)
       code = code + ', ';
@@ -183,7 +183,7 @@ Blockly.Python['vpython_helix'] = function(block) {
 
 
   var value_trail = Blockly.Python.valueToCode(block,
-                                                'TRAIL',
+                                                'MAKE_TRAIL',
                                                 Blockly.Python.ORDER_ATOMIC);
   var value_retain = block.getFieldValue("RETAIN_VALUE");
 
@@ -201,14 +201,14 @@ Blockly.Python['vpython_arrow'] = function(block) {
   var code = 'arrow('; 
   var previousArg = false; 
 
-  if(block.hasPos){
+  if(block.hasXml['pos']){
     var value_pos = Blockly.Python.valueToCode(block, 
                                                'POS', 
                                                Blockly.Python.ORDER_ATOMIC);
     code = code + 'pos=' + value_pos;
     previousArg = true;
   }
-  if(block.hasAxis){
+  if(block.hasXml['axis']){
 
     if(previousArg)
         code = code + ', ';
@@ -219,7 +219,7 @@ Blockly.Python['vpython_arrow'] = function(block) {
     code = code +'axis=' + value_axis;
     previousArg = true;
   }
-  if(block.hasLength){
+  if(block.hasXml['length']){
 
     if(previousArg)
         code = code + ', ';
@@ -230,7 +230,7 @@ Blockly.Python['vpython_arrow'] = function(block) {
     code = code + 'length=' + value_length;
     previousArg = true;
   }
-  if(block.hasShaftWidth){
+  if(block.hasXml['shaftwidth']){
 
     if(previousArg)
         code = code + ', ';
@@ -241,7 +241,7 @@ Blockly.Python['vpython_arrow'] = function(block) {
     code = code + 'shaftwidth=' + value_shaft_width;
     previousArg = true;
   }
-  if(block.hasHeadWidth){
+  if(block.hasXml['headwidth']){
 
     if(previousArg)
         code = code + ', ';
@@ -252,7 +252,7 @@ Blockly.Python['vpython_arrow'] = function(block) {
     code = code + 'headwidth=' + value_head_width;
     previousArg = true;
   }
-  if(block.hasHeadLength){
+  if(block.hasXml['headlength']){
 
     if(previousArg)
         code = code + ', ';
@@ -263,7 +263,7 @@ Blockly.Python['vpython_arrow'] = function(block) {
     code = code + 'headlength=' + value_head_length;
     previousArg = true;
   }
-  if(block.hasUp){
+  if(block.hasXml['up']){
 
     if(previousArg)
         code = code + ', ';
@@ -274,7 +274,7 @@ Blockly.Python['vpython_arrow'] = function(block) {
     code = code +'up=' + value_up;
     previousArg = true;
   }
-  if(block.hasColor){
+  if(block.hasXml['color']){
 
     if(previousArg)
         code = code + ', ';
@@ -305,7 +305,7 @@ Blockly.Python['vpython_arrow'] = function(block) {
     
     previousArg = true;
   }
-  if(block.hasOpacity){
+  if(block.hasXml['opacity']){
 
     if(previousArg)
         code = code + ', ';
@@ -317,7 +317,7 @@ Blockly.Python['vpython_arrow'] = function(block) {
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
   }
-  if(block.hasTexture){
+  if(block.hasXml['texture']){
 
     if(previousArg)
       code = code +', ';
@@ -328,7 +328,7 @@ Blockly.Python['vpython_arrow'] = function(block) {
 
     code = code + 'texture=' + value_texture; 
   }
-  if(block.hasTrail){
+  if(block.hasXml['make_trail']){
 
     if(previousArg)
       code = code + ', ';
@@ -336,7 +336,7 @@ Blockly.Python['vpython_arrow'] = function(block) {
 
 
   var value_trail = Blockly.Python.valueToCode(block,
-                                                'TRAIL',
+                                                'MAKE_TRAIL',
                                                 Blockly.Python.ORDER_ATOMIC);
   var value_retain = block.getFieldValue("RETAIN_VALUE");
 
@@ -354,14 +354,14 @@ Blockly.Python['vpython_cylinder'] = function(block) {
   var code = 'cylinder('; 
   var previousArg = false; 
 
-  if(block.hasPos){
+  if(block.hasXml['pos']){
     var value_pos = Blockly.Python.valueToCode(block, 
                                                'POS', 
                                                Blockly.Python.ORDER_ATOMIC);
     code = code + 'pos=' + value_pos;
     previousArg = true;
   }
-  if(block.hasAxis){
+  if(block.hasXml['axis']){
 
     if(previousArg)
         code = code + ', ';
@@ -372,7 +372,7 @@ Blockly.Python['vpython_cylinder'] = function(block) {
     code = code +'axis=' + value_axis;
     previousArg = true;
   }
-  if(block.hasRadius){
+  if(block.hasXml['radius']){
 
     if(previousArg)
         code = code + ', ';
@@ -383,7 +383,7 @@ Blockly.Python['vpython_cylinder'] = function(block) {
     code = code + 'radius=' + value_radius;
     previousArg = true;
   }
-  if(block.hasLength){
+  if(block.hasXml['length']){
 
     if(previousArg)
         code = code + ', ';
@@ -394,7 +394,7 @@ Blockly.Python['vpython_cylinder'] = function(block) {
     code = code + 'length=' + value_length;
     previousArg = true;
   }
-  if(block.hasSize){
+  if(block.hasXml['size']){
 
     if(previousArg)
         code = code + ', ';
@@ -405,7 +405,7 @@ Blockly.Python['vpython_cylinder'] = function(block) {
     code = code + 'size=' + value_size;
     previousArg = true;
   }
-  if(block.hasUp){
+  if(block.hasXml['up']){
 
     if(previousArg)
         code = code + ', ';
@@ -416,7 +416,7 @@ Blockly.Python['vpython_cylinder'] = function(block) {
     code = code +'up=' + value_up;
     previousArg = true;
   }
-  if(block.hasColor){
+  if(block.hasXml['color']){
 
     if(previousArg)
         code = code + ', ';
@@ -443,7 +443,7 @@ Blockly.Python['vpython_cylinder'] = function(block) {
     
     previousArg = true;
   }
-  if(block.hasOpacity){
+  if(block.hasXml['opacity']){
 
     if(previousArg)
         code = code + ', ';
@@ -455,7 +455,7 @@ Blockly.Python['vpython_cylinder'] = function(block) {
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
   }
-  if(block.hasTexture){
+  if(block.hasXml['texture']){
 
     if(previousArg)
       code = code +', ';
@@ -466,7 +466,7 @@ Blockly.Python['vpython_cylinder'] = function(block) {
 
     code = code + 'texture=' + value_texture; 
   }
-  if(block.hasTrail){
+  if(block.hasXml['make_trail']){
 
     if(previousArg)
       code = code + ', ';
@@ -474,7 +474,7 @@ Blockly.Python['vpython_cylinder'] = function(block) {
 
 
   var value_trail = Blockly.Python.valueToCode(block,
-                                                'TRAIL',
+                                                'MAKE_TRAIL',
                                                 Blockly.Python.ORDER_ATOMIC);
   var value_retain = block.getFieldValue("RETAIN_VALUE");
 
@@ -492,14 +492,14 @@ Blockly.Python['vpython_ring'] = function(block) {
   var code = 'ring('; 
   var previousArg = false; 
 
-  if(block.hasPos){
+  if(block.hasXml['pos']){
     var value_pos = Blockly.Python.valueToCode(block, 
                                                'POS', 
                                                Blockly.Python.ORDER_ATOMIC);
     code = code + 'pos=' + value_pos;
     previousArg = true;
   }
-  if(block.hasAxis){
+  if(block.hasXml['axis']){
 
     if(previousArg)
         code = code + ', ';
@@ -510,7 +510,7 @@ Blockly.Python['vpython_ring'] = function(block) {
     code = code +'axis=' + value_axis;
     previousArg = true;
   }
-  if(block.hasRadius){
+  if(block.hasXml['radius']){
 
     if(previousArg)
         code = code + ', ';
@@ -521,7 +521,7 @@ Blockly.Python['vpython_ring'] = function(block) {
     code = code + 'radius=' + value_radius;
     previousArg = true;
   }
-  if(block.hasLength){
+  if(block.hasXml['length']){
 
     if(previousArg)
         code = code + ', ';
@@ -532,7 +532,7 @@ Blockly.Python['vpython_ring'] = function(block) {
     code = code + 'length=' + value_length;
     previousArg = true;
   }
-  if(block.hasThickness){
+  if(block.hasXml['thickness']){
 
     if(previousArg)
         code = code + ', ';
@@ -543,7 +543,7 @@ Blockly.Python['vpython_ring'] = function(block) {
     code = code + 'thickness=' + value_thickness;
     previousArg = true;
   }
-  if(block.hasSize){
+  if(block.hasXml['size']){
 
     if(previousArg)
         code = code + ', ';
@@ -554,7 +554,7 @@ Blockly.Python['vpython_ring'] = function(block) {
     code = code + 'size=' + value_size;
     previousArg = true;
   }
-  if(block.hasUp){
+  if(block.hasXml['up']){
 
     if(previousArg)
         code = code + ', ';
@@ -565,7 +565,7 @@ Blockly.Python['vpython_ring'] = function(block) {
     code = code +'up=' + value_up;
     previousArg = true;
   }
-  if(block.hasColor){
+  if(block.hasXml['color']){
 
     if(previousArg)
         code = code + ', ';
@@ -591,7 +591,7 @@ Blockly.Python['vpython_ring'] = function(block) {
       code = code + 'color=' + value_color;
     previousArg = true;
   }
-  if(block.hasOpacity){
+  if(block.hasXml['opacity']){
 
     if(previousArg)
         code = code + ', ';
@@ -603,7 +603,7 @@ Blockly.Python['vpython_ring'] = function(block) {
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
   }
-  if(block.hasTexture){
+  if(block.hasXml['texture']){
 
     if(previousArg)
       code = code +', ';
@@ -614,7 +614,7 @@ Blockly.Python['vpython_ring'] = function(block) {
 
     code = code + 'texture=' + value_texture; 
   }
-  if(block.hasTrail){
+  if(block.hasXml['make_trail']){
 
     if(previousArg)
       code = code + ', ';
@@ -622,7 +622,7 @@ Blockly.Python['vpython_ring'] = function(block) {
 
 
   var value_trail = Blockly.Python.valueToCode(block,
-                                                'TRAIL',
+                                                'MAKE_TRAIL',
                                                 Blockly.Python.ORDER_ATOMIC);
   var value_retain = block.getFieldValue("RETAIN_VALUE");
 
@@ -640,14 +640,14 @@ Blockly.Python['vpython_sphere'] = function(block) {
   var code = 'sphere('; 
   var previousArg = false; 
 
-  if(block.hasPos){
+  if(block.hasXml['pos']){
     var value_pos = Blockly.Python.valueToCode(block, 
                                                'POS', 
                                                Blockly.Python.ORDER_ATOMIC);
     code = code + 'pos=' + value_pos;
     previousArg = true;
   }
-  if(block.hasAxis){
+  if(block.hasXml['axis']){
 
     if(previousArg)
         code = code + ', ';
@@ -658,7 +658,7 @@ Blockly.Python['vpython_sphere'] = function(block) {
     code = code +'axis=' + value_axis;
     previousArg = true;
   }
-  if(block.hasRadius){
+  if(block.hasXml['radius']){
 
     if(previousArg)
         code = code + ', ';
@@ -669,7 +669,7 @@ Blockly.Python['vpython_sphere'] = function(block) {
     code = code + 'radius=' + value_radius;
     previousArg = true;
   }
-  if(block.hasSize){
+  if(block.hasXml['size']){
 
     if(previousArg)
         code = code + ', ';
@@ -680,7 +680,7 @@ Blockly.Python['vpython_sphere'] = function(block) {
     code = code + 'size=' + value_size;
     previousArg = true;
   }
-  if(block.hasUp){
+  if(block.hasXml['up']){
 
     if(previousArg)
         code = code + ', ';
@@ -691,7 +691,7 @@ Blockly.Python['vpython_sphere'] = function(block) {
     code = code +'up=' + value_up;
     previousArg = true;
   }
-  if(block.hasColor){
+  if(block.hasXml['color']){
 
     if(previousArg)
         code = code + ', ';
@@ -717,7 +717,7 @@ Blockly.Python['vpython_sphere'] = function(block) {
       code = code + 'color=' + value_color;
     previousArg = true;
   }
-  if(block.hasOpacity){
+  if(block.hasXml['opacity']){
 
     if(previousArg)
         code = code + ', ';
@@ -729,7 +729,7 @@ Blockly.Python['vpython_sphere'] = function(block) {
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
   }
-  if(block.hasTexture){
+  if(block.hasXml['texture']){
 
     if(previousArg)
       code = code +', ';
@@ -740,7 +740,7 @@ Blockly.Python['vpython_sphere'] = function(block) {
 
     code = code + 'texture=' + value_texture; 
   }
-  if(block.hasTrail){
+  if(block.hasXml['make_trail']){
 
     if(previousArg)
       code = code + ', ';
@@ -748,7 +748,7 @@ Blockly.Python['vpython_sphere'] = function(block) {
 
 
   var value_trail = Blockly.Python.valueToCode(block,
-                                                'TRAIL',
+                                                'MAKE_TRAIL',
                                                 Blockly.Python.ORDER_ATOMIC);
   var value_retain = block.getFieldValue("RETAIN_VALUE");
 
@@ -766,14 +766,14 @@ Blockly.Python['vpython_box'] = function(block) {
   var code = 'box('; 
   var previousArg = false; 
 
-  if(block.hasPos){
+  if(block.hasXml['pos']){
     var value_pos = Blockly.Python.valueToCode(block, 
                                                'POS', 
                                                Blockly.Python.ORDER_ATOMIC);
     code = code + 'pos=' + value_pos;
     previousArg = true;
   }
-  if(block.hasAxis){
+  if(block.hasXml['axis']){
 
     if(previousArg)
         code = code + ', ';
@@ -784,7 +784,7 @@ Blockly.Python['vpython_box'] = function(block) {
     code = code +'axis=' + value_axis;
     previousArg = true;
   }
-  if(block.hasSize){
+  if(block.hasXml['size']){
 
     if(previousArg)
         code = code + ', ';
@@ -795,7 +795,7 @@ Blockly.Python['vpython_box'] = function(block) {
     code = code + 'size=' + value_size;
     previousArg = true;
   }
-  if(block.hasUp){
+  if(block.hasXml['up']){
 
     if(previousArg)
         code = code + ', ';
@@ -806,7 +806,7 @@ Blockly.Python['vpython_box'] = function(block) {
     code = code +'up=' + value_height;
     previousArg = true;
   }
-  if(block.hasColor){
+  if(block.hasXml['color']){
 
     if(previousArg)
         code = code + ', ';
@@ -832,7 +832,7 @@ Blockly.Python['vpython_box'] = function(block) {
       code = code + 'color=' + value_color;
     previousArg = true;
   }
-  if(block.hasTexture){
+  if(block.hasXml['texture']){
 
     if(previousArg)
       code = code +', ';
@@ -843,7 +843,7 @@ Blockly.Python['vpython_box'] = function(block) {
 
     code = code + 'texture=' + value_texture; 
   }
-  if(block.hasOpacity){
+  if(block.hasXml['opacity']){
 
     if(previousArg)
         code = code + ', ';
@@ -855,7 +855,7 @@ Blockly.Python['vpython_box'] = function(block) {
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
   }
-  if(block.hasTexture){
+  if(block.hasXml['texture']){
 
     if(previousArg)
       code = code +', ';
@@ -866,7 +866,7 @@ Blockly.Python['vpython_box'] = function(block) {
 
     code = code + 'texture=' + value_texture; 
   }
-  if(block.hasTrail){
+  if(block.hasXml['make_trail']){
 
     if(previousArg)
       code = code + ', ';
@@ -874,7 +874,7 @@ Blockly.Python['vpython_box'] = function(block) {
 
 
   var value_trail = Blockly.Python.valueToCode(block,
-                                                'TRAIL',
+                                                'MAKE_TRAIL',
                                                 Blockly.Python.ORDER_ATOMIC);
   var value_retain = block.getFieldValue("RETAIN_VALUE")
 

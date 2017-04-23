@@ -31,7 +31,8 @@ goog.require('Blockly.Blocks');
 
 Blockly.Blocks.variables.HUE = '#607D8B';
 
-var boxDropDown = [["box", "box"],["pos", "pos"], ["axis", "axis"],
+var boxDropDown = [["box", "box"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                   ["axis", "axis"], ["mass", "mass"], ["charge", "charge"],
                    ["size", "size"], ["up", "up"],
                    ["color","color"],["texture", "texture"],
                    ["trail", "trail"],
@@ -40,37 +41,42 @@ var boxDropDown = [["box", "box"],["pos", "pos"], ["axis", "axis"],
 var vectorDropDown = [["all", "all"],["x", "x"], ["y", "y"],
                       ["z", "z"]];
 
-var vectorList = ["pos", "axis", "up", "size", "all"];
-var numberList = ["radius", "opacity", "retain", "shaftwidth", 
+var vectorList = ["pos", "vel", "acc", "axis", "up", "size", "all"];
+var numberList = ["radius", "mass", "charge", "opacity", "retain", "shaftwidth", 
                   "headwidth", "headlength", "thickness", "x", "y", "z"];
 
-var cylinderDropDown = [["cylinder", "cylinder"],["pos", "pos"], ["axis", "axis"], 
+var cylinderDropDown = [["cylinder", "cylinder"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                      ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
                       ["radius", "radius"],["length", "length"],
                       ["up", "up"], ["color", "color"], ["texture", "texture"],
                       ["opacity", "opacity"], ["trail", "trail"],
                       ["retain", "retain"]];
 
-var sphereDropDown = [["sphere", "sphere"],["pos", "pos"], ["axis", "axis"], 
+var sphereDropDown = [["sphere", "sphere"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                      ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
                       ["radius", "radius"], ["up", "up"],
                       ["color", "color"], ["texture", "texture"],
                       ["opacity", "opacity"],
                       ["trail", "trail"], ["retain", "retain"]
                       ];
 
-var arrowDropDown = [["arrow", "arrow"],["pos", "pos"], ["axis", "axis"], ["length", "length"],
+var arrowDropDown = [["arrow", "arrow"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                     ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["length", "length"],
                      ["shaftwidth", "shaftwidth"], ["headwidth", "headwidth"],
                      ["headlength", "headlength"], ["up", "up"], 
                      ["color", "color"], ["texture", "texture"],
                      ["opacity", "opacity"],
                      ["make_trail"], ["retain", "retain"]];
 
-var ringDropDown = [["ring", "ring"],["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
+var ringDropDown = [["ring", "ring"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                    ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["radius", "radius"],
                     ["length", "length"], ["thickness", "thickness"], 
                     ["size", "size"], ["up", "up"], ["color", "color"],
                     ["texture", "texture"],["opacity", "opacity"], ["make_trail", "make_trail"],
                     ["retain", "retain"]];
 
-var helixDropDown = [["helix", "helix"],["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
+var helixDropDown = [["helix", "helix"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                    ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["radius", "radius"],
                     ["length", "length"], ["coils", "coils"],
                     ["thickness", "thickness"], ["size", "size"],
                     ["up", "up"], ["color", "color"], ["texture", "texture"],
@@ -96,7 +102,7 @@ Blockly.Blocks['variables_get'] = {
     var thisBlock = this;
     this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
     this.setColour(Blockly.Blocks.variables.HUE);
-    this.appendDummyInput()
+    this.appendDummyInput("FieldVariable")
         .appendField(new Blockly.FieldVariable(
         Blockly.Msg.VARIABLES_DEFAULT_NAME, function(selection){
           thisBlock.setNewType(selection);
@@ -162,6 +168,10 @@ Blockly.Blocks['variables_get'] = {
     options.push(option);
   },
 
+  onchange: function(){
+    this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
+  },
+
   setNewType: function(selection){
     //if(selection === "item")
     var variableUses = this.workspace.getVariableUses(selection);
@@ -186,8 +196,10 @@ Blockly.Blocks['variables_get'] = {
             try{checkType = children[i].outputConnection.check_[0];}catch(e){}
             if(checkType)
               //this.setOutput(true, checkType);
+            if(checkType != this.selectedType){
               this.selectedType = checkType;
               this.modifyBlock(checkType);
+            }
           }
         }
       }
@@ -395,6 +407,11 @@ Blockly.Blocks['variables_set'] = {
     console.log(xmlElement.getAttribute('type_'));
     this.modifyBlock(xmlElement.getAttribute('type_'));
   },
+
+  onchange: function(){
+    this.setNewType(this.getInput("VALUE").fieldRow[1].value_);
+  },
+
   setNewType: function(selection){
     //if(selection === "item")
    var variableUses = this.workspace.getVariableUses(selection);
@@ -403,7 +420,7 @@ Blockly.Blocks['variables_set'] = {
     for(var i = 0; i < variableUses.length; i++){
       // add the first value, then find the highest but only if it is not itself
       if((topBlock.index == null || topBlock.height < variableUses[i].getRelativeToSurfaceXY().y) 
-          && (this.id != variableUses[i].id && variableUses[i].type == "variables_set") ){
+           && variableUses[i].type == "variables_set") {
         topBlock["index"] = i;
         topBlock["height"] = variableUses[i].getRelativeToSurfaceXY().y;
       }
@@ -417,9 +434,13 @@ Blockly.Blocks['variables_set'] = {
         }else{
           for(var i = 0; i < children.length; i++){
             try{checkType = children[i].outputConnection.check_[0];}catch(e){}
-            if(checkType)
-              //this.setOutput(true, checkType);
-              this.modifyBlock(checkType);
+            if(checkType && this.id != variableUses[topBlock.index].id)
+              if(this.currentType != checkType){
+                //this.setOutput(true, checkType);
+                this.currentType = checkType;
+                this.modifyBlock(checkType);
+              }
+              
           }
         }
       }

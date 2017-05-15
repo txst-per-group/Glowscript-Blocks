@@ -855,17 +855,7 @@ Blockly.Python['vpython_box'] = function(block) {
     code = code + 'opacity=' + value_opacity;
     previousArg = true;
   }
-  if(block.hasXml['texture']){
-
-    if(previousArg)
-      code = code +', ';
-
-    var value_texture = Blockly.Python.valueToCode(block,
-                                                   'TEXTURE',
-                                                   Blockly.Python.ORDER_ATOMIC);
-
-    code = code + 'texture=' + value_texture; 
-  }
+  
   if(block.hasXml['make_trail']){
 
     if(previousArg)

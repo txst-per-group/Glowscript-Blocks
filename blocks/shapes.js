@@ -49,6 +49,7 @@ Blockly.Blocks.Shape.prototype.init = function(){
     this.appendDummyInput()
         .appendField(this.info.name);
     this.setInputsInline(false);
+    this.hasXml = Object.assign({},this.hasXml);
     this.setOutput(true, this.info.type);
     this.setColour(Blockly.Blocks.shapes.HUE);
     this.setMutator(new Blockly.Mutator(this.mutatorName));

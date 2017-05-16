@@ -168,9 +168,9 @@ Blockly.Blocks['variables_get'] = {
     options.push(option);
   },
 
-  onchange: function(){
-    this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
-  },
+  // onchange: function(){
+  //   this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
+  // },
 
   setNewType: function(selection){
     //if(selection === "item")
@@ -186,22 +186,21 @@ Blockly.Blocks['variables_get'] = {
       }
 
       if(topBlock.index != null){
-        // find the type of the child that has a type and set output to that type
+        // find the type of the connection that has a type and set output to that type
         var checkType;
-        var children = variableUses[topBlock.index].getChildren();
-        if(children.length == 0){
-          this.modifyBlock("None");
+
+        try{checkType = variableUses[topBlock.index].inputList[0]
+                                                    .connection
+                                                    .targetConnection
+                                                    .check_[0];
+        }catch(e){}
+        
+        if(checkType){
+          this.modifyBlock(checkType);
         }else{
-          for(var i = 0; i < children.length; i++){
-            try{checkType = children[i].outputConnection.check_[0];}catch(e){}
-            if(checkType)
-              //this.setOutput(true, checkType);
-            if(checkType != this.selectedType){
-              this.selectedType = checkType;
-              this.modifyBlock(checkType);
-            }
-          }
+          this.modifyBlock("None");
         }
+        
       }
     }
     }catch(e){}
@@ -407,35 +406,42 @@ Blockly.Blocks['variables_set'] = {
     console.log(xmlElement.getAttribute('type_'));
     this.modifyBlock(xmlElement.getAttribute('type_'));
   },
+
+
   setNewType: function(selection){
     //if(selection === "item")
    var variableUses = this.workspace.getVariableUses(selection);
     try{
-    var topBlock = {index: null, height: null};
-    for(var i = 0; i < variableUses.length; i++){
-      // add the first value, then find the highest but only if it is not itself
-      if((topBlock.index == null || topBlock.height < variableUses[i].getRelativeToSurfaceXY().y) 
-          && (this.id != variableUses[i].id && variableUses[i].type == "variables_set") ){
-        topBlock["index"] = i;
-        topBlock["height"] = variableUses[i].getRelativeToSurfaceXY().y;
+
+      var topBlock = {index: null, height: null};
+
+      for(var i = 0; i < variableUses.length; i++){
+        // add the first value, then find the highest but only if it is not itself
+        if((topBlock.index == null || topBlock.height < variableUses[i].getRelativeToSurfaceXY().y) 
+            && (this.id != variableUses[i].id && variableUses[i].type == "variables_set") ){
+          topBlock["index"] = i;
+          topBlock["height"] = variableUses[i].getRelativeToSurfaceXY().y;
+        }
       }
 
       if(topBlock.index != null){
         // find the type of the child that has a type and set output to that type
         var checkType;
-        var children = variableUses[topBlock.index].getChildren();
-        if(children.length == 0){
-          this.modifyBlock("None");
+        
+        try{checkType = variableUses[topBlock.index].inputList[0]
+                                                    .connection
+                                                    .targetConnection
+                                                    .check_[0];
+        }catch(e){}
+        
+        if(checkType){
+          this.modifyBlock(checkType);
         }else{
-          for(var i = 0; i < children.length; i++){
-            try{checkType = children[i].outputConnection.check_[0];}catch(e){}
-            if(checkType)
-              //this.setOutput(true, checkType);
-              this.modifyBlock(checkType);
-          }
+          this.modifyBlock("None");
         }
+
       }
-    }
+
     }catch(e){}
     
   },

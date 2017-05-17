@@ -46,8 +46,8 @@ Blockly.Blocks['colour_picker'] = {
           "colour": "#ff0000"
         }
       ],
-      "output": "Colour",
-      "colour": Blockly.Blocks.colour.HUE,
+      "output": "Vector",
+      "colour": Blockly.Blocks.vectors.HUE,
       "helpUrl": Blockly.Msg.COLOUR_PICKER_HELPURL
     });
     // Assign 'this' to a variable for use in the tooltip closure below.
@@ -93,7 +93,7 @@ Blockly.Blocks['colour_random'] = {
     this.jsonInit({
       "message0": Blockly.Msg.COLOUR_RANDOM_TITLE,
       "output": "Colour",
-      "colour": Blockly.Blocks.colour.HUE,
+      "colour": Blockly.Blocks.vectors.HUE,
       "tooltip": Blockly.Msg.COLOUR_RANDOM_TOOLTIP,
       "helpUrl": Blockly.Msg.COLOUR_RANDOM_HELPURL
     });
@@ -107,7 +107,7 @@ Blockly.Blocks['colour_rgb'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.COLOUR_RGB_HELPURL);
-    this.setColour(Blockly.Blocks.colour.HUE);
+    this.setColour(Blockly.Blocks.vectors.HUE);
     this.appendValueInput('RED')
         .setCheck('Number')
         .setAlign(Blockly.ALIGN_RIGHT)
@@ -133,7 +133,7 @@ Blockly.Blocks['colour_blend'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.COLOUR_BLEND_HELPURL);
-    this.setColour(Blockly.Blocks.colour.HUE);
+    this.setColour(Blockly.Blocks.vectors.HUE);
     this.appendValueInput('COLOUR1')
         .setCheck('Colour')
         .setAlign(Blockly.ALIGN_RIGHT)

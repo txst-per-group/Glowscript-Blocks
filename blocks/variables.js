@@ -41,7 +41,7 @@ var boxDropDown = [["box", "box"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"]
 var vectorDropDown = [["all", "all"],["x", "x"], ["y", "y"],
                       ["z", "z"]];
 
-var vectorList = ["pos", "vel", "acc", "axis", "up", "size", "all"];
+var vectorList = ["pos", "vel", "acc", "axis", "up", "size", "color", "all"];
 var numberList = ["radius", "mass", "charge", "opacity", "retain", "shaftwidth", 
                   "headwidth", "headlength", "thickness", "x", "y", "z"];
 

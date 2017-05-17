@@ -4,16 +4,6 @@ goog.provide('Blockly.Python.shapes');
 
 goog.require('Blockly.Python');
 
-function hexToR(h) {return parseInt((cutHex(h)).substring(0,2),16)}
-function hexToG(h) {return parseInt((cutHex(h)).substring(2,4),16)}
-function hexToB(h) {return parseInt((cutHex(h)).substring(4,6),16)}
-function cutHex(h) {return (h.charAt(0)=="#") ? h.substring(1,7):h}
-function isHexaColor(sNum){
-  return (typeof sNum === "string") && sNum.length === 6 
-         && ! isNaN( parseInt(sNum, 16) );
-}
-
-
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -133,12 +123,7 @@ Blockly.Python['vpython_helix'] = function(block) {
                                                  'COLOR',
                                                  Blockly.Python.ORDER_ATOMIC);
 
-    value_color = value_color.replace('\'', '');
-    var R = hexToR(value_color);
-    var G = hexToG(value_color);
-    var B = hexToB(value_color);
 
-    code = code + 'color=vector(' + R + '/255 ,' + G + '/255 ,' + B + '/255)'
     previousArg = true;
   }
   if(block.hasXml['texture']){

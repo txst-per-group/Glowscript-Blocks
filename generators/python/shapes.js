@@ -122,7 +122,7 @@ Blockly.Python['vpython_helix'] = function(block) {
     var value_color = Blockly.Python.valueToCode(block,
                                                  'COLOR',
                                                  Blockly.Python.ORDER_ATOMIC);
-
+    code = code + 'color=' + value_color;
 
     previousArg = true;
   }
@@ -267,26 +267,7 @@ Blockly.Python['vpython_arrow'] = function(block) {
     var value_color = Blockly.Python.valueToCode(block,
                                                  'COLOR',
                                                  Blockly.Python.ORDER_ATOMIC);
-
-    
-
-    value_color = value_color.replace('\'', '');
-
-    var isHex  = isHexaColor(cutHex(value_color));
-
-    if(isHex){
-  
-      var R = hexToR(value_color);
-      var G = hexToG(value_color);
-      var B = hexToB(value_color);
-
-      code = code + 'color=vector(' + R + '/255 ,' + G + '/255 ,' + B + '/255)'
-    }
-
-    else
-
-      code = code + 'color=' + value_color;
-
+    code = code + 'color=' + value_color;
     
     previousArg = true;
   }
@@ -409,22 +390,7 @@ Blockly.Python['vpython_cylinder'] = function(block) {
     var value_color = Blockly.Python.valueToCode(block,
                                                  'COLOR',
                                                  Blockly.Python.ORDER_ATOMIC);
-
-    value_color = value_color.replace('\'', '');
-    var isHex  = isHexaColor(cutHex(value_color));
-
-    if(isHex){
-  
-      var R = hexToR(value_color);
-      var G = hexToG(value_color);
-      var B = hexToB(value_color);
-
-      code = code + 'color=vector(' + R + '/255 ,' + G + '/255 ,' + B + '/255)'
-    }
-
-    else
-
-      code = code + 'color=' + value_color;
+    code = code + 'color=' + value_color;
     
     previousArg = true;
   }
@@ -558,22 +524,8 @@ Blockly.Python['vpython_ring'] = function(block) {
     var value_color = Blockly.Python.valueToCode(block,
                                                  'COLOR',
                                                  Blockly.Python.ORDER_ATOMIC);
+    code = code + 'color=' + value_color;
 
-    value_color = value_color.replace('\'', '');
-    var isHex  = isHexaColor(cutHex(value_color));
-
-    if(isHex){
-  
-      var R = hexToR(value_color);
-      var G = hexToG(value_color);
-      var B = hexToB(value_color);
-
-      code = code + 'color=vector(' + R + '/255 ,' + G + '/255 ,' + B + '/255)'
-    }
-
-    else
-
-      code = code + 'color=' + value_color;
     previousArg = true;
   }
   if(block.hasXml['opacity']){
@@ -684,22 +636,8 @@ Blockly.Python['vpython_sphere'] = function(block) {
     var value_color = Blockly.Python.valueToCode(block,
                                                  'COLOR',
                                                  Blockly.Python.ORDER_ATOMIC);
+    code = code + 'color=' + value_color;
 
-    value_color = value_color.replace('\'', '');
-    var isHex  = isHexaColor(cutHex(value_color));
-
-    if(isHex){
-  
-      var R = hexToR(value_color);
-      var G = hexToG(value_color);
-      var B = hexToB(value_color);
-
-      code = code + 'color=vector(' + R + '/255 ,' + G + '/255 ,' + B + '/255)'
-    }
-
-    else
-
-      code = code + 'color=' + value_color;
     previousArg = true;
   }
   if(block.hasXml['opacity']){
@@ -799,22 +737,8 @@ Blockly.Python['vpython_box'] = function(block) {
     var value_color = Blockly.Python.valueToCode(block,
                                                  'COLOR',
                                                  Blockly.Python.ORDER_ATOMIC);
-
-    value_color = value_color.replace('\'', '');
-    var isHex  = isHexaColor(cutHex(value_color));
-
-    if(isHex){
-  
-      var R = hexToR(value_color);
-      var G = hexToG(value_color);
-      var B = hexToB(value_color);
-
-      code = code + 'color=vector(' + R + '/255 ,' + G + '/255 ,' + B + '/255)'
-    }
-
-    else
-
-      code = code + 'color=' + value_color;
+    code = code + 'color=' + value_color;
+    
     previousArg = true;
   }
   if(block.hasXml['texture']){

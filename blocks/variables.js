@@ -36,6 +36,7 @@ var setNewType = function(selection){
   // new variables should have no type
   if(variableUses.length == 0 ){
     this.modifyBlock("None");
+    this.selectedType = "None";
     return;
 
   }
@@ -62,19 +63,60 @@ var setNewType = function(selection){
       
       if(checkType){
         this.modifyBlock(checkType);
+        this.selectedType = checkType;
         return;
       }else{
         this.modifyBlock("None");
+        this.selectedType = "None";
         return;
       }
       
     }else{
       this.modifyBlock("None");
+      this.selectedType = "None";
       return;
     }
   }
   }catch(e){}
-}
+};
+
+
+var mutationToDom = function(){
+    var container = document.createElement('mutation');
+    // record current output type
+    
+    var attributeInput = this.getInput("Attribute");
+    if(attributeInput){
+      container.setAttribute('attribute_', 
+                              attributeInput.fieldRow[0].name == "attributeDropdown" ? 
+                              attributeInput.fieldRow[0].getText() : 'none');
+      container.setAttribute('component_', 
+                              attributeInput.fieldRow[1].name == "componentDropdown" ? 
+                              attributeInput.fieldRow[1].getText() : 'none');
+    }else{
+      container.setAttribute('attribute_', 'none');
+    }
+
+
+    if(this.selectedType == null){
+      container.setAttribute('type_', 'None');
+    }else{
+      container.setAttribute('type_', this.selectedType);
+    }
+
+    return container;
+  };
+
+var domToMutation = function(xmlElement){
+    //this.vecPos = xmlElement.getAttribute('vector_pos');
+    //this.updateDropDown(this.vecPos);
+    this.selectedType = xmlElement.getAttribute('type_');
+    this.selectedType = this.selectedType ? this.selectedType : 'None';
+    this.attribute = xmlElement.getAttribute('attribute_');
+    this.component = xmlElement.getAttribute('component_');
+    console.log(xmlElement.getAttribute('type_'));
+    this.modifyBlock(this.selectedType, this.attribute, this.component);
+  };
 
 
 Blockly.Blocks.variables.HUE = '#607D8B';
@@ -164,39 +206,7 @@ Blockly.Blocks['variables_get'] = {
     this.component = 'none';
   },
 
-  mutationToDom: function(){
-    var container = document.createElement('mutation');
-    // record current output type
-    
-    var attributeInput = this.getInput("Attribute");
-    if(attributeInput){
-      container.setAttribute('attribute_', 
-                              attributeInput.fieldRow[0].name == "attributeDropdown" ? 
-                              attributeInput.fieldRow[0].getText() : 'none');
-    }else{
-      container.setAttribute('attribute_', 'none');
-    }
-
-    if(this.selectedType == null){
-      container.setAttribute('type_', 'None');
-    }else{
-      container.setAttribute('type_', this.selectedType);
-    }
-    container.setAttribute('component_', this.component);
-
-    return container;
-  },
-
-  domToMutation: function(xmlElement){
-    //this.vecPos = xmlElement.getAttribute('vector_pos');
-    //this.updateDropDown(this.vecPos);
-    this.selectedType = xmlElement.getAttribute('type_');
-    this.selectedType = this.selectedType ? this.selectedType : 'None';
-    this.attribute = xmlElement.getAttribute('attribute_');
-    this.component = xmlElement.getAttribute('component_');
-    console.log(xmlElement.getAttribute('type_'));
-    this.modifyBlock(this.selectedType, this.attribute, this.component);
-  },
+ 
 
   contextMenuType_: 'variables_set',
   /**
@@ -378,6 +388,8 @@ Blockly.Blocks['variables_get'] = {
 };
 
 Blockly.Blocks['variables_get'].setNewType = setNewType;
+Blockly.Blocks['variables_get'].mutationToDom = mutationToDom;
+Blockly.Blocks['variables_get'].domToMutation = domToMutation;
 
 Blockly.Blocks['variables_set'] = {
   /**
@@ -409,19 +421,7 @@ Blockly.Blocks['variables_set'] = {
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
   },
 
-  mutationToDom: function(){
-    var container = document.createElement('mutation');
-    // record current output type
-    container.setAttribute('type_', this.currentType);
-    return container;
-  },
-
-  domToMutation: function(xmlElement){
-    //this.vecPos = xmlElement.getAttribute('vector_pos');
-    //this.updateDropDown(this.vecPos);
-    console.log(xmlElement.getAttribute('type_'));
-    this.modifyBlock(xmlElement.getAttribute('type_'));
-  },
+ 
 
 
   modifyBlock: function(newType = 'None', attribute = 'none', component = 'none'){
@@ -585,3 +585,5 @@ Blockly.Blocks['variables_set'] = {
 };
 
 Blockly.Blocks['variables_set'].setNewType = setNewType;
+Blockly.Blocks['variables_set'].mutationToDom = mutationToDom;
+Blockly.Blocks['variables_set'].domToMutation = domToMutation;

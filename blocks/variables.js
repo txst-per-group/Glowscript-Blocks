@@ -82,20 +82,38 @@ var setNewType = function(selection){
 
 
 var mutationToDom = function(){
+
+    // create dom
     var container = document.createElement('mutation');
-    // record current output type
-    
+
+    // record current output type  
     var attributeInput = this.getInput("Attribute");
+
+    // initalize field values to 'none'
+    var attribute_ = 'none';
+    var component_ = 'none';
+
     if(attributeInput){
-      container.setAttribute('attribute_', 
-                              attributeInput.fieldRow[0].name == "attributeDropdown" ? 
-                              attributeInput.fieldRow[0].getText() : 'none');
-      container.setAttribute('component_', 
-                              attributeInput.fieldRow[1].name == "componentDropdown" ? 
-                              attributeInput.fieldRow[1].getText() : 'none');
-    }else{
-      container.setAttribute('attribute_', 'none');
+
+      // loop over all fields
+      for(var i=0; i < attributeInput.fieldRow.length; i++){
+
+        // if field is attribute dropdown or component get field text
+
+        if(attributeInput.fieldRow[i].name === "attributeDropdown"){
+          attribute_ = attributeInput.fieldRow[i].getText();
+        }
+
+        if(attributeInput.fieldRow[i].name === "componentDropdown"){
+          component_ = attributeInput.fieldRow[i].getText();
+        }  
+      }
+  
     }
+
+    // write attribute and component state
+    container.setAttribute('attribute_', attribute_);
+    container.setAttribute('component_', component_);
 
 
     if(this.selectedType == null){

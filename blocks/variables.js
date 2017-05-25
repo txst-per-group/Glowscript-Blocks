@@ -361,7 +361,7 @@ Blockly.Blocks['variables_get'] = {
       }
     }else{
         this.setColour(Blockly.Blocks.shapes.HUE);
-        this.setOutput(true, "Number");
+        this.setOutput(true, type);
         this.attribute = shapeDropDowns[type][0][0];
     }  
   },
@@ -548,7 +548,7 @@ Blockly.Blocks['variables_set'] = {
       this.getInput("Attribute").fieldRow[0].setValue(attribute);
     }else{
         this.setColour(Blockly.Blocks.shapes.HUE);
-        this.getInput("VALUE").setCheck("Number");
+        this.getInput("VALUE").setCheck(type);
         this.attribute = shapeDropDowns[type][0][0];
     }
 

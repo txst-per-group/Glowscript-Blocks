@@ -62,8 +62,10 @@ var setNewType = function(selection){
       }catch(e){}
       
       if(checkType){
-        this.modifyBlock(checkType);
-        this.selectedType = checkType;
+        if(checkType != this.selectedType || this.selectedType == null){
+          this.modifyBlock(checkType);
+          this.selectedType = checkType;
+        }
         return;
       }else{
         this.modifyBlock("None");
@@ -212,8 +214,10 @@ Blockly.Blocks['variables_get'] = {
     this.setColour(Blockly.Blocks.variables.HUE);
     this.appendDummyInput("FieldVariable")
         .appendField(new Blockly.FieldVariable(
-        Blockly.Msg.VARIABLES_DEFAULT_NAME, function(selection){
+        Blockly.Msg.VARIABLES_DEFAULT_NAME , function(selection){
+          thisBlock.component = 'none';
           thisBlock.setNewType(selection);
+
         })
         , 'VAR');
     this.setOutput(true);
@@ -244,9 +248,10 @@ Blockly.Blocks['variables_get'] = {
     options.push(option);
   },
 
-  // onchange: function(){
-  //   this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
-  // },
+  onchange: function(){
+    
+    this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
+  },
 
 
   modifyBlock: function(newType = 'None', attribute = 'none', component = 'none'){
@@ -438,6 +443,12 @@ Blockly.Blocks['variables_set'] = {
     this.currentType = "None";
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
   },
+
+  onchange: function(){
+    
+    this.setNewType(this.getInput("VALUE").fieldRow[1].value_);
+  },
+
 
  
 

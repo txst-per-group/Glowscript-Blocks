@@ -286,18 +286,36 @@ Blockly.Blocks['math_single'] = {
     if(this.workspace.isDragging())
       return;
 
-    if(this.getInput("NUM")
+    this.type_ = this.getInput("NUM")
              .connection
              .targetConnection
              .sourceBlock_
              .outputConnection
-             .check_[0] == "Vector"){
+             .check_[0];
+
+    this.modifyBlock();
+  },
+
+  modifyBlock: function(){
+    if(this.type_ == "Vector"){
+      this.getInput("NUM").setCheck(['Vector', 'Number']);
       this.setOutput(true, "Vector");
       this.setColour(Blockly.Blocks.vectors.HUE);
     }else{
       this.setOutput(true, "Number");
       this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
     };
+  },
+
+  mutationToDom: function(){
+    var container = document.createElement('mutation');
+    container.setAttribute('input_type', this.type_);
+    return container;
+  },
+
+  domToMutation: function(xmlElement){
+    this.type_ = xmlElement.getAttribute('input_type');
+    this.modifyBlock();
   }
 };
 

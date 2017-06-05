@@ -45,38 +45,41 @@ var setNewType = function(selection){
   var topBlock = {index: null, height: null};
   for(var i = 0; i < variableUses.length; i++){
     // add the first value, then find the highest but only if it is not itself
-    if((topBlock.index == null || topBlock.height < variableUses[i].getRelativeToSurfaceXY().y) 
-        && (this.id != variableUses[i].id && variableUses[i].type == "variables_set") ){
+    if((topBlock.index == null || topBlock.height > variableUses[i].getRelativeToSurfaceXY().y) 
+        && variableUses[i].type == "variables_set" ){
       topBlock["index"] = i;
       topBlock["height"] = variableUses[i].getRelativeToSurfaceXY().y;
     }
+  }
 
-    if(topBlock.index != null){
-      // find the type of the connection that has a type and set output to that type
-      var checkType;
+  if(topBlock.index != null && variableUses[topBlock.index].id != this.id){
+    // find the type of the connection that has a type and set output to that type
+    var checkType;
 
-      try{checkType = variableUses[topBlock.index].inputList[0]
-                                                  .connection
-                                                  .targetConnection
-                                                  .check_[0];
-      }catch(e){}
-      
-      if(checkType){
+    try{checkType = variableUses[topBlock.index].inputList[0]
+                                                .connection
+                                                .targetConnection
+                                                .check_[0];
+    }catch(e){}
+    
+    if(checkType){
+      if(checkType != this.selectedType || this.selectedType == null){
         this.modifyBlock(checkType);
         this.selectedType = checkType;
-        return;
-      }else{
-        this.modifyBlock("None");
-        this.selectedType = "None";
-        return;
       }
-      
+      return;
     }else{
       this.modifyBlock("None");
       this.selectedType = "None";
       return;
     }
+    
+  }else{
+    this.modifyBlock("None");
+    this.selectedType = "None";
+    return;
   }
+  
   }catch(e){}
 };
 
@@ -146,7 +149,7 @@ var boxDropDown = [["box", "box"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"]
                    ["trail", "trail"],
                    ["retain", "retain"]];
 
-var vectorDropDown = [["all", "all"],["x", "x"], ["y", "y"],
+var vectorDropDown = [["vector", "vector"],["x", "x"], ["y", "y"],
                       ["z", "z"]];
 
 var vectorList = ["pos", "vel", "acc", "axis", "up", "size", "color", "all"];
@@ -212,8 +215,10 @@ Blockly.Blocks['variables_get'] = {
     this.setColour(Blockly.Blocks.variables.HUE);
     this.appendDummyInput("FieldVariable")
         .appendField(new Blockly.FieldVariable(
-        Blockly.Msg.VARIABLES_DEFAULT_NAME, function(selection){
+        Blockly.Msg.VARIABLES_DEFAULT_NAME , function(selection){
+          thisBlock.component = 'none';
           thisBlock.setNewType(selection);
+
         })
         , 'VAR');
     this.setOutput(true);
@@ -244,9 +249,10 @@ Blockly.Blocks['variables_get'] = {
     options.push(option);
   },
 
-  // onchange: function(){
-  //   this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
-  // },
+  onchange: function(){
+    
+    this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
+  },
 
 
   modifyBlock: function(newType = 'None', attribute = 'none', component = 'none'){
@@ -438,6 +444,12 @@ Blockly.Blocks['variables_set'] = {
     this.currentType = "None";
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
   },
+
+  onchange: function(){
+    
+    this.setNewType(this.getInput("VALUE").fieldRow[1].value_);
+  },
+
 
  
 

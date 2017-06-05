@@ -240,34 +240,32 @@ Blockly.Blocks['math_single'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.jsonInit({
-      "message0": "%1 %2",
-      "args0": [
-        {
-          "type": "field_dropdown",
-          "name": "OP",
-          "options": [
-            [Blockly.Msg.MATH_SINGLE_OP_ROOT, 'ROOT'],
-            [Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE, 'ABS'],
-            ['-', 'NEG'],
-            ['ln', 'LN'],
-            ['log10', 'LOG10'],
-            ['e^', 'EXP'],
-            ['10^', 'POW10']
-          ]
-        },
-        {
-          "type": "input_value",
-          "name": "NUM",
-          "check": "Number"
-        }
-      ],
-      "output": "Number",
-      "colour": Blockly.Blocks.math.MATH_HUE,
-      "helpUrl": Blockly.Msg.MATH_SINGLE_HELPURL
-    });
-    // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
+    this.appendValueInput("NUM")
+        .setCheck("Number")
+        .appendField(new Blockly.FieldDropdown([[Blockly.Msg.MATH_SINGLE_OP_ROOT, 'ROOT'],
+                                                [Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE, 'ABS'],
+                                                ['-', 'NEG'],
+                                                ['ln', 'LN'],
+                                                ['log10', 'LOG10'],
+                                                ['e^', 'EXP'],
+                                                ['10^', 'POW10']],
+                                                function(selected){
+                                                  if(selected === 'NEG'){
+                                                    thisBlock.getInput("NUM").setCheck(
+                                                                    ['Vector', 'Number']);
+                                                    
+                                                  }else{
+                                                    thisBlock.getInput("NUM").setCheck("Number");
+                                                    thisBlock.setOutput(true, "Number");
+                                                    thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+                                                    thisBlock.onchange = undefined;
+                                                  };
+                                                }),
+                                                'OP');
+    this.setOutput(true, "Number");
+    this.setColour(Blockly.Blocks.math.MATH_HUE);
+    this.selection = "";
     this.setTooltip(function() {
       var mode = thisBlock.getFieldValue('OP');
       var TOOLTIPS = {
@@ -281,6 +279,47 @@ Blockly.Blocks['math_single'] = {
       };
       return TOOLTIPS[mode];
     });
+  },
+
+  onchange: function(e){
+
+    if(this.workspace.isDragging())
+      return;
+
+    this.type_ = this.getInput("NUM")
+             .connection
+             .targetConnection
+             .sourceBlock_
+             .outputConnection
+             .check_[0];
+
+    this.modifyBlock();
+  },
+
+  modifyBlock: function(){
+
+    if(this.getFieldValue('OP') == 'NEG'){
+      this.getInput("NUM").setCheck(['Vector', 'Number']);
+    }
+
+    if(this.type_ == "Vector"){      
+      this.setOutput(true, "Vector");
+      this.setColour(Blockly.Blocks.vectors.HUE);
+    }else{
+      this.setOutput(true, "Number");
+      this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+    };
+  },
+
+  mutationToDom: function(){
+    var container = document.createElement('mutation');
+    container.setAttribute('input_type', this.type_);
+    return container;
+  },
+
+  domToMutation: function(xmlElement){
+    this.type_ = xmlElement.getAttribute('input_type');
+    this.modifyBlock();
   }
 };
 

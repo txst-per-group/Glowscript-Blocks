@@ -256,7 +256,7 @@ var boxInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
                  texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'}
                  }
 
 
@@ -283,7 +283,7 @@ var sphereInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
                  texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'}
                  }
 
 
@@ -308,14 +308,14 @@ var arrowXml = {pos: 0, axis: 0, length:0, shaftwidth:0,
 var arrowInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
                  length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
-                 shaftwidth: {inputName: 'SHAFTWIDTH', check: 'Number', field: 'shaftwidth'},
-                 headwidth: {inputName: 'HEADWIDTH', check: 'Number', field: 'headwidth'},
-                 headlength: {inputName: 'HEADLENGTH', check: 'Number', field: 'headlength'},
+                 shaftwidth: {inputName: 'SHAFTWIDTH', check: 'Number', field: 'shaft width'},
+                 headwidth: {inputName: 'HEADWIDTH', check: 'Number', field: 'head width'},
+                 headlength: {inputName: 'HEADLENGTH', check: 'Number', field: 'head length'},
                  up: {inputName: 'UP', check: 'Vector', field: 'up'},
                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
                  texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'}
                  }
 
 
@@ -343,7 +343,7 @@ var cylinderInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
                  texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'}
                  }
 
 
@@ -373,7 +373,7 @@ var ringInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
                  texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'}
                  }
 
 
@@ -404,7 +404,7 @@ var helixInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
                  texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'}
                  }
 
 

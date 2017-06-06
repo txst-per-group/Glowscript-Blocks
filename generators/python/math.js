@@ -109,7 +109,7 @@ Blockly.Python['math_single'] = function(block) {
       code = 'exp(' + arg + ')';
       break;
     case 'POW10':
-      code = 'math.pow(10,' + arg + ')';
+      code = 'pow(10,' + arg + ')';
       break;
     case 'ROUND':
       code = 'round(' + arg + ')';

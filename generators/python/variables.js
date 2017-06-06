@@ -28,6 +28,8 @@ goog.provide('Blockly.Python.variables');
 
 goog.require('Blockly.Python');
 
+Blockly.Python.Shapes = new Set(['box', 'cylinder', 'sphere', 'arrow', 'ring', 'helix']);
+
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -103,7 +105,7 @@ Blockly.Python['variables_get'] = function(block) {
       Blockly.Variables.NAME_TYPE);
   var dropdown_attribute = block.getFieldValue('attributeDropdown');
   var dropdown_vector = block.getFieldValue('componentDropdown');
-  if(dropdown_attribute){
+  if(dropdown_attribute && !Blockly.Python.Shapes.has(dropdown_attribute)){
     code = code + '.' + dropdown_attribute;
   }
   if(dropdown_vector && dropdown_vector !== "all"){
@@ -120,7 +122,7 @@ Blockly.Python['variables_set'] = function(block) {
       Blockly.Variables.NAME_TYPE);
    var dropdown_attribute = block.getFieldValue('attributeDropdown');
   var dropdown_vector = block.getFieldValue('componentDropdown');
-  if(dropdown_attribute){
+  if(dropdown_attribute && !Blockly.Python.Shapes.has(dropdown_attribute)){
     varName = varName + '.' + dropdown_attribute;
   }
   if(dropdown_vector && dropdown_vector !== "all"){

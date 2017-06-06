@@ -146,6 +146,11 @@
   <category name="Color">
     <block type="colour_picker"></block>
     <block type="texture_picker"></block>
+    <block type="scene_colour">
+      <value name="COLOUR">
+        <shadow type=colour_picker></shadow>
+      </value>
+    </block>
   </category>
 
   <category name="Text">

@@ -47,7 +47,7 @@ Blockly.Python['set_shape'] = function(block) {
   // TODO: Assemble Python into code variable.
 
   if(dropdown_vector){
-    if(dropdown_vector == 'all'){
+    if(dropdown_vector == 'vector'){
       var code = selected_shape + '.' + dropdown_attribute + ' = ' + value_value + '\n';
     }
     else{
@@ -70,7 +70,7 @@ Blockly.Python['get_shape'] = function(block) {
   
   // TODO: Assemble Python into code variable.
   if(dropdown_vector){
-    if(dropdown_vector == 'all'){
+    if(dropdown_vector == 'vector'){
       var code = selected_shape + '.' + dropdown_value;
     }
     else{
@@ -108,7 +108,7 @@ Blockly.Python['variables_get'] = function(block) {
   if(dropdown_attribute && !Blockly.Python.Shapes.has(dropdown_attribute)){
     code = code + '.' + dropdown_attribute;
   }
-  if(dropdown_vector && dropdown_vector !== "all"){
+  if(dropdown_vector && dropdown_vector !== "vector"){
     code = code + '.' + dropdown_vector
   }
   return [code, Blockly.Python.ORDER_ATOMIC];
@@ -125,7 +125,7 @@ Blockly.Python['variables_set'] = function(block) {
   if(dropdown_attribute && !Blockly.Python.Shapes.has(dropdown_attribute)){
     varName = varName + '.' + dropdown_attribute;
   }
-  if(dropdown_vector && dropdown_vector !== "all"){
+  if(dropdown_vector && dropdown_vector !== "vector"){
     varName = varName + '.' + dropdown_vector
   }
   return varName + ' = ' + argument0 + '\n';

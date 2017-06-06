@@ -300,11 +300,9 @@ Blockly.Blocks['math_single'] = {
 
   modifyBlock: function(){
 
-    if(this.getFieldValue('OP') == 'NEG'){
-      this.getInput("NUM").setCheck(['Vector', 'Number']);
-    }
-
-    if(this.type_ == "Vector"){      
+    if(this.type_ == "Vector"){
+      this.getField('OP').setValue('NEG');
+      this.getInput("NUM").setCheck(['Vector', 'Number']);     
       this.setOutput(true, "Vector");
       this.setColour(Blockly.Blocks.vectors.HUE);
     }else{

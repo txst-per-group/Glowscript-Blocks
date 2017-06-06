@@ -240,6 +240,7 @@ Blockly.Blocks['math_single'] = {
    * @this Blockly.Block
    */
   init: function() {
+
     var thisBlock = this;
     this.appendValueInput("NUM")
         .setCheck("Number")
@@ -249,6 +250,7 @@ Blockly.Blocks['math_single'] = {
                                                 ['ln', 'LN'],
                                                 ['log10', 'LOG10'],
                                                 ['e^', 'EXP'],
+                                                ['!', 'FACT'],
                                                 ['10^', 'POW10']],
                                                 function(selected){
                                                   if(selected === 'NEG'){
@@ -535,6 +537,7 @@ Blockly.Blocks['math_round'] = {
   }
 };
 
+
 Blockly.Blocks['math_on_list'] = {
   /**
    * Block for evaluating a list of numbers to return sum, average, min, max,
@@ -546,11 +549,17 @@ Blockly.Blocks['math_on_list'] = {
         [[Blockly.Msg.MATH_ONLIST_OPERATOR_SUM, 'SUM'],
          [Blockly.Msg.MATH_ONLIST_OPERATOR_MIN, 'MIN'],
          [Blockly.Msg.MATH_ONLIST_OPERATOR_MAX, 'MAX'],
+
+/*
          [Blockly.Msg.MATH_ONLIST_OPERATOR_AVERAGE, 'AVERAGE'],
          [Blockly.Msg.MATH_ONLIST_OPERATOR_MEDIAN, 'MEDIAN'],
          [Blockly.Msg.MATH_ONLIST_OPERATOR_MODE, 'MODE'],
          [Blockly.Msg.MATH_ONLIST_OPERATOR_STD_DEV, 'STD_DEV'],
-         [Blockly.Msg.MATH_ONLIST_OPERATOR_RANDOM, 'RANDOM']];
+         [Blockly.Msg.MATH_ONLIST_OPERATOR_RANDOM, 'RANDOM']
+*/
+
+         ];
+
     // Assign 'this' to a variable for use in the closures below.
     var thisBlock = this;
     this.setHelpUrl(Blockly.Msg.MATH_ONLIST_HELPURL);
@@ -688,3 +697,5 @@ Blockly.Blocks['math_random_float'] = {
     });
   }
 };
+
+

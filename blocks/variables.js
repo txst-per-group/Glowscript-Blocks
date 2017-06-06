@@ -152,7 +152,7 @@ var boxDropDown = [["box", "box"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"]
 var vectorDropDown = [["vector", "vector"],["x", "x"], ["y", "y"],
                       ["z", "z"]];
 
-var vectorList = ["pos", "vel", "acc", "axis", "up", "size", "color", "all"];
+var vectorList = ["pos", "vel", "acc", "axis", "up", "size", "color", "vector"];
 var numberList = ["radius", "mass", "charge", "opacity", "retain", "shaftwidth", 
                   "headwidth", "headlength", "thickness", "x", "y", "z"];
 
@@ -381,7 +381,7 @@ Blockly.Blocks['variables_get'] = {
 
     if(att.fieldRow.length <= 1){
         att.appendField(new Blockly.FieldDropdown(vectorDropDown, function(component){
-              if(component === 'all'){
+              if(component === 'vector'){
                 thisBlock.setColour(Blockly.Blocks.vectors.HUE);
                 thisBlock.setOutput(true, 'Vector');
               }else{
@@ -393,7 +393,7 @@ Blockly.Blocks['variables_get'] = {
             }), "componentDropdown");
     }
 
-    if(component !== 'none' && component !== 'all'){
+    if(component !== 'none' && component !== 'vector'){
         for(var field of this.getInput("Attribute").fieldRow){
             if(field.name === "componentDropdown"){
                 field.setValue(component);
@@ -403,7 +403,7 @@ Blockly.Blocks['variables_get'] = {
         this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
         this.setOutput(true, "Number");
     }else{
-        this.component == 'all';
+        this.component == 'vector';
         thisBlock.setColour(Blockly.Blocks.vectors.HUE);
         thisBlock.setOutput(true, 'Vector');
     }
@@ -582,7 +582,7 @@ Blockly.Blocks['variables_set'] = {
 
     if(att.fieldRow.length <= 1){
         att.appendField(new Blockly.FieldDropdown(vectorDropDown, function(component){
-              if(component === 'all'){
+              if(component === 'vector'){
                 thisBlock.setColour(Blockly.Blocks.vectors.HUE);
                 thisBlock.getInput("VALUE").setCheck('Vector');
               }else{
@@ -594,7 +594,7 @@ Blockly.Blocks['variables_set'] = {
             }), "componentDropdown");
     }
 
-    if(component !== 'none' && component !== 'all'){
+    if(component !== 'none' && component !== 'vector'){
         for(var field of this.getInput("Attribute").fieldRow){
             if(field.name === "componentDropdown"){
                 field.setValue(component);
@@ -604,7 +604,7 @@ Blockly.Blocks['variables_set'] = {
         this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
         this.getInput("VALUE").setCheck("Number");
     }else{
-        this.component == 'all';
+        this.component == 'vector';
         thisBlock.setColour(Blockly.Blocks.vectors.HUE);
         thisBlock.getInput("VALUE").setCheck('Vector');
     }

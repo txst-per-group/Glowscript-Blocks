@@ -37,6 +37,12 @@ function isHexaColor(sNum){
          && ! isNaN( parseInt(sNum, 16) );
 }
 
+Blockly.Python['scene_colour'] = function(block) {
+  // Scene background color change.
+  var colour = Blockly.Python.valueToCode(block, 'COLOUR',
+      Blockly.Python.ORDER_NONE) || '\'\'';
+  return 'scene.background = ' + colour + '\n';
+};
 
 Blockly.Python['colour_picker'] = function(block) {
   // Colour picker.
@@ -46,7 +52,7 @@ Blockly.Python['colour_picker'] = function(block) {
   var G = hexToG(code);
   var B = hexToB(code);
 
-  code = 'vector(' + R + '/255 ,' + G + '/255 ,' + B + '/255)'
+  code = 'vector(' + R + '/255, ' + G + '/255, ' + B + '/255)'
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 

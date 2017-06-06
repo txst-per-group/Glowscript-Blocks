@@ -151,3 +151,21 @@ Blockly.Blocks['colour_blend'] = {
     this.setTooltip(Blockly.Msg.COLOUR_BLEND_TOOLTIP);
   }
 };
+
+Blockly.Blocks['scene_colour'] = {
+  /**
+   * Block for scene background color.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.appendValueInput('COLOUR')
+        .setCheck('Vector')
+        .appendField('scene color');
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(Blockly.Blocks.colour.HUE);
+    this.setTooltip(function() {
+      return 'Change the color of the scene background';
+    });
+  }
+};

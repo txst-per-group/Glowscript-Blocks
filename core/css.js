@@ -442,7 +442,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyTreeSeparator {',
-    'border-bottom: solid #e5e5e5 1px;',
+    'border-bottom: solid #000000 1px;',
     'height: 0;',
     'margin: 5px 0;',
   '}',

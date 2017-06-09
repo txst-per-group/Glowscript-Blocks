@@ -200,6 +200,8 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
             if(this.getInput(this.inputs[input].inputName)){
                 this.removeInput(this.inputs[input].inputName);
                 this.removeInput("RETAIN_INPUT");
+                this.removeInput("TRAIL_FIELD");
+                this.removeInput("INTERVAL_INPUT")
             }
         }else{
             if(this.getInput(this.inputs[input].inputName))
@@ -214,9 +216,18 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
                 this.appendValueInput(this.inputs[has].inputName)
                     .setCheck(this.inputs[has].check)
                     .appendField(this.inputs[has].field);
+                this.appendDummyInput("TRAIL_FIELD")
+                    .appendField("type")
+                    .appendField(new Blockly.FieldDropdown([
+                                    ['curve','CURVE'],
+                                    ['points','POINTS']
+                                ]), 'TRAIL_TYPE');
                 this.appendDummyInput("RETAIN_INPUT")
                 .appendField("retain")
                 .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
+                this.appendDummyInput("INTERVAL_INPUT")
+                .appendField("interval")
+                .appendField(new Blockly.FieldTextInput("2"), "INTERVAL_VALUE");
             }
         }else{
             if (this.hasXml[has]){

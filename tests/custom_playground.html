@@ -13,6 +13,7 @@
 <script src="../blocks/text.js"></script>
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/vector.js"></script>
+<script src="../blocks/graphs.js"></script>
 <script src="../generators/python.js"></script>    
 <script src="../generators/python/logic.js"></script>   
 <script src="../generators/python/loops.js"></script>   
@@ -21,6 +22,7 @@
 <script src="../generators/python/lists.js"></script>   
 <script src="../generators/python/colour.js"></script>    
 <script src="../generators/python/variables.js"></script>
+<script src="../generators/python/graphs.js"></script>
 <script src="../msg/js/en.js"></script>
 
 <!-- Vpython generator files -->   
@@ -535,7 +537,7 @@ h1 {
     </category>
 
     <category name="Math">
-      <block type="math_number" gap="32"></block>
+      <block type="math_number"></block>
       <block type="math_arithmetic">
         <value name="A">
           <shadow type="math_number">
@@ -656,6 +658,22 @@ h1 {
         <value name="TEXT">
           <shadow type="text">
             <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+
+    <category name="Graphs">
+      <block type="create_line"></block>
+      <block type="plot">
+        <value name="X_VALUE">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="Y_VALUE">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
           </shadow>
         </value>
       </block>

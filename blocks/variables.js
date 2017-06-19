@@ -285,6 +285,10 @@ Blockly.Blocks['variables_get'] = {
         this.setColour(Blockly.Blocks.logic.HUE);
         this.setOutput(true, newType);
         break;
+      case 'Line':
+        this.setColour(Blockly.Blocks.graphs.HUE);
+        this.setOutput(true, newType);
+        break;
       case 'None':
         this.setColour(Blockly.Blocks.variables.HUE);
         this.setOutput(true, null);
@@ -482,6 +486,10 @@ Blockly.Blocks['variables_set'] = {
         break;
       case 'Boolean':
         this.setColour(Blockly.Blocks.logic.HUE);
+        input.setCheck(newType);
+        break;
+      case 'Line':
+        this.setColour(Blockly.Blocks.graphs.HUE);
         input.setCheck(newType);
         break;
       case 'None':

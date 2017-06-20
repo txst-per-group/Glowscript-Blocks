@@ -20,9 +20,9 @@ Blockly.Python['create_line'] = function(block) {
 Blockly.Python['plot'] = function(block) {
   var variable_line = Blockly.Python.variableDB_.getName(block.getFieldValue('LINE'), Blockly.Variables.NAME_TYPE);
   var dropdown_name = block.getFieldValue('NAME');
-  var value_x_value = Blockly.Python.valueToCode(block, 'X_VALUE', Blockly.Python.ORDER_ATOMIC);
-  var value_y_value = Blockly.Python.valueToCode(block, 'Y_VALUE', Blockly.Python.ORDER_ATOMIC);
+  var x_value = Blockly.Python.valueToCode(block, 'X_VALUE', Blockly.Python.ORDER_ATOMIC);
+  var y_value = Blockly.Python.valueToCode(block, 'Y_VALUE', Blockly.Python.ORDER_ATOMIC);
   // TODO: Assemble Python into code variable.
-  var code = '...\n';
+  var code = variable_line + '.plot(' + x_value + ',' + y_value + ')\n';
   return code;
 };

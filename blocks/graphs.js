@@ -24,7 +24,7 @@ Blockly.Blocks['plot'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("plot")
-        // TODO create dropdown function that only returns type "Line"
+        // Dropdown function that only returns type "Line"
         .appendField(new Blockly.FieldDropdown(this.dynamicOptions), "LINE");
     this.appendValueInput("X_VALUE")
         .setCheck("Number")
@@ -42,27 +42,32 @@ Blockly.Blocks['plot'] = {
 
   dynamicOptions: function() {
   	var options = []
-	var allVariables = Blockly.Variables.allVariables(workspace);
-	console.log(allVariables);
-	var empty = ["none","NONE"];
-	if (allVariables.length==0)
-		options.push(empty);
-	for (var curr in allVariables) {
-		if (!(curr === "append" ||
-			curr === "copy" ||
-			curr === "extend" ||
-			curr === "index" ||
-			curr === "insert" ||
-			curr === "remove")) {
-			var varBlock = workspace.getVariableUses(allVariables[curr])[0].inputList[0].connection;
-			if (!varBlock.targetConnection==null && varBlock.targetConnection.check_[0]==="Line") {
-				options.push([allVariables[curr],allVariables[curr]]);
-				console.log(options);
-			} else {
-				options.push(empty);
-			}
-		}
-	}
-	return options;
+    // Variable for storing a list of all variable blocks in workspace
+  	var allVariables = Blockly.Variables.allVariables(workspace);
+    // Variable for menu options of no Line type variables
+  	var empty = ["none","NONE"];
+  	if (!allVariables.length==0) {
+    	for (var curr in allVariables) {
+        // Filter out names of object funtions that get returned
+    		if (!(curr === "append" ||
+    			curr === "copy" ||
+    			curr === "extend" ||
+    			curr === "index" ||
+    			curr === "insert" ||
+    			curr === "remove" ||
+          curr === "+")) {
+    			var varBlock = workspace.getVariableUses(allVariables[curr])[0].inputList[0].connection;
+          // Only push variable block to menu if it has a Line type connected to it
+    			if (!(varBlock.targetConnection==null) && varBlock.targetConnection.check_[0]==="Line") {
+    				options.push([allVariables[curr],allVariables[curr].toUpperCase()]);
+    			} else {
+    				options.push(empty);
+    			}
+    		}
+    	}
+    } else {
+      options.push(empty);
+    }
+  	return options;
   }
 };

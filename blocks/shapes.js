@@ -177,7 +177,8 @@ Blockly.Blocks.Shape.prototype.saveConnections = function(containerBlock){
     while(clauseBlock){
 
         var valueInput = this.getInput(this.inputs[clauseBlock.type].inputName);
-        clauseBlock.valueConnection_ = valueInput && valueInput.connection.targetConnection;
+        if (!(valueInput.connection==null))
+          clauseBlock.valueConnection_ = valueInput && valueInput.connection.targetConnection;
        
         clauseBlock = clauseBlock.nextConnection &&
             clauseBlock.nextConnection.targetBlock(); 
@@ -213,9 +214,12 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
     for (var has in this.hasXml){
         if(has === "make_trail"){   
             if (this.hasXml[has]){
-                this.appendValueInput(this.inputs[has].inputName)
-                    .setCheck(this.inputs[has].check)
-                    .appendField(this.inputs[has].field);
+                this.appendDummyInput(this.inputs[has].inputName)
+                    .appendField(this.inputs[has].field)
+                    .appendField(new Blockly.FieldDropdown([
+                                    ['true','TRUE'],
+                                    ['false','FALSE']
+                                ]), 'TRAIL_VALUE');
                 this.appendDummyInput("TRAIL_FIELD")
                     .appendField("type")
                     .appendField(new Blockly.FieldDropdown([

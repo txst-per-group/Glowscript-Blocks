@@ -145,46 +145,51 @@ Blockly.Blocks.variables.HUE = '#607D8B';
 var boxDropDown = [["box", "box"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                    ["axis", "axis"], ["mass", "mass"], ["charge", "charge"],
                    ["size", "size"], ["up", "up"],
-                   ["color","color"],["texture", "texture"],
-                   ["trail", "trail"],
-                   ["retain", "retain"]];
+                   ["color","color"], ["texture", "texture"],
+                   ["trail", "trail"], ["retain", "retain"],
+                   ["interval", "interval"], ["trail type", "trail type"]];
 
 var vectorDropDown = [["vector", "vector"],["x", "x"], ["y", "y"],
                       ["z", "z"]];
 
 var vectorList = ["pos", "vel", "acc", "axis", "up", "size", "color", "vector"];
 var numberList = ["radius", "mass", "charge", "opacity", "retain", "shaftwidth", 
-                  "headwidth", "headlength", "thickness", "x", "y", "z"];
+                  "headwidth", "headlength", "thickness", "x", "y", "z",
+                  "retain", "interval"];
+var stringList = ["texture", "trail type"];
 
 var cylinderDropDown = [["cylinder", "cylinder"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                       ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
                       ["radius", "radius"],["length", "length"],
                       ["up", "up"], ["color", "color"], ["texture", "texture"],
                       ["opacity", "opacity"], ["trail", "trail"],
-                      ["retain", "retain"]];
+                      ["retain", "retain"],["interval", "interval"],
+                      ["trail type", "trail type"]];
 
 var sphereDropDown = [["sphere", "sphere"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                       ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
                       ["radius", "radius"], ["up", "up"],
                       ["color", "color"], ["texture", "texture"],
                       ["opacity", "opacity"],
-                      ["trail", "trail"], ["retain", "retain"]
-                      ];
+                      ["trail", "trail"], ["retain", "retain"],
+                      ["interval", "interval"], ["trail type", "trail type"]];
 
 var arrowDropDown = [["arrow", "arrow"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                      ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["length", "length"],
                      ["shaftwidth", "shaftwidth"], ["headwidth", "headwidth"],
                      ["headlength", "headlength"], ["up", "up"], 
                      ["color", "color"], ["texture", "texture"],
-                     ["opacity", "opacity"],
-                     ["make_trail"], ["retain", "retain"]];
+                     ["opacity", "opacity"], ["make_trail"], 
+                     ["retain", "retain"], ["interval", "interval"],
+                     ["trail type", "trail type"]];
 
 var ringDropDown = [["ring", "ring"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                     ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["radius", "radius"],
                     ["length", "length"], ["thickness", "thickness"], 
                     ["size", "size"], ["up", "up"], ["color", "color"],
-                    ["texture", "texture"],["opacity", "opacity"], ["make_trail", "make_trail"],
-                    ["retain", "retain"]];
+                    ["texture", "texture"],["opacity", "opacity"],
+                    ["make_trail", "make_trail"], ["retain", "retain"],
+                    ["interval", "interval"], ["trail type", "trail type"]];
 
 var helixDropDown = [["helix", "helix"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                     ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["radius", "radius"],
@@ -192,7 +197,8 @@ var helixDropDown = [["helix", "helix"],["pos", "pos"], ["vel", "vel"], ["acc", 
                     ["thickness", "thickness"], ["size", "size"],
                     ["up", "up"], ["color", "color"], ["texture", "texture"],
                     ["opacity", "opacity"], ["make_trail", "make_trail"],
-                    ["retain", "retain"]];
+                    ["retain", "retain"], ["interval", "interval"],
+                    ["trail type", "trail type"]];
 
 var shapeDropDowns = {};
 
@@ -341,7 +347,14 @@ Blockly.Blocks['variables_get'] = {
           if(thisBlock.getInput("Attribute").fieldRow.length > 1){
             thisBlock.getInput("Attribute").removeField("componentDropdown");
           }
-          //else boolean (write me)
+          // if selected attribute is "trail" (boolean)
+          }else if(attribute==="trail"){
+          thisBlock.setColour(Blockly.Blocks.logic.HUE);
+          thisBlock.setOutput(true, "Boolean");
+          // if selected attribute is a string
+          }else if(stringList.indexOf(attribute) > -1){
+          thisBlock.setColour(Blockly.Blocks.texts.HUE);
+          thisBlock.setOutput(true, "String");
           }
         }), "attributeDropdown");
 
@@ -359,6 +372,12 @@ Blockly.Blocks['variables_get'] = {
       }else if(numberList.indexOf(attribute) > -1){
         this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
         this.setOutput(true, "Number");
+      }else if(attribute==="trail"){
+        this.setColour(Blockly.Blocks.logic.HUE);
+        this.setOutput(true, "Boolean");
+      }else if(stringList.indexOf(attribute) > -1){
+        this.setColour(Blockly.Blocks.texts.HUE);
+        this.setOutput(true, "String");
       }
     }else{
         this.setColour(Blockly.Blocks.shapes.HUE);
@@ -536,6 +555,13 @@ Blockly.Blocks['variables_set'] = {
           if(thisBlock.getInput("Attribute").fieldRow.length > 1){
             thisBlock.getInput("Attribute").removeField("componentDropdown");
           }
+          // if selected attribute is "trail" (boolean)
+          }else if(attribute==="trail"){
+          thisBlock.setColour(Blockly.Blocks.logic.HUE);
+          thisBlock.getInput("VALUE").setCheck("Boolean");
+          }else if(stringList.indexOf(attribute) > -1){
+          thisBlock.setColour(Blockly.Blocks.texts.HUE);
+          thisBlock.getInput("VALUE").setCheck("String");
           }
         }), "attributeDropdown");
 
@@ -560,6 +586,12 @@ Blockly.Blocks['variables_set'] = {
       //this.modifyBlock("Number");
       this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
       this.getInput("VALUE").setCheck("Number");
+    }else if(attribute==="trail"){
+      this.setColour(Blockly.Blocks.logic.HUE);
+      this.getInput("VALUE").setCheck("Boolean");
+    }else if(stringList.indexOf(attribute) > -1){
+      this.setColour(Blockly.Blocks.texts.HUE);
+      this.getInput("VALUE").setCheck("String");
     }
     
   },

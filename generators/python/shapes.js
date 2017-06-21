@@ -28,9 +28,7 @@ Blockly.Python.Shape = function(block) {
         if (previousArg)
           code = code + ", "
         code = code + "make_trail=" + 
-        Blockly.Python.valueToCode(block,
-                                   attribute.toUpperCase(),
-                                   Blockly.Python.ORDER_ATOMIC) + 
+        block.getFieldValue("TRAIL_VALUE").toLowerCase() + 
         ", trail_type='" + block.getFieldValue("TRAIL_TYPE").toLowerCase() + "'" +
         ", retain=" + block.getFieldValue("RETAIN_VALUE") +
         ", interval=" + block.getFieldValue("INTERVAL_VALUE");

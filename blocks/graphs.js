@@ -44,11 +44,12 @@ Blockly.Blocks['plot'] = {
   	var options = []
     // Variable for storing a list of all variable blocks in workspace
   	var allVariables = Blockly.Variables.allVariables(workspace);
-    // Variable for menu options of no Line type variables
+    // Variable for menu options if no Line type variables are found in workspace
   	var empty = ["none","NONE"];
   	if (!allVariables.length==0) {
     	for (var curr in allVariables) {
-        // Filter out names of object funtions that get returned
+        // allVariables is not a hash list and contains variable object functions
+        // Filter out the names of object funtions that get unwantingly returned
     		if (!(curr === "append" ||
     			curr === "copy" ||
     			curr === "extend" ||
@@ -60,14 +61,31 @@ Blockly.Blocks['plot'] = {
           // Only push variable block to menu if it has a Line type connected to it
     			if (!(varBlock.targetConnection==null) && varBlock.targetConnection.check_[0]==="Line") {
     				options.push([allVariables[curr],allVariables[curr].toUpperCase()]);
-    			} else {
-    				options.push(empty);
     			}
     		}
     	}
+      if (options.length==0) {
+        options.push(empty);
+      }
     } else {
       options.push(empty);
     }
   	return options;
-  }
+  },
+  // TODO use onchange to update current selection if it changes from a line type
+  // onchange: function() {
+  //   // Do nothing if block is only being dragged to avoid unnecessary calls
+  //   if(this.workspace.isDragging())
+  //     return;
+  //   // Gets the currently selected variable block
+  //   var selection = this.inputList[0].fieldRow[1].value_
+  //   // Only continue if selection is not None (default)
+  //   if (!(selection==="NONE")) {
+  //     var varBlock = workspace.getVariableUses(selection)[0].inputList[0].connection;
+  //     if (!(varBlock.targetConnection==null) && !(varBlock.targetConnection
+  //                                                         .check_[0]==="Line")){
+  //       return this.dynamicOptions;
+  //     }      
+  //   }
+  // }
 };

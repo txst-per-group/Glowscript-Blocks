@@ -177,7 +177,8 @@ Blockly.Blocks.Shape.prototype.saveConnections = function(containerBlock){
     while(clauseBlock){
 
         var valueInput = this.getInput(this.inputs[clauseBlock.type].inputName);
-        clauseBlock.valueConnection_ = valueInput && valueInput.connection.targetConnection;
+        if (!(valueInput.connection==null))
+          clauseBlock.valueConnection_ = valueInput && valueInput.connection.targetConnection;
        
         clauseBlock = clauseBlock.nextConnection &&
             clauseBlock.nextConnection.targetBlock(); 
@@ -200,6 +201,8 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
             if(this.getInput(this.inputs[input].inputName)){
                 this.removeInput(this.inputs[input].inputName);
                 this.removeInput("RETAIN_INPUT");
+                this.removeInput("TRAIL_FIELD");
+                this.removeInput("INTERVAL_INPUT")
             }
         }else{
             if(this.getInput(this.inputs[input].inputName))
@@ -211,12 +214,24 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
     for (var has in this.hasXml){
         if(has === "make_trail"){   
             if (this.hasXml[has]){
-                this.appendValueInput(this.inputs[has].inputName)
-                    .setCheck(this.inputs[has].check)
-                    .appendField(this.inputs[has].field);
+                this.appendDummyInput(this.inputs[has].inputName)
+                    .appendField(this.inputs[has].field)
+                    .appendField(new Blockly.FieldDropdown([
+                                    ['true','TRUE'],
+                                    ['false','FALSE']
+                                ]), 'TRAIL_VALUE');
+                this.appendDummyInput("TRAIL_FIELD")
+                    .appendField("type")
+                    .appendField(new Blockly.FieldDropdown([
+                                    ['curve','CURVE'],
+                                    ['points','POINTS']
+                                ]), 'TRAIL_TYPE');
                 this.appendDummyInput("RETAIN_INPUT")
                 .appendField("retain")
                 .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
+                this.appendDummyInput("INTERVAL_INPUT")
+                .appendField("interval")
+                .appendField(new Blockly.FieldTextInput("2"), "INTERVAL_VALUE");
             }
         }else{
             if (this.hasXml[has]){

@@ -22,11 +22,12 @@ Blockly.Blocks['create_line'] = {
 
 Blockly.Blocks['plot'] = {
   init: function() {
+    var thisBlock = this;
     this.appendDummyInput()
         .appendField("plot")
         // Dropdown function that only returns type "Line"
-        .appendField(new Blockly.FieldDropdown(this.dynamicOptions), "LINE");
-    this.appendValueInput("X_VALUE")
+        .appendField(new Blockly.FieldDropdown(function(selection){return thisBlock.dynamicOptions(thisBlock)}), "LINE");
+    this.appendValueInput("X_VALUE") 
         .setCheck("Number")
         .appendField("at  X:");
     this.appendValueInput("Y_VALUE")
@@ -40,10 +41,11 @@ Blockly.Blocks['plot'] = {
     				 the lines corresponding graph display.');
   },
 
-  dynamicOptions: function() {
+  dynamicOptions: function(thisBlock) {
   	var options = []
     // Variable for storing a list of all variable blocks in workspace
-  	var allVariables = Blockly.Variables.allVariables(workspace);
+
+  	var allVariables = Blockly.Variables.allVariables(thisBlock.workspace);
     // Variable for menu options if no Line type variables are found in workspace
   	var empty = ["none","NONE"];
   	if (!allVariables.length==0) {

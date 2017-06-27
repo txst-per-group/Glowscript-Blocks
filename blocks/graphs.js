@@ -44,7 +44,6 @@ Blockly.Blocks['plot'] = {
   dynamicOptions: function(thisBlock) {
   	var options = []
     // Variable for storing a list of all variable blocks in workspace
-
   	var allVariables = Blockly.Variables.allVariables(thisBlock.workspace);
     // Variable for menu options if no Line type variables are found in workspace
   	var empty = ["none","NONE"];
@@ -59,7 +58,7 @@ Blockly.Blocks['plot'] = {
     			curr === "insert" ||
     			curr === "remove" ||
           curr === "+")) {
-    			var varBlock = workspace.getVariableUses(allVariables[curr])[0].inputList[0].connection;
+    			var varBlock = thisBlock.workspace.getVariableUses(allVariables[curr])[0].inputList[0].connection;
           // Only push variable block to menu if it has a Line type connected to it
     			if (!(varBlock.targetConnection==null) && varBlock.targetConnection.check_[0]==="Line") {
     				options.push([allVariables[curr],allVariables[curr].toUpperCase()]);

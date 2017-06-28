@@ -23,16 +23,18 @@ Blockly.Blocks['create_line'] = {
 Blockly.Blocks['plot'] = {
   init: function() {
     var thisBlock = this;
-    this.appendDummyInput()
+    this.appendDummyInput("VAR")
         .appendField("plot")
         // Dropdown function that only returns type "Line"
         .appendField(new Blockly.FieldDropdown(function(selection){return thisBlock.dynamicOptions(thisBlock)}), "LINE");
     this.appendValueInput("X_VALUE") 
         .setCheck("Number")
-        .appendField("at  X:");
+        .appendField("(");
     this.appendValueInput("Y_VALUE")
         .setCheck("Number")
-        .appendField("Y:");
+        .appendField(", ");
+    this.appendDummyInput()
+        .appendField(")");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -46,7 +48,7 @@ Blockly.Blocks['plot'] = {
     // Variable for storing a list of all variable blocks in workspace
   	var allVariables = Blockly.Variables.allVariables(thisBlock.workspace);
     // Variable for menu options if no Line type variables are found in workspace
-  	var empty = ["none","NONE"];
+  	var empty = ["none","none"];
   	if (!allVariables.length==0) {
     	for (var curr in allVariables) {
         // allVariables is not a hash list and contains variable object functions
@@ -74,19 +76,19 @@ Blockly.Blocks['plot'] = {
   	return options;
   },
   // TODO use onchange to update current selection if it changes from a line type
-  // onchange: function() {
-  //   // Do nothing if block is only being dragged to avoid unnecessary calls
-  //   if(this.workspace.isDragging())
-  //     return;
-  //   // Gets the currently selected variable block
-  //   var selection = this.inputList[0].fieldRow[1].value_
-  //   // Only continue if selection is not None (default)
-  //   if (!(selection==="NONE")) {
-  //     var varBlock = workspace.getVariableUses(selection)[0].inputList[0].connection;
-  //     if (!(varBlock.targetConnection==null) && !(varBlock.targetConnection
-  //                                                         .check_[0]==="Line")){
-  //       return this.dynamicOptions;
-  //     }      
-  //   }
-  // }
+  onchange: function() {
+    // Do nothing if block is only being dragged to avoid unnecessary calls
+    if(this.workspace.isDragging())
+      return;
+    // Gets the currently selected variable block
+    var selection = this.inputList[0].fieldRow[1].value_
+    // Only continue if selection is not None (default)
+    if (!(selection==="none")) {
+      var varBlock = this.workspace.getVariableUses(selection)[0].inputList[0].connection;
+      if (varBlock.targetConnection==null || !(varBlock.targetConnection
+                                                          .check_[0]==="Line")){
+        this.getInput("VAR").fieldRow[1].setValue(this.dynamicOptions(this)[0][0]);
+      }      
+    }
+  }
 };

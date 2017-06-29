@@ -26,3 +26,16 @@ Blockly.Python['plot'] = function(block) {
   var code = variable_line + '.plot(' + x_value + ',' + y_value + ')\n';
   return code;
 };
+
+Blockly.Python['graph_display'] = function(block) {
+  var title = Blockly.Python.valueToCode(block, 'TITLE', Blockly.Python.ORDER_ATOMIC);
+  var x_max = Blockly.Python.valueToCode(block, 'X_MAX', Blockly.Python.ORDER_ATOMIC);
+  var x_min = Blockly.Python.valueToCode(block, 'X_MIN', Blockly.Python.ORDER_ATOMIC);
+  var y_max = Blockly.Python.valueToCode(block, 'Y_MAX', Blockly.Python.ORDER_ATOMIC);
+  var y_min = Blockly.Python.valueToCode(block, 'Y_MIN', Blockly.Python.ORDER_ATOMIC);
+  var statements_objects = Blockly.Python.statementToCode(block, 'OBJECTS');
+  // TODO: Assemble Python into code variable.
+  var code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_NONE];
+};

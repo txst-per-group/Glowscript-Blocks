@@ -142,21 +142,22 @@ var domToMutation = function(xmlElement){
 
 Blockly.Blocks.variables.HUE = '#607D8B';
 
-var boxDropDown = [["box", "box"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
-                   ["axis", "axis"], ["mass", "mass"], ["charge", "charge"],
-                   ["size", "size"], ["up", "up"],
-                   ["color","color"], ["texture", "texture"],
-                   ["trail", "trail"], ["retain", "retain"],
-                   ["interval", "interval"], ["trail type", "trail type"]];
-
 var vectorDropDown = [["vector", "vector"],["x", "x"], ["y", "y"],
                       ["z", "z"]];
 
 var vectorList = ["pos", "vel", "acc", "axis", "up", "size", "color", "vector"];
 var numberList = ["radius", "mass", "charge", "opacity", "retain", "shaftwidth", 
                   "headwidth", "headlength", "thickness", "x", "y", "z",
-                  "retain", "interval"];
-var stringList = ["texture", "trail type"];
+                  "retain", "interval", "xmax", "xmin", "ymax", "ymin"];
+var stringList = ["texture", "trail type", "xtitle", "ytitle"];
+var graphList = ["Graph", "Line"];
+
+var boxDropDown = [["box", "box"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
+                   ["axis", "axis"], ["mass", "mass"], ["charge", "charge"],
+                   ["size", "size"], ["up", "up"],
+                   ["color","color"], ["texture", "texture"],
+                   ["trail", "trail"], ["retain", "retain"],
+                   ["interval", "interval"], ["trail type", "trail type"]];
 
 var cylinderDropDown = [["cylinder", "cylinder"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                       ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
@@ -200,6 +201,11 @@ var helixDropDown = [["helix", "helix"],["pos", "pos"], ["vel", "vel"], ["acc", 
                     ["retain", "retain"], ["interval", "interval"],
                     ["trail type", "trail type"]];
 
+var graphDropDown = [["graph", "graph"],["xtitle", "xtitle"],["ytitle","ytitle"],
+                    ["xmax", "xmax"],["xmin", "xmin"],["ymax", "ymax"],["ymin","ymin"]];
+
+var lineDropDown = [["line", "line"],["color", "color"]];
+
 var shapeDropDowns = {};
 
 shapeDropDowns["Box"] = boxDropDown;
@@ -208,6 +214,11 @@ shapeDropDowns["Sphere"] = sphereDropDown;
 shapeDropDowns["Arrow"] = arrowDropDown;
 shapeDropDowns["Ring"] = ringDropDown;
 shapeDropDowns["Helix"] = helixDropDown;
+
+shapeDropDowns["Graph"] = graphDropDown;
+shapeDropDowns["Line"] = lineDropDown;
+
+
 /////////////////////////////////////////////
 
 Blockly.Blocks['variables_get'] = {
@@ -291,10 +302,6 @@ Blockly.Blocks['variables_get'] = {
         this.setColour(Blockly.Blocks.logic.HUE);
         this.setOutput(true, newType);
         break;
-      case 'Line':
-        this.setColour(Blockly.Blocks.graphs.HUE);
-        this.setOutput(true, newType);
-        break;
       case 'None':
         this.setColour(Blockly.Blocks.variables.HUE);
         this.setOutput(true, null);
@@ -305,6 +312,8 @@ Blockly.Blocks['variables_get'] = {
       case 'Ring':
       case 'Cylinder':
       case 'Helix':
+      case 'Graph':
+      case 'Line':
         this.addAttribute(newType, attribute, component);
         //this.addAttribute(newType); function call when implemented
         break;
@@ -327,40 +336,76 @@ Blockly.Blocks['variables_get'] = {
     }
 
     var thisBlock = this;
-
-    this.appendDummyInput("Attribute")
-        .appendField(new Blockly.FieldDropdown(shapeDropDowns[type], function(attribute){
-          this.attribute = attribute;
-          // if selection is shape
-          if(attribute === shapeDropDowns[type][0][0]){
-            thisBlock.setColour(Blockly.Blocks.shapes.HUE);
-            thisBlock.setOutput(true, type);
+    if (graphList.indexOf(type)>-1) {
+      console.log("YESSS:");
+      this.appendDummyInput("Attribute")
+          .appendField(new Blockly.FieldDropdown(shapeDropDowns[type], function(attribute){
+            this.attribute = attribute;
+            // if selection is shape
+            if(attribute === shapeDropDowns[type][0][0]){
+              thisBlock.setColour(Blockly.Blocks.graphs.HUE);
+              thisBlock.setOutput(true, type);
+              // if there is a component in Attribute remove it
+              if(thisBlock.getInput("Attribute").fieldRow.length > 1){
+                  thisBlock.getInput("Attribute").removeField("componentDropdown");
+              }
+              
+            // if selected attribute is a vector
+            }else if(vectorList.indexOf(attribute) > -1){
+            thisBlock.addComponent(attribute, component); 
+            // if selected attribute is a number
+            }else if(numberList.indexOf(attribute) > -1){
+            thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+            thisBlock.setOutput(true, "Number");
             // if there is a component in Attribute remove it
             if(thisBlock.getInput("Attribute").fieldRow.length > 1){
-                thisBlock.getInput("Attribute").removeField("componentDropdown");
+              thisBlock.getInput("Attribute").removeField("componentDropdown");
             }
-            
-          // if selected attribute is a vector
-          }else if(vectorList.indexOf(attribute) > -1){
-          thisBlock.addComponent(attribute, component); 
-          // if selected attribute is a number
-          }else if(numberList.indexOf(attribute) > -1){
-          thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
-          thisBlock.setOutput(true, "Number");
-          // if there is a component in Attribute remove it
-          if(thisBlock.getInput("Attribute").fieldRow.length > 1){
-            thisBlock.getInput("Attribute").removeField("componentDropdown");
-          }
-          // if selected attribute is "trail" (boolean)
-          }else if(attribute==="trail"){
-          thisBlock.setColour(Blockly.Blocks.logic.HUE);
-          thisBlock.setOutput(true, "Boolean");
-          // if selected attribute is a string
-          }else if(stringList.indexOf(attribute) > -1){
-          thisBlock.setColour(Blockly.Blocks.texts.HUE);
-          thisBlock.setOutput(true, "String");
-          }
-        }), "attributeDropdown");
+            // if selected attribute is "trail" (boolean)
+            }else if(attribute==="trail"){
+            thisBlock.setColour(Blockly.Blocks.logic.HUE);
+            thisBlock.setOutput(true, "Boolean");
+            // if selected attribute is a string
+            }else if(stringList.indexOf(attribute) > -1){
+            thisBlock.setColour(Blockly.Blocks.texts.HUE);
+            thisBlock.setOutput(true, "String");
+            }
+          }), "attributeDropdown");
+    } else {
+      this.appendDummyInput("Attribute")
+          .appendField(new Blockly.FieldDropdown(shapeDropDowns[type], function(attribute){
+            this.attribute = attribute;
+            // if selection is shape
+            if(attribute === shapeDropDowns[type][0][0]){
+              thisBlock.setColour(Blockly.Blocks.shapes.HUE);
+              thisBlock.setOutput(true, type);
+              // if there is a component in Attribute remove it
+              if(thisBlock.getInput("Attribute").fieldRow.length > 1){
+                  thisBlock.getInput("Attribute").removeField("componentDropdown");
+              }
+              
+            // if selected attribute is a vector
+            }else if(vectorList.indexOf(attribute) > -1){
+            thisBlock.addComponent(attribute, component); 
+            // if selected attribute is a number
+            }else if(numberList.indexOf(attribute) > -1){
+            thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+            thisBlock.setOutput(true, "Number");
+            // if there is a component in Attribute remove it
+            if(thisBlock.getInput("Attribute").fieldRow.length > 1){
+              thisBlock.getInput("Attribute").removeField("componentDropdown");
+            }
+            // if selected attribute is "trail" (boolean)
+            }else if(attribute==="trail"){
+            thisBlock.setColour(Blockly.Blocks.logic.HUE);
+            thisBlock.setOutput(true, "Boolean");
+            // if selected attribute is a string
+            }else if(stringList.indexOf(attribute) > -1){
+            thisBlock.setColour(Blockly.Blocks.texts.HUE);
+            thisBlock.setOutput(true, "String");
+            }
+          }), "attributeDropdown");
+    }
 
     
     if(attribute !== 'none' && attribute !== shapeDropDowns[type][0][0]){
@@ -507,10 +552,6 @@ Blockly.Blocks['variables_set'] = {
         this.setColour(Blockly.Blocks.logic.HUE);
         input.setCheck(newType);
         break;
-      case 'Line':
-        this.setColour(Blockly.Blocks.graphs.HUE);
-        input.setCheck(newType);
-        break;
       case 'None':
         this.setColour(Blockly.Blocks.variables.HUE);
         input.setCheck(null);
@@ -521,6 +562,8 @@ Blockly.Blocks['variables_set'] = {
       case 'Ring':
       case 'Cylinder':
       case 'Helix':
+      case 'Graph':
+      case 'Line':
         this.addAttribute(newType, attribute, component);      
         break;
       default:

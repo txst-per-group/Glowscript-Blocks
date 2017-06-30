@@ -28,14 +28,24 @@ Blockly.Python['plot'] = function(block) {
 };
 
 Blockly.Python['graph_display'] = function(block) {
-  var title = Blockly.Python.valueToCode(block, 'TITLE', Blockly.Python.ORDER_ATOMIC);
-  var x_max = Blockly.Python.valueToCode(block, 'X_MAX', Blockly.Python.ORDER_ATOMIC);
-  var x_min = Blockly.Python.valueToCode(block, 'X_MIN', Blockly.Python.ORDER_ATOMIC);
-  var y_max = Blockly.Python.valueToCode(block, 'Y_MAX', Blockly.Python.ORDER_ATOMIC);
-  var y_min = Blockly.Python.valueToCode(block, 'Y_MIN', Blockly.Python.ORDER_ATOMIC);
-  var statements_objects = Blockly.Python.statementToCode(block, 'OBJECTS');
-  // TODO: Assemble Python into code variable.
-  var code = '...';
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.Python.ORDER_NONE];
+  var graph_objects = Blockly.Python.statementToCode(block, 'OBJECTS', true);
+
+  var code = 'graph(';
+  var previousArg = false;
+  // Loop through the display xml to find applicable attributes to add
+  for (var attribute in block.hasXml) {
+    // If the xml has the attribute, write the code
+    if (block.hasXml[attribute]) {
+      if (previousArg)
+        code = code + ', '
+      code = code + attribute + '=' + 
+      Blockly.Python.valueToCode(block, attribute.toUpperCase(), Blockly.Python.ORDER_ATOMIC);
+      previousArg = true;
+    }
+  }
+  code = code + ')\n';
+  // Add the relevant graph_object blocks below the graph display code if they exist
+  // Statement to cdoe retruns with indent but is unnecassary so trim() will remove indent
+  code = code + graph_objects;
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };

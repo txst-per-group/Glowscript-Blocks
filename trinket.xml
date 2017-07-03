@@ -22,7 +22,12 @@
         </block>
       </value>
     </block>
-    <block type="create_line"></block>
+    <block type="variables_set">
+        <field name="VAR">g_object</field>
+          <value name="VALUE">
+            <block type="create_line"></block>
+          <value>
+      </block>
     <block type="plot">
       <value name="X_VALUE">
         <shadow type="math_number">

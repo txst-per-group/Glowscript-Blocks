@@ -274,15 +274,18 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
  * Generate code representing the statement.  Indent the code.
  * @param {!Blockly.Block} block The block containing the input.
  * @param {string} name The name of the input.
+ * @param {boolean} noIndent The choice of indentions. Defaults to indention.
  * @return {string} Generated code or '' if no blocks are connected.
  */
-Blockly.Generator.prototype.statementToCode = function(block, name) {
+Blockly.Generator.prototype.statementToCode = function(block, name, noIndent=false) {
   var targetBlock = block.getInputTargetBlock(name);
   var code = this.blockToCode(targetBlock);
   // Value blocks must return code and order of operations info.
   // Statement blocks must only return code.
   goog.asserts.assertString(code, 'Expecting code from statement block "%s".',
       targetBlock && targetBlock.type);
+  if (noIndent)
+    return code
   if (code) {
     code = this.prefixLines(/** @type {string} */ (code), this.INDENT);
   }

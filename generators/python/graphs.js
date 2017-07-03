@@ -26,3 +26,26 @@ Blockly.Python['plot'] = function(block) {
   var code = variable_line + '.plot(' + x_value + ',' + y_value + ')\n';
   return code;
 };
+
+Blockly.Python['graph_display'] = function(block) {
+  var graph_objects = Blockly.Python.statementToCode(block, 'OBJECTS', true);
+
+  var code = 'graph(';
+  var previousArg = false;
+  // Loop through the display xml to find applicable attributes to add
+  for (var attribute in block.hasXml) {
+    // If the xml has the attribute, write the code
+    if (block.hasXml[attribute]) {
+      if (previousArg)
+        code = code + ', '
+      code = code + attribute + '=' + 
+      Blockly.Python.valueToCode(block, attribute.toUpperCase(), Blockly.Python.ORDER_ATOMIC);
+      previousArg = true;
+    }
+  }
+  code = code + ')\n';
+  // Add the relevant graph_object blocks below the graph display code if they exist
+  // Statement to cdoe retruns with indent but is unnecassary so trim() will remove indent
+  code = code + graph_objects;
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};

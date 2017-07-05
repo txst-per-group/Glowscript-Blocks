@@ -4,14 +4,14 @@ goog.provide('Blockly.Python.graphs');
 
 goog.require('Blockly.Python');
 
-Blockly.Python['create_line'] = function(block) {
+Blockly.Python['series'] = function(block) {
   var code = 'g';
-  var line_type = block.getFieldValue('LINE_TYPE');
-  var line_color = block.getFieldValue('LINE_COLOR');
-  var R = hexToR(line_color);
-  var G = hexToG(line_color);
-  var B = hexToB(line_color);
-  code = code + line_type.toLowerCase() + '(color=vector('
+  var type = block.getFieldValue('TYPE');
+  var color = block.getFieldValue('COLOR');
+  var R = hexToR(color);
+  var G = hexToG(color);
+  var B = hexToB(color);
+  code = code + type.toLowerCase() + '(color=vector('
   		 + R + '/255, ' + G + '/255, ' + B + '/255))';
 
   return [code, Blockly.Python.ORDER_ATOMIC];

@@ -6,16 +6,16 @@ goog.require('Blockly.Blocks');
 
 Blockly.Blocks.graphs.HUE = '#26A69A';
 
-Blockly.Blocks['create_line'] = {
+Blockly.Blocks['series'] = {
   init: function() {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["curve", "CURVE"],
-        										["dots", "DOTS"]]), "LINE_TYPE")
-        .appendField(new Blockly.FieldColour("#ff0000"), "LINE_COLOR");
+        										["dots", "DOTS"]]), "TYPE")
+        .appendField(new Blockly.FieldColour("#ff0000"), "COLOR");
     this.setInputsInline(true);
-    this.setOutput(true, "Line");
+    this.setOutput(true, "Series");
     this.setColour(Blockly.Blocks.graphs.HUE);
-    this.setTooltip('Creates line for plotting on a graph as either a solid\
+    this.setTooltip('Creates a series for plotting on a graph as either a solid\
     				 curve or a dotted line.');
   }
 };
@@ -25,11 +25,11 @@ Blockly.Blocks['plot'] = {
     var thisBlock = this;
     this.appendDummyInput("VAR")
         .appendField("plot")
-        // Dropdown function that only returns type "Line"
+        // Dropdown function that only returns type "Series"
         .appendField(new Blockly.FieldDropdown(function(selection){return thisBlock.dynamicOptions(thisBlock)}), "LINE");
     this.appendValueInput("X_VALUE") 
         .setCheck("Number")
-        .appendField("(");
+        .appendField("at (");
     this.appendValueInput("Y_VALUE")
         .setCheck("Number")
         .appendField(", ");
@@ -47,7 +47,7 @@ Blockly.Blocks['plot'] = {
   	var options = []
     // Variable for storing a list of all variable blocks in workspace
   	var allVariables = Blockly.Variables.allVariables(thisBlock.workspace);
-    // Variable for menu options if no Line type variables are found in workspace
+    // Variable for menu options if no Series type variables are found in workspace
   	var empty = ["none","none"];
     if (this.isInFlyout)
       options.push(empty);
@@ -63,9 +63,9 @@ Blockly.Blocks['plot'] = {
     			curr === "remove" ||
           curr === "+")) {
     			var varBlock = thisBlock.workspace.getVariableUses(allVariables[curr])[0].inputList[0].connection;
-          // Only push variable block to menu if it has a Line type connected to it
+          // Only push variable block to menu if it has a Series type connected to it
           if (!(varBlock===null)) {
-      			if (!(varBlock.targetConnection==null) && varBlock.targetConnection.check_[0]==="Line") {
+      			if (!(varBlock.targetConnection==null) && varBlock.targetConnection.check_[0]==="Series") {
       				options.push([allVariables[curr],allVariables[curr].toUpperCase()]);
       			}
           }
@@ -91,8 +91,8 @@ Blockly.Blocks['plot'] = {
       if (!(selection==="none")) {
         var varBlock = this.workspace.getVariableUses(selection)[0].inputList[0].connection;
         if (varBlock.targetConnection==null || !(varBlock.targetConnection
-                                                            .check_[0]==="Line")){
-          // Update list with top most "Line" variable
+                                                            .check_[0]==="Series")){
+          // Update list with top most "Series" variable
           this.getInput("VAR").fieldRow[1].setValue(this.dynamicOptions(this)[0][0]);
         }      
       }
@@ -105,13 +105,13 @@ Blockly.Blocks['graph_display'] = {
     this.appendDummyInput()
         .appendField("graph display");
     this.appendStatementInput("OBJECTS")
-        .setCheck('Line')
+        .setCheck('Series')
         .setAlign(Blockly.ALIGN_RIGHT);
     this.setOutput(true, 'Graph');
-    this.setMutator(new Blockly.Mutator(['xtitle','ytitle','xmax','xmin','ymax','ymin']));
+    this.setMutator(new Blockly.Mutator(['title','xmax','xmin','ymax','ymin']));
     this.setColour(Blockly.Blocks.graphs.HUE);
     this.setTooltip('Creates a display which contains the enclosed graph objects.');
-    this.hasXml = {xtitle:0, ytitle:0, xmax:0, xmin:0, ymax:0, ymin:0};
+    this.hasXml = {title:0, xmax:0, xmin:0, ymax:0, ymin:0};
     for (var attribute in this.hasXml){
       this.hasXml[attribute] = false;
     }
@@ -206,7 +206,7 @@ Blockly.Blocks['graph_display'] = {
       // And reconnect the recorded block to the blocks input
       Blockly.Mutator.reconnect(valueConnections[i][1],this,valueConnections[i][0]);
     }
-    // If there were 'Line' objects connected
+    // If there were 'Series' objects connected
     if (!(containerBlock.stateConnection_==null))
       // Reconnect the stack of blocks back into the 'statementInput'
       Blockly.Mutator.reconnect(containerBlock.stateConnection_,this,'OBJECTS');
@@ -218,7 +218,7 @@ Blockly.Blocks['graph_display'] = {
    */
   updateShape_: function() {
     // list of graph display inputs
-    var inputs = ['XTITLE','YTITLE','XMAX','XMIN','YMAX','YMIN','OBJECTS']
+    var inputs = ['TITLE','XMAX','XMIN','YMAX','YMIN','OBJECTS']
     // start by resetting all inputs
     for (var input in inputs){
       if (this.getInput(inputs[input]))
@@ -227,7 +227,7 @@ Blockly.Blocks['graph_display'] = {
     // add inputs from the xml list
     for (var has in this.hasXml){
       //special case for title attribute
-      if (has.substring(has.indexOf('t')) === 'title'){
+      if (has === 'title'){
         if (this.hasXml[has]){
           this.appendValueInput(has.toUpperCase())
               .setCheck("String")
@@ -245,7 +245,7 @@ Blockly.Blocks['graph_display'] = {
     }
     // add back OBJECTS statements last, below other attributes
     this.appendStatementInput('OBJECTS')
-        .setCheck('Line')
+        .setCheck('Series')
         .setAlign(Blockly.ALIGN_RIGHT);
 
   },
@@ -286,25 +286,14 @@ Blockly.Blocks['display_root'] = {
   }
 };
 
-Blockly.Blocks['xtitle'] = {
+Blockly.Blocks['title'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("xtitle");
+        .appendField("title");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(Blockly.Blocks.graphs.HUE);
-    this.setTooltip('Sets the title of the X axis on graph to a given string.');
-  }
-};
-
-Blockly.Blocks['ytitle'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("ytitle");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(Blockly.Blocks.graphs.HUE);
-    this.setTooltip('Sets the title of the Y axis on graph to a given string.');
+    this.setTooltip('Sets the title of the graph to a given string.');
   }
 };
 

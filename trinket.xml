@@ -12,7 +12,22 @@
   </category>
 
   <category name="Graphs">
-    <block type="create_line"></block>
+    <block type="graph_display">
+      <value name="OBJECTS">
+        <block type="variables_set">
+          <field name="VAR">series1</field>
+            <value name="VALUE">
+              <block type="series"></block>
+            <value>
+        </block>
+      </value>
+    </block>
+    <block type="variables_set">
+        <field name="VAR">series</field>
+          <value name="VALUE">
+            <block type="series"></block>
+          <value>
+      </block>
     <block type="plot">
       <value name="X_VALUE">
         <shadow type="math_number">

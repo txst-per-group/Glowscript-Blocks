@@ -18,7 +18,7 @@
           <field name="VAR">series1</field>
             <value name="VALUE">
               <block type="series"></block>
-            <value>
+            </value>
         </block>
       </value>
     </block>
@@ -26,7 +26,7 @@
         <field name="VAR">series</field>
           <value name="VALUE">
             <block type="series"></block>
-          <value>
+          </value>
       </block>
     <block type="plot">
       <value name="X_VALUE">

@@ -25,10 +25,10 @@ Blockly.Python.Shape = function(block) {
     if (block.hasXml[attribute]) {
       //special case for make_trail
       if(attribute === "make_trail") {
+        var value = (block.getFieldValue('TRAIL_VALUE') == 'TRUE') ? 'True' : 'False';
         if (previousArg)
           code = code + ", "
-        code = code + "make_trail=" + 
-        block.getFieldValue("TRAIL_VALUE").toLowerCase() + 
+        code = code + "make_trail=" + value + 
         ", trail_type='" + block.getFieldValue("TRAIL_TYPE").toLowerCase() + "'" +
         ", retain=" + block.getFieldValue("RETAIN_VALUE") +
         ", interval=" + block.getFieldValue("INTERVAL_VALUE");

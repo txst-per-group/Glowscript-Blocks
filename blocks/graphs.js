@@ -23,18 +23,18 @@ Blockly.Blocks['series'] = {
 Blockly.Blocks['plot'] = {
   init: function() {
     var thisBlock = this;
-    this.appendDummyInput("VAR")
-        .appendField("plot")
-        // Dropdown function that only returns type "Series"
-        .appendField(new Blockly.FieldDropdown(function(selection){return thisBlock.dynamicOptions(thisBlock)}), "LINE");
     this.appendValueInput("X_VALUE") 
         .setCheck("Number")
-        .appendField("at (");
+        .appendField("plot (");
     this.appendValueInput("Y_VALUE")
         .setCheck("Number")
         .appendField(", ");
     this.appendDummyInput()
         .appendField(")");
+    this.appendDummyInput("VAR")
+        .appendField("on")
+        // Dropdown function that only returns type "Series"
+        .appendField(new Blockly.FieldDropdown(function(selection){return thisBlock.dynamicOptions(thisBlock)}), "LINE");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

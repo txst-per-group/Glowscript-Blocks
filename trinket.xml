@@ -15,18 +15,18 @@
     <block type="graph_display">
       <value name="OBJECTS">
         <block type="variables_set">
-          <field name="VAR">g_object_1</field>
+          <field name="VAR">series1</field>
             <value name="VALUE">
-              <block type="create_line"></block>
-            <value>
+              <block type="series"></block>
+            </value>
         </block>
       </value>
     </block>
     <block type="variables_set">
-        <field name="VAR">g_object</field>
+        <field name="VAR">series</field>
           <value name="VALUE">
-            <block type="create_line"></block>
-          <value>
+            <block type="series"></block>
+          </value>
       </block>
     <block type="plot">
       <value name="X_VALUE">

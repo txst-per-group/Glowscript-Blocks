@@ -84,16 +84,19 @@ Blockly.Blocks['plot'] = {
     // Do nothing if block is only being dragged to avoid unnecessary calls
     if(this.workspace.isDragging())
       return;
-    // Gets the currently selected variable block
-    var selection = this.inputList[0].fieldRow[1].text_;
-    // Only continue if selection is not None (default)
-    if (!(this.workspace.getVariableUses(selection).length==0)) {
-      if (!(selection==="none")) {
-        var varBlock = this.workspace.getVariableUses(selection)[0].inputList[0].connection;
-        if (varBlock.targetConnection==null || !(varBlock.targetConnection
-                                                            .check_[0]==="Series")){
-          // Update list with top most "Series" variable
-          this.getInput("VAR").fieldRow[1].setValue(this.dynamicOptions(this)[0][0]);
+    // Do nothing if there is no variable selected
+    if (this.inputList[3].fieldRow[1] !== undefined) {
+      // Gets the currently selected variable block
+      var selection = this.inputList[3].fieldRow[1].text_;
+      // Only continue if selection is not None (default)
+      if (!(this.workspace.getVariableUses(selection).length==0)) {
+        if (!(selection==="none")) {
+          var varBlock = this.workspace.getVariableUses(selection)[0].inputList[0].connection;
+          if (varBlock.targetConnection==null || !(varBlock.targetConnection
+                                                              .check_[0]==="Series")){
+            // Update list with top most "Series" variable
+            this.getInput("VAR").fieldRow[1].setValue(this.dynamicOptions(this)[0][0]);
+          }
         }      
       }
     }

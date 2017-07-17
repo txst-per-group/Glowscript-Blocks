@@ -387,3 +387,13 @@ Blockly.Python['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   return ['random()', Blockly.Python.ORDER_FUNCTION_CALL];
 };
+
+Blockly.Python['radian_degree'] = function(block) {
+  // Converts number input to radian or degree.
+  var dropdown_op = block.getFieldValue('OP');
+  var value_num = Blockly.Python.valueToCode(block, 'NUM', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = dropdown_op.toLowerCase() + '(' + value_num + ')';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_NONE];
+};

@@ -696,4 +696,20 @@ Blockly.Blocks['math_random_float'] = {
   }
 };
 
+Blockly.Blocks['radian_degree'] = {
+  /**
+   * Block for converting number to degree or radian.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.appendValueInput("NUM")
+        .setCheck("Number")
+        .appendField(new Blockly.FieldDropdown([["radians","RADIANS"], ["degrees","DEGREES"]]), "OP");
+    this.setInputsInline(false);
+    this.setOutput(true, "Number");
+    this.setColour(Blockly.Blocks.math.MATH_HUE);
+    this.setTooltip('Converts an input into a radian or to degrees.');
+  }
+};
+
 

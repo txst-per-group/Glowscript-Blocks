@@ -143,6 +143,7 @@
         </shadow>
       </value>
     </block>
+    <block type="radian_degree"></block>
   </category>
 
   <category name="Loops">

@@ -16,7 +16,7 @@ Blockly.Python['vector'] = function(block) {
 
 Blockly.Python['vector_math'] = function(block) {
 
-    var dropdown_operation = block.getFieldValue('operation');
+    var dropdown_operation = block.getFieldValue('OP');
     var value_vector1 = Blockly.Python.valueToCode(block, 'vector1', Blockly.Python.ORDER_ATOMIC);
   
     switch(dropdown_operation){

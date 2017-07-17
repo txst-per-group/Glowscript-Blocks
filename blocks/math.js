@@ -704,7 +704,7 @@ Blockly.Blocks['radian_degree'] = {
   init: function() {
     this.appendValueInput("NUM")
         .setCheck("Number")
-        .appendField(new Blockly.FieldDropdown([["radians","RADIANS"], ["degree","DEGREE"]]), "OP");
+        .appendField(new Blockly.FieldDropdown([["radians","RADIANS"], ["degrees","DEGREES"]]), "OP");
     this.setInputsInline(false);
     this.setOutput(true, "Number");
     this.setColour(Blockly.Blocks.math.MATH_HUE);

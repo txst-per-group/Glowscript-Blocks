@@ -166,9 +166,9 @@ Blockly.Python['math_constant'] = function(block) {
     'INFINITY': ['float(\'inf\')', Blockly.Python.ORDER_ATOMIC]
   };
   var constant = block.getFieldValue('CONSTANT');
-  if (constant != 'INFINITY') {
+  /* if (constant != 'INFINITY') {
     Blockly.Python.definitions_['import_math'] = 'import math';
-  }
+  } */
   return CONSTANTS[constant];
 };
 

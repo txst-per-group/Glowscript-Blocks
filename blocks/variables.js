@@ -146,7 +146,7 @@ var boxDropDown = [["box", "box"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"]
                    ["axis", "axis"], ["mass", "mass"], ["charge", "charge"],
                    ["size", "size"], ["up", "up"],
                    ["color","color"], ["texture", "texture"],
-                   ["trail", "trail"], ["retain", "retain"],
+                   ["make_trail", "make_trail"], ["retain", "retain"],
                    ["interval", "interval"], ["trail type", "trail type"]];
 
 var vectorDropDown = [["vector", "vector"],["x", "x"], ["y", "y"],
@@ -162,7 +162,7 @@ var cylinderDropDown = [["cylinder", "cylinder"],["pos", "pos"], ["vel", "vel"],
                       ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
                       ["radius", "radius"],["length", "length"],
                       ["up", "up"], ["color", "color"], ["texture", "texture"],
-                      ["opacity", "opacity"], ["trail", "trail"],
+                      ["opacity", "opacity"], ["make_trail", "make_trail"],
                       ["retain", "retain"],["interval", "interval"],
                       ["trail type", "trail type"]];
 
@@ -171,7 +171,7 @@ var sphereDropDown = [["sphere", "sphere"],["pos", "pos"], ["vel", "vel"], ["acc
                       ["radius", "radius"], ["up", "up"],
                       ["color", "color"], ["texture", "texture"],
                       ["opacity", "opacity"],
-                      ["trail", "trail"], ["retain", "retain"],
+                      ["make_trail", "make_trail"], ["retain", "retain"],
                       ["interval", "interval"], ["trail type", "trail type"]];
 
 var arrowDropDown = [["arrow", "arrow"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
@@ -179,7 +179,7 @@ var arrowDropDown = [["arrow", "arrow"],["pos", "pos"], ["vel", "vel"], ["acc", 
                      ["shaftwidth", "shaftwidth"], ["headwidth", "headwidth"],
                      ["headlength", "headlength"], ["up", "up"], 
                      ["color", "color"], ["texture", "texture"],
-                     ["opacity", "opacity"], ["make_trail"], 
+                     ["opacity", "opacity"], ["make_trail", "make_trail"], 
                      ["retain", "retain"], ["interval", "interval"],
                      ["trail type", "trail type"]];
 
@@ -352,7 +352,7 @@ Blockly.Blocks['variables_get'] = {
             thisBlock.getInput("Attribute").removeField("componentDropdown");
           }
           // if selected attribute is "trail" (boolean)
-          }else if(attribute==="trail"){
+          }else if(attribute==="make_trail"){
           thisBlock.setColour(Blockly.Blocks.logic.HUE);
           thisBlock.setOutput(true, "Boolean");
           // if selected attribute is a string
@@ -376,7 +376,7 @@ Blockly.Blocks['variables_get'] = {
       }else if(numberList.indexOf(attribute) > -1){
         this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
         this.setOutput(true, "Number");
-      }else if(attribute==="trail"){
+      }else if(attribute==="make_trail"){
         this.setColour(Blockly.Blocks.logic.HUE);
         this.setOutput(true, "Boolean");
       }else if(stringList.indexOf(attribute) > -1){
@@ -563,8 +563,8 @@ Blockly.Blocks['variables_set'] = {
           if(thisBlock.getInput("Attribute").fieldRow.length > 1){
             thisBlock.getInput("Attribute").removeField("componentDropdown");
           }
-          // if selected attribute is "trail" (boolean)
-          }else if(attribute==="trail"){
+          // if selected attribute is "make_trail" (boolean)
+          }else if(attribute==="make_trail"){
           thisBlock.setColour(Blockly.Blocks.logic.HUE);
           thisBlock.getInput("VALUE").setCheck("Boolean");
           }else if(stringList.indexOf(attribute) > -1){
@@ -594,7 +594,7 @@ Blockly.Blocks['variables_set'] = {
       //this.modifyBlock("Number");
       this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
       this.getInput("VALUE").setCheck("Number");
-    }else if(attribute==="trail"){
+    }else if(attribute==="make_trail"){
       this.setColour(Blockly.Blocks.logic.HUE);
       this.getInput("VALUE").setCheck("Boolean");
     }else if(stringList.indexOf(attribute) > -1){

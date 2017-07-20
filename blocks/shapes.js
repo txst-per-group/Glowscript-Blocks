@@ -6,6 +6,7 @@ goog.require('Blockly.Blocks');
 
 
 Blockly.Blocks.shapes.HUE = '#FFC107';
+Blockly.Blocks.shapes.VARIABLE_HUE = '#FFD54F';
 
 
 ////////////////////////////////////////////////
@@ -15,3019 +16,453 @@ Blockly.Blocks.shapes.objectDropDown = [["box", "box"], ["sphere", "sphere"],
                       ["ring", "ring"], ["cylinder", "cylinder"], 
                       ["helix", "helix"]];
 
-var boxDropDown = [["pos", "pos"], ["axis", "axis"],
-                   ["size", "size"], ["up", "up"],
-                   ["color","color"],["texture", "texture"],
-                   ["make_trail", "make_trail"],
-                   ["retain", "retain"]];
 
-var vectorDropDown = [["all", "all"],["x", "x"], ["y", "y"],
-                      ["z", "z"]];
+///////////////////////////////////////////////////////////////////////////////
 
-var vectorList = ["pos", "axis", "up", "size"];
 
-var cylinderDropDown = [["pos", "pos"], ["axis", "axis"], 
-                      ["radius", "radius"],["length", "length"],
-                      ["up", "up"], ["color", "color"], ["texture", "texture"],
-                      ["opacity", "opacity"], ["make_trail", "make_trail"],
-                      ["retain", "retain"]];
-
-var sphereDropDown = [["pos", "pos"], ["axis", "axis"], 
-                      ["radius", "radius"], ["up", "up"],
-                      ["color", "color"], ["texture", "texture"],
-                      ["opacity", "opacity"],
-                      ["make_trail", "make_trail"], ["retain", "retain"]
-                      ];
-
-var arrowDropDown = [["pos", "pos"], ["axis", "axis"], ["length", "length"],
-                     ["shaftwidth", "shaftwidth"], ["headwidth", "headwidth"],
-                     ["headlength", "headlength"], ["up", "up"], 
-                     ["color", "color"], ["texture", "texture"],
-                     ["opacity", "opacity"],
-                     ["make_trail"], ["retain", "retain"]];
-
-var ringDropDown = [["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
-                    ["length", "length"], ["thickness", "thickness"], 
-                    ["size", "size"], ["up", "up"], ["color", "color"],
-                    ["texture", "texture"],["opacity", "opacity"], ["make_trail", "make_trail"],
-                    ["retain", "retain"]];
-
-var helixDropDown = [["pos", "pos"], ["axis", "axis"], ["radius", "radius"],
-                    ["length", "length"], ["coils", "coils"],
-                    ["thickness", "thickness"], ["size", "size"],
-                    ["up", "up"], ["color", "color"], ["texture", "texture"],
-                    ["opacity", "opacity"], ["make_trail", "make_trail"],
-                    ["retain", "retain"]];
-
+//-----------------------3D Objects Blocks Prototype-------------------------//
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
-//----------------------------3D Objects Blocks------------------------------//
 
+Blockly.Blocks.Shape = function(info, mutator, inputs, hasXml){
 
-///////////////////////////////////////////////////////////////////////////////
+    /**
+     *   used for creating new shape in Blockly.Blocks
+     */
 
-
-Blockly.Blocks['vpython_box'] = {
-  init: function(){
-    this.appendDummyInput()
-        .appendField("box");
-    this.setInputsInline(false);
-    this.setOutput(true, 'Box');
-    this.setColour(Blockly.Blocks.shapes.HUE);
-    this.setTooltip('');
-    this.itemCount_ = 0;
-    this.setHelpUrl('http://www.example.com/');
-    this.setMutator(new Blockly.Mutator(['pos',
-                                         'axis',
-                                         'size',
-                                         'up',
-                                         'color',
-                                         'texture',
-                                         'opacity',
-                                         'make_trail']));
-    this.hasPos = false;
-    this.hasAxis= false;
-    this.hasSize= false;
-    this.hasUp = false;
-    this.hasColor = false;
-    this.hasTexture = false;
-    this.hasOpacity = false;
-    this.hasTrail = false;
-    this.elementCount_ = 0;
-    },
-
-    // xml values for names must be lowercased (for some reason)
-    // do not camel case when setting or reading values from
-    // xml element or writing to container
-
-    mutationToDom: function(){
-        if(!this.elementCount_){
-            return null;
-        }
-        var container = document.createElement('mutation');
-
-        if(this.hasPos){
-            container.setAttribute('pos', 1);
-        }
-        if(this.hasAxis){
-            container.setAttribute('axis', 1);
-        }
-        if(this.hasSize){
-            container.setAttribute('size', 1);
-        }
-        if(this.hasUp){
-            container.setAttribute('up', 1);
-        }
-        if(this.hasColor){
-            container.setAttribute('color', 1);
-        }
-        if(this.hasTexture){
-            container.setAttribute('texture', 1);
-        }
-        if(this.hasOpacity){
-            container.setAttribute('opacity', 1);
-        }
-        if(this.hasTrail){
-            container.setAttribute('make_trail', 1);
-        }
-        container.setAttribute('element_count', this.elementCount_)
-        return container;
-    },
-
-    // xml values for names must be lowercased (for some reason)
-    // do not camel case when setting or reading values from
-    // xml element or writing to container
-
-    domToMutation: function(xmlElement){
-
-        this.hasPos = parseInt(xmlElement.getAttribute('pos'), 10) || 0;
-        this.hasAxis = parseInt(xmlElement.getAttribute('axis'), 10) || 0;
-        this.hasSize = parseInt(xmlElement.getAttribute('size'), 10) || 0;
-        this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
-        this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
-        this.hasTexture = parseInt(xmlElement.getAttribute('texture'), 10) || 0;
-        this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
-        this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
-        this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
-        this.updateShape_();
-
-    },
-    decompose: function(workspace){
-        var containerBlock = workspace.newBlock('vpython_create_box');
-        containerBlock.initSvg();
-        var connection = containerBlock.nextConnection;
-
-        if(this.hasPos){
-            
-            var posBlock = workspace.newBlock('pos');
-            posBlock.initSvg();
-            connection.connect(posBlock.previousConnection);
-            connection = posBlock.nextConnection;
-        }
-
-        if(this.hasAxis){
-            var axisBlock = workspace.newBlock('axis')
-            axisBlock.initSvg();
-            connection.connect(axisBlock.previousConnection);
-            connection = axisBlock.nextConnection;
-
-        }
-        if(this.hasSize){
-            var sizeBlock = workspace.newBlock('size');
-            sizeBlock.initSvg();
-            connection.connect(sizeBlock.previousConnection);
-            connection = sizeBlock.nextConnection;
-        }
-
-        if(this.hasUp){
-            var upBlock = workspace.newBlock('up');
-            upBlock.initSvg();
-            connection.connect(upBlock.previousConnection);
-            connection = upBlock.nextConnection;
-        }
-
-        if(this.hasColor){
-            var colorBlock = workspace.newBlock('color');
-            colorBlock.initSvg();
-            connection.connect(colorBlock.previousConnection);
-            connection = colorBlock.nextConnection;
-        }
-
-        if(this.hasTexture){
-            var textureBlock = workspace.newBlock('texture');
-            textureBlock.initSvg();
-            connection.connect(textureBlock.previousConnection);
-            connection = textureBlock.nextConnection;
-        }
-
-        if(this.hasOpacity){
-            var opacityBlock = workspace.newBlock('opacity');
-            opacityBlock.initSvg();
-            connection.connect(opacityBlock.previousConnection);
-            connection = opacityBlock.nextConnection;
-        }
-
-        if(this.hasTrail){
-            var trailBlock = workspace.newBlock('make_trail');
-            trailBlock.initSvg();
-            connection.connect(trailBlock.previousConnection);
-            connection = trailBlock.nextConnection;
-        }
-
-        return containerBlock;
-    },
-
-    compose: function(containerBlock){
-
-        var clauseBlock = containerBlock.nextConnection.targetBlock();
-        
-        this.hasPos = false;
-        this.hasAxis = false;
-        this.hasSize = false;
-        this.hasUp = false;
-        this.hasColor = false;
-        this.hasTexture = false;
-        this.hasOpacity = false;
-        this.hasTrail = false;
-        this.elementCount_ = 0;
-        //alert("compose");
-        var valueConnections = [];
-        var i = 0;
-        while(clauseBlock){
-
-
-            switch(clauseBlock.type){
-
-                case 'pos':
-                    this.hasPos = true;
-                    this.elementCount_++;
-                    valueConnections.push(['POS', clauseBlock.valueConnection_]);
-                    break;
-                case 'axis':
-                    this.hasAxis = true;
-                    this.elementCount_++;
-                    valueConnections.push(['AXIS', clauseBlock.valueConnection_]);
-                    break;
-                case 'size':
-                    this.hasSize = true;
-                    this.elementCount_++;
-                    valueConnections.push(['SIZE', clauseBlock.valueConnection_]);
-                    break;
-                case 'up':
-                    this.hasUp = true;
-                    this.elementCount_++;
-                    valueConnections.push(['UP', clauseBlock.valueConnection_]);
-                    break;
-                case 'color':
-                    this.hasColor = true;
-                    this.elementCount_++;
-                    valueConnections.push(['COLOR', clauseBlock.valueConnection_]);
-                    break;
-                case 'texture':
-                    this.hasTexture = true;
-                    this.elementCount_++;
-                    valueConnections.push(['TEXTURE', clauseBlock.valueConnection_]);
-                    break;
-                case 'opacity':
-                    this.hasOpacity = true;
-                    this.elementCount_++;
-                    valueConnections.push(['OPACITY', clauseBlock.valueConnection_]);
-                    break;
-                case 'make_trail':
-                    this.hasTrail = true;
-                    this.elementCount_++;
-                    valueConnections.push(['TRAIL', clauseBlock.valueConnection_]);
-                    break;
-
-                default:
-                    throw "Unknown block type.";
-
-            }
-            clauseBlock = clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
-            i++;
-            
-        }
-        
-        this.updateShape_();
-
-        for(var i = 0; i <= this.elementCount_ - 1; i++){
-            Blockly.Mutator.reconnect(valueConnections[i][1], 
-                                      this, 
-                                      valueConnections[i][0]);
-        }
-        
-
-    },
-
-    saveConnections: function(containerBlock){
-        var clauseBlock = containerBlock.nextConnection.targetBlock();
-        
-        while(clauseBlock){
-           
-            switch(clauseBlock.type){
-                case 'pos':
-                    //alert("saveConnections clauseBlock pos");
-                    var inputPos = this.getInput('POS');
-                    clauseBlock.valueConnection_ = inputPos && inputPos.connection.targetConnection;
-                    break;
-                case 'axis':
-                    var inputAxis = this.getInput('AXIS');
-                    clauseBlock.valueConnection_ = inputAxis && inputAxis.connection.targetConnection;
-                    break;
-                case 'size':
-                    //alert("saveConnections clauseBlock box_size");
-                    var inputSize = this.getInput('SIZE');
-                    clauseBlock.valueConnection_ = inputSize && inputSize.connection.targetConnection;
-                    break;
-                case 'up':
-                    var inputUp = this.getInput('UP');
-                    clauseBlock.valueConnection_ = inputUp && inputUp.connection.targetConnection;
-                    break;
-                case 'color':
-                    var inputColor = this.getInput('COLOR');
-                    clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
-                    break;
-                case 'texture':
-                    var inputTexture = this.getInput('TEXTURE');
-                    clauseBlock.valueConnection_ = inputTexture && inputTexture.connection.targetConnection;
-                    break;
-                case 'opacity':
-                    var inputOpacity = this.getInput('OPACITY');
-                    clauseBlock.valueConnection_ = inputOpacity && inputOpacity.connection.targetConnection;
-                    break;
-                case 'make_trail':
-                    var inputTrail = this.getInput('TRAIL');
-                    clauseBlock.valueConnection_ = inputTrail && inputTrail.connection.targetConnection;
-                    break;
-
-                default:
-                    throw 'Unknown block type.';
-
-            }
-            clauseBlock = clauseBlock.nextConnection &&
-                clauseBlock.nextConnection.targetBlock(); 
-        }
-
-        
-
-    },
-
-    updateShape_: function(){
-        
-        if(this.getInput('POS')){
-            this.removeInput('POS');
-        }
-        if(this.getInput('AXIS')){
-            this.removeInput('AXIS');
-        }
-        if(this.getInput('SIZE')){
-            this.removeInput('SIZE');
-        }
-       if(this.getInput('UP')){
-            this.removeInput('UP');
-        }
-        if(this.getInput('COLOR')){
-            this.removeInput('COLOR');
-        }
-        if(this.getInput('TEXTURE')){
-            this.removeInput('TEXTURE');
-        }
-        if(this.getInput('OPACITY')){
-        	this.removeInput('OPACITY');
-        }
-        if(this.getInput('TRAIL')){
-            this.removeInput('TRAIL');
-            this.removeInput('RETAIN_INPUT');
-        }
-
-        if(this.hasPos){
-            //alert("updateShape_ has pos");
-            this.appendValueInput("POS")
-                .setCheck("Vector")
-                .appendField("pos");
-        }
-
-        if(this.hasAxis){
-            this.appendValueInput("AXIS")
-                .setCheck("Vector")
-                .appendField("axis");
-        }
-
-        if(this.hasSize){
-            this.appendValueInput("SIZE")
-                .setCheck("Vector")
-                .appendField("size");
-        }
-
-        if(this.hasUp){
-            this.appendValueInput("UP")
-                .setCheck("Vector")
-                .appendField("up");
-        }
-
-        if(this.hasColor){
-            this.appendValueInput("COLOR")
-                .setCheck(["Vector", "Colour"])
-                .appendField("color");
-        }
-
-        if(this.hasTexture){
-            this.appendValueInput("TEXTURE")
-                .setCheck('Texture')
-                .appendField("texture");
-        }
-
-        if(this.hasOpacity){
-        	this.appendValueInput("OPACITY")
-        		.setCheck("Number")
-        		.appendField("opacity");
-        }
-        
-        if(this.hasTrail){
-            this.appendValueInput("TRAIL")
-                .setCheck("Boolean")
-                .appendField("make_trail");
-            this.appendDummyInput("RETAIN_INPUT")
-                .appendField("retain")
-                .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
-        }
-    }
+    this.info = info;
+    this.mutatorName = mutator;
+    this.inputs = inputs;
+    this.hasXml = hasXml;
 };
 
+/**
+ * Block for Shapes
+ * @this Blockly.Block
+ */
 
-Blockly.Blocks['vpython_sphere'] = {
-  init: function(){
+Blockly.Blocks.Shape.prototype.init = function(){
+
     this.appendDummyInput()
-        .appendField("sphere");
+        .appendField(this.info.name);
     this.setInputsInline(false);
-    this.setOutput(true, 'Sphere');
+    this.hasXml = Object.assign({},this.hasXml);
+    this.setOutput(true, this.info.type);
     this.setColour(Blockly.Blocks.shapes.HUE);
-    this.setTooltip('');
-    this.itemCount_ = 0;
-    this.setHelpUrl('http://www.example.com/');
-    this.setMutator(new Blockly.Mutator(['pos',
-                                         'axis',
-                                         'radius',
-                                         'size',
-                                         'up',
-                                         'color',
-                                         'texture',
-                                         'opacity',
-                                         'make_trail']));
-    this.hasPos = false;
-    this.hasAxis = false;
-    this.hasRadius = false;
-    this.hasSize = false;
-    this.hasUp = false;
-    this.hasColor = false;
-    this.hasTexture = false;
-    this.hasOpacity = false;
-    this.hasTrail = false;
-    this.elementCount_ = 0;
-    },
-
-    // xml values for names must be lowercased (for some reason)
-    // do not camel case when setting or reading values from
-    // xml element or writing to container
-
-    mutationToDom: function(){
-        if(!this.elementCount_){
-            return null;
-        }
-        var container = document.createElement('mutation');
-
-        if(this.hasPos){
-            container.setAttribute('pos', 1);
-        }
-        if(this.hasAxis){
-            container.setAttribute('axis', 1);
-        }
-        if(this.hasRadius){
-            container.setAttribute('radius', 1);
-        }
-        if(this.hasSize){
-            container.setAttribute('size', 1);
-        }
-        if(this.hasUp){
-            container.setAttribute('up', 1);
-        }
-        if(this.hasColor){
-            container.setAttribute('color', 1);
-        }
-        if(this.hasTexture){
-            container.setAttribute('texture', 1);
-        }
-        if(this.hasOpacity){
-            container.setAttribute('opacity', 1);
-        }
-        if(this.hasTrail){
-            container.setAttribute('make_trail', 1);
-        }
-        container.setAttribute('element_count', this.elementCount_)
-        return container;
-    },
-
-    // xml values for names must be lowercased (for some reason)
-    // do not camel case when setting or reading values from
-    // xml element or writing to container
-
-    domToMutation: function(xmlElement){
-
-        this.hasPos = parseInt(xmlElement.getAttribute('pos'), 10) || 0;
-        this.hasAxis = parseInt(xmlElement.getAttribute('axis'), 10) || 0;
-        this.hasRadius = parseInt(xmlElement.getAttribute('radius'), 10) || 0;
-        this.hasSize = parseInt(xmlElement.getAttribute('size'), 10) || 0;
-        this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
-        this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
-        this.hasTexture = parseInt(xmlElement.getAttribute('texture'), 10) || 0;
-        this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
-        this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
-        this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
-        this.updateShape_();
-
-    },
-    decompose: function(workspace){
-        var containerBlock = workspace.newBlock('vpython_create_sphere');
-        containerBlock.initSvg();
-        var connection = containerBlock.nextConnection;
-
-        if(this.hasPos){
-            
-            var posBlock = workspace.newBlock('pos');
-            posBlock.initSvg();
-            connection.connect(posBlock.previousConnection);
-            connection = posBlock.nextConnection;
-        }
-
-        if(this.hasAxis){
-            var axisBlock = workspace.newBlock('axis')
-            axisBlock.initSvg();
-            connection.connect(axisBlock.previousConnection);
-            connection = axisBlock.nextConnection;
-
-        }
-
-        if(this.hasRadius){
-            var radiusBlock = workspace.newBlock('radius');
-            radiusBlock.initSvg();
-            connection.connect(radiusBlock.previousConnection);
-            connection = radiusBlock.nextConnection;
-        }
-
-        if(this.hasSize){
-            var sizeBlock = workspace.newBlock('size');
-            sizeBlock.initSvg();
-            connection.connect(sizeBlock.previousConnection);
-            connection = sizeBlock.nextConnection;
-        }
-
-        if(this.hasUp){
-            var upBlock = workspace.newBlock('up');
-            upBlock.initSvg();
-            connection.connect(upBlock.previousConnection);
-            connection = upBlock.nextConnection;
-        }
-
-        if(this.hasColor){
-            var colorBlock = workspace.newBlock('color');
-            colorBlock.initSvg();
-            connection.connect(colorBlock.previousConnection);
-            connection = colorBlock.nextConnection;
-        }
-
-        if(this.hasTexture){
-            var textureBlock = workspace.newBlock('texture');
-            textureBlock.initSvg();
-            connection.connect(textureBlock.previousConnection);
-            connection = textureBlock.nextConnection;
-        }
-
-        if(this.hasOpacity){
-            var opacityBlock = workspace.newBlock('opacity');
-            opacityBlock.initSvg();
-            connection.connect(opacityBlock.previousConnection);
-            connection = opacityBlock.nextConnection;
-        }
-
-        if(this.hasTrail){
-            var trailBlock = workspace.newBlock('make_trail');
-            trailBlock.initSvg();
-            connection.connect(trailBlock.previousConnection);
-            connection = trailBlock.nextConnection;
-        }
-
-        return containerBlock;
-    },
-
-    compose: function(containerBlock){
-
-        var clauseBlock = containerBlock.nextConnection.targetBlock();
-        
-        this.hasPos = false;
-        this.hasAxis = false;
-        this.hasRadius = false;
-        this.hasSize = false;
-        this.hasUp = false;
-        this.hasColor = false;
-        this.hasTexture = false;
-        this.hasOpacity = false;
-        this.hasTrail = false;
-        this.elementCount_ = 0;
-        //alert("compose");
-        var valueConnections = [];
-        var i = 0;
-        while(clauseBlock){
-
-
-            switch(clauseBlock.type){
-
-                case 'pos':
-                    this.hasPos = true;
-                    this.elementCount_++;
-                    valueConnections.push(['pos', clauseBlock.valueConnection_]);
-                    break;
-                case 'axis':
-                    this.hasAxis = true;
-                    this.elementCount_++;
-                    valueConnections.push(['axis', clauseBlock.valueConnections_]);
-                    break;
-                case 'radius':
-                    this.hasRadius = true;
-                    this.elementCount_++;
-                    valueConnections.push(['radius', clauseBlock.valueConnection_]);
-                    break; 
-                case 'size':
-                    this.hasSize = true;
-                    this.elementCount_++;
-                    valueConnections.push(['size', clauseBlock.valueConnection_]);
-                    break; 
-                case 'up':
-                    this.hasUp = true;
-                    this.elementCount_++;
-                    valueConnections.push(['up', clauseBlock.valueConnection_]);
-                    break;
-                case 'color':
-                    this.hasColor = true;
-                    this.elementCount_++;
-                    valueConnections.push(['color', clauseBlock.valueConnection_]);
-                    break;
-                case 'texture':
-                    this.hasTexture = true;
-                    this.elementCount_++;
-                    valueConnections.push(['texture', clauseBlock.valueConnection_]);
-                    break;
-                case 'opacity':
-                    this.hasOpacity = true;
-                    this.elementCount_++;
-                    valueConnections.push(['opacity', clauseBlock.valueConnection_]);
-                    break;
-                case 'make_trail':
-                    this.hasTrail = true;
-                    this.elementCount_++;
-                    valueConnections.push(['make_trail', clauseBlock.valueConnection_]);
-                    break;
-
-                default:
-                    throw "Unknown block type.";
-
-            }
-            clauseBlock = clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
-            i++;
-            
-        }
-        
-        this.updateShape_();
-
-        // Was unsure of this sections purpose or whether it will be implemented
-        // later on so I copied it over
-        /*for(var i = 0; i <= this.elementCount_ - 1; i++){
-            Blockly.Mutator.reconnect(valueConnections[i][1], 
-                                      this, 
-                                      valueConnections[i][0]);
-        }*/
-
-    },
-
-    saveConnections: function(containerBlock){
-        var clauseBlock = containerBlock.nextConnection.targetBlock();
-        
-        while(clauseBlock){
-           
-            switch(clauseBlock.type){
-                case 'pos':
-                    var inputPos = this.getInput('POS');
-                    clauseBlock.valueConnection_ = inputPos && inputPos.connection.targetConnection;
-                    break;
-                case 'axis':
-                    var inputAxis = this.getInput('AXIS');
-                    clauseBlock.valueConnection_ = inputAxis && inputAxis.connection.targetConnection;
-                    break;
-                case 'radius':
-                    var inputRadius = this.getInput('RADIUS');
-                    clauseBlock.valueConnection_ = inputRadius && inputRadius.connection.targetConnection;
-                    break;
-                case 'size':
-                    var inputSize = this.getInput('SIZE');
-                    clauseBlock.valueConnection_ = inputSize && inputSize.connection.targetConnection;
-                    break;
-                case 'up':
-                    var inputUp = this.getInput('UP');
-                    clauseBlock.valueConnection_ = inputUp && inputUp.connection.targetConnection;
-                    break;
-                case 'color':
-                    var inputColor = this.getInput('COLOR');
-                    clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
-                    break;
-                case 'texture':
-                    var inputTexture = this.getInput('TEXTURE');
-                    clauseBlock.valueConnection_ = inputTexture && inputTexture.connection.targetConnection;
-                    break;
-                case 'opacity':
-                    var inputOpacity = this.getInput('OPACITY');
-                    clauseBlock.valueConnection_ = inputOpacity && inputOpacity.connection.targetConnection;
-                    break;
-                case 'make_trail':
-                    var inputTrail = this.getInput('TRAIL');
-                    clauseBlock.valueConnection_ = inputTrail && inputTrail.connection.targetConnection;
-                    break;
-
-                default:
-                    throw 'Unknown block type.';
-
-            }
-            clauseBlock = clauseBlock.nextConnection &&
-                clauseBlock.nextConnection.targetBlock(); 
-        }
-
-        
-
-    },
-
-    updateShape_: function(){
-        
-        if(this.getInput('POS')){
-            this.removeInput('POS');
-        }
-        if(this.getInput('AXIS')){
-            this.removeInput('AXIS');
-        }
-        if(this.getInput('RADIUS')){
-            this.removeInput('RADIUS');
-        }
-        if(this.getInput('SIZE')){
-            this.removeInput('SIZE');
-        }
-        if(this.getInput('UP')){
-            this.removeInput('UP');
-        }
-        if(this.getInput('COLOR')){
-            this.removeInput('COLOR');
-        }
-        if(this.getInput('TEXTURE')){
-            this.removeInput('TEXTURE');
-        }
-        if(this.getInput('OPACITY')){
-            this.removeInput('OPACITY');
-        }
-        if(this.getInput('TRAIL')){
-            this.removeInput('TRAIL');
-            this.removeInput('RETAIN_INPUT');
-        }
-
-        if(this.hasPos){
-            this.appendValueInput("POS")
-                .setCheck("Vector")
-                .appendField("pos");
-        }
-
-        if(this.hasAxis){
-            this.appendValueInput("AXIS")
-                .setCheck("Vector")
-                .appendField("axis");
-        }
-
-        if(this.hasRadius){
-            this.appendValueInput("RADIUS")
-                .setCheck("Number")
-                .appendField("radius");
-        }
-
-        if(this.hasSize){
-            this.appendValueInput("SIZE")
-                .setCheck("Vector")
-                .appendField("size");
-        }
-
-        if(this.hasUp){
-            this.appendValueInput("UP")
-                .setCheck("Vector")
-                .appendField("up");
-        }
-
-        if(this.hasColor){
-            this.appendValueInput("COLOR")
-                .setCheck(["Vector", "Colour"])
-                .appendField("color");
-        }
-        
-        if(this.hasTexture){
-            this.appendValueInput("TEXTURE")
-                .setCheck("Texture")
-                .appendField("texture");
-        }
-
-        if(this.hasOpacity){
-            this.appendValueInput("OPACITY")
-                .setCheck("Number")
-                .appendField("opacity");
-        }
-        
-        if(this.hasTrail){
-            this.appendValueInput("TRAIL")
-                .setCheck("Boolean")
-                .appendField("make trail");
-            this.appendDummyInput("RETAIN_INPUT")
-                .appendField("retain")
-                .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
-        }
+    this.setMutator(new Blockly.Mutator(this.mutatorName));
+    for (var attribute in this.hasXml){
+        this.hasXml[attribute] = false
     }
+
+    this.element_count_ = 0;
 };
 
+/**
+ * Create XML to represent if block is supposed to have inputs 
+ * from hasXml List and keeps element count
+ * @return {Element} XML storage element.
+ * @this Blockly.Block
+ */
 
-Blockly.Blocks['vpython_arrow'] = {
-  init: function(){
-    this.appendDummyInput()
-        .appendField("arrow");
-    this.setInputsInline(false);
-    this.setOutput(true, 'Arrow');
-    this.setColour(Blockly.Blocks.shapes.HUE);
-    this.setTooltip('');
-    this.itemCount_ = 0;
-    this.setHelpUrl('http://www.example.com/');
-    this.setMutator(new Blockly.Mutator(['pos',
-                                         'axis',
-                                         'length',
-                                         'shaftwidth',
-                                         'headwidth',
-                                         'headlength',
-                                         'up',
-                                         'color',
-                                         'texture',
-                                         'opacity',
-                                         'make_trail']));
-    this.hasPos = false;
-    this.hasAxis = false;
-    this.hasLength = false;
-    this.hasShaftWidth = false;
-    this.hasHeadWidth = false;
-    this.hasHeadLength = false;
-    this.hasUp = false;
-    this.hasColor = false;
-    this.hasTexture = false;
-    this.hasOpacity = false;
-    this.hasTrail = false;
-    this.elementCount_ = 0;
-    },
+Blockly.Blocks.Shape.prototype.mutationToDom = function(){
 
-    // xml values for names must be lowercased (for some reason)
-    // do not camel case when setting or reading values from
-    // xml element or writing to container
-
-    mutationToDom: function(){
-        if(!this.elementCount_){
-            return null;
-        }
-        var container = document.createElement('mutation');
-
-        if(this.hasPos){
-            container.setAttribute('pos', 1);
-        }
-        if(this.hasAxis){
-            container.setAttribute('axis', 1);
-        }
-        if(this.hasLength){
-            container.setAttribute('length', 1);
-        }
-        if(this.hasShaftWidth){
-            container.setAttribute('shaftwidth', 1);
-        }
-        if(this.hasHeadWidth){
-            container.setAttribute('headwidth', 1);
-        }
-        if(this.hasHeadLength){
-            container.setAttribute('headlength', 1);
-        }
-        if(this.hasUp){
-            container.setAttribute('up', 1);
-        }
-        if(this.hasColor){
-            container.setAttribute('color', 1);
-        }
-        if(this.hasTexture){
-            container.setAttribute('texture', 1);
-        }
-        if(this.hasOpacity){
-            container.setAttribute('opacity', 1);
-        }
-        if(this.hasTrail){
-            container.setAttribute('make_trail', 1);
-        }
-        container.setAttribute('element_count', this.elementCount_)
-        return container;
-    },
-
-    // xml values for names must be lowercased (for some reason)
-    // do not camel case when setting or reading values from
-    // xml element or writing to container
-
-    domToMutation: function(xmlElement){
-
-        this.hasPos = parseInt(xmlElement.getAttribute('pos'), 10) || 0;
-        this.hasAxis = parseInt(xmlElement.getAttribute('axis'), 10) || 0;
-        this.hasLengths = parseInt(xmlElement.getAttribute('length'), 10) || 0;
-        this.hasShaftWidth = parseInt(xmlElement.getAttribute('shaftwidth'), 10) || 0;
-        this.hasHeadWidth = parseInt(xmlElement.getAttribute('headwidth'), 10) || 0;
-        this.hasHeadLength = parseInt(xmlElement.getAttribute('headlength'), 10) || 0;
-        this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
-        this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
-        this.hasTexture = parseInt(xmlElement.getAttribute('texture'), 10) || 0;
-        this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
-        this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
-        this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
-        this.updateShape_();
-
-    },
-    decompose: function(workspace){
-        var containerBlock = workspace.newBlock('vpython_create_arrow');
-        containerBlock.initSvg();
-        var connection = containerBlock.nextConnection;
-
-        if(this.hasPos){
-            
-            var posBlock = workspace.newBlock('pos');
-            posBlock.initSvg();
-            connection.connect(posBlock.previousConnection);
-            connection = posBlock.nextConnection;
-        }
-
-        if(this.hasAxis){
-            var axisBlock = workspace.newBlock('axis')
-            axisBlock.initSvg();
-            connection.connect(axisBlock.previousConnection);
-            connection = axisBlock.nextConnection;
-
-        }
-
-        if(this.hasLength){
-            var lengthBlock = workspace.newBlock('length');
-            lengthBlock.initSvg();
-            connection.connect(lengthBlock.previousConnection);
-            connection = lengthBlock.nextConnection;
-        }
-
-        if(this.hasShaftWidth){
-            var shaftWidthBlock = workspace.newBlock('shaftwidth');
-            shaftWidthBlock.initSvg();
-            connection.connect(shaftWidthBlock.previousConnection);
-            connection = shaftWidthBlock.nextConnection;
-        }
-
-        if(this.hasHeadWidth){
-            var headWidthBlock = workspace.newBlock('headwidth');
-            headWidthBlock.initSvg();
-            connection.connect(headWidthBlock.previousConnection);
-            connection = headWidthBlock.nextConnection;
-        }
-
-        if(this.hasHeadLength){
-            var headLengthBlock = workspace.newBlock('headlength');
-            headLengthBlock.initSvg();
-            connection.connect(headLengthBlock.previousConnection);
-            connection = headLengthBlock.nextConnection;
-        }
-        if(this.hasUp){
-            var upBlock = workspace.newBlock('up');
-            upBlock.initSvg();
-            connection.connect(upBlock.previousConnection);
-            connection = upBlock.nextConnection;
-        }
-
-        if(this.hasColor){
-            var colorBlock = workspace.newBlock('color');
-            colorBlock.initSvg();
-            connection.connect(colorBlock.previousConnection);
-            connection = colorBlock.nextConnection;
-        }
-
-        if(this.hasTexture){
-            var textureBlock = workspace.newBlock('texture');
-            textureBlock.initSvg();
-            connection.connect(textureBlock.previousConnection);
-            connection = textureBlock.nextConnection;
-        }
-
-        if(this.hasOpacity){
-            var opacityBlock = workspace.newBlock('opacity');
-            opacityBlock.initSvg();
-            connection.connect(opacityBlock.previousConnection);
-            connection = opacityBlock.nextConnection;
-        }
-
-        if(this.hasTrail){
-            var trailBlock = workspace.newBlock('make_trail');
-            trailBlock.initSvg();
-            connection.connect(trailBlock.previousConnection);
-            connection = trailBlock.nextConnection;
-        }
-
-        return containerBlock;
-    },
-
-    compose: function(containerBlock){
-
-        var clauseBlock = containerBlock.nextConnection.targetBlock();
-        
-        this.hasPos = false;
-        this.hasAxis = false;
-        this.hasLength = false;
-        this.hasShaftWidth = false;
-        this.hasHeadWidth = false;
-        this.hasHeadLength = false;
-        this.hasUp = false;
-        this.hasColor = false;
-        this.hasTexture = false;
-        this.hasOpacity = false;
-        this.hasTrail = false;
-        this.elementCount_ = 0;
-        //alert("compose");
-        var valueConnections = [];
-        var i = 0;
-        while(clauseBlock){
-
-
-            switch(clauseBlock.type){
-
-                case 'pos':
-                    this.hasPos = true;
-                    this.elementCount_++;
-                    valueConnections.push(['pos', clauseBlock.valueConnection_]);
-                    break;
-                case 'axis':
-                    this.hasAxis = true;
-                    this.elementCount_++;
-                    valueConnections.push(['axis', clauseBlock.valueConnections_]);
-                    break;
-                case 'length':
-                    this.hasLength = true;
-                    this.elementCount_++;
-                    valueConnections.push(['length', clauseBlock.valueConnection_]);
-                    break; 
-                case 'shaftwidth':
-                    this.hasShaftWidth = true;
-                    this.elementCount_++;
-                    valueConnections.push(['shaftwidth', clauseBlock.valueConnection_]);
-                    break; 
-                case 'headwidth':
-                    this.hasHeadWidth = true;
-                    this.elementCount_++;
-                    valueConnections.push(['headwidth', clauseBlock.valueConnection_]);
-                    break; 
-                case 'headlength':
-                    this.hasHeadLength = true;
-                    this.elementCount_++;
-                    valueConnections.push(['headlength', clauseBlock.valueConnection_]);
-                    break; 
-                case 'up':
-                    this.hasUp = true;
-                    this.elementCount_++;
-                    valueConnections.push(['up', clauseBlock.valueConnection_]);
-                    break;
-                case 'color':
-                    this.hasColor = true;
-                    this.elementCount_++;
-                    valueConnections.push(['color', clauseBlock.valueConnection_]);
-                    break;
-                case 'texture':
-                    this.hasTexture = true;
-                    this.elementCount_++;
-                    valueConnections.push(['texture', clauseBlock.valueConnection_]);
-                    break;
-                case 'opacity':
-                    this.hasOpacity = true;
-                    this.elementCount_++;
-                    valueConnections.push(['opacity', clauseBlock.valueConnection_]);
-                    break;
-                case 'make_trail':
-                    this.hasTrail = true;
-                    this.elementCount_++;
-                    valueConnections.push(['make_trail', clauseBlock.valueConnection_]);
-                    break;
-
-                default:
-                    throw "Unknown block type.";
-
-            }
-            clauseBlock = clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
-            i++;
-            
-        }
-        
-        this.updateShape_();
-
-        // Was unsure of this sections purpose or whether it will be implemented
-        // later on so I copied it over
-        /*for(var i = 0; i <= this.elementCount_ - 1; i++){
-            Blockly.Mutator.reconnect(valueConnections[i][1], 
-                                      this, 
-                                      valueConnections[i][0]);
-        }*/
-
-    },
-
-    saveConnections: function(containerBlock){
-        var clauseBlock = containerBlock.nextConnection.targetBlock();
-        
-        while(clauseBlock){
-           
-            switch(clauseBlock.type){
-                case 'pos':
-                    var inputPos = this.getInput('POS');
-                    clauseBlock.valueConnection_ = inputPos && inputPos.connection.targetConnection;
-                    break;
-                case 'axis':
-                    var inputAxis = this.getInput('AXIS');
-                    clauseBlock.valueConnection_ = inputAxis && inputAxis.connection.targetConnection;
-                    break;
-                case 'length':
-                    var inputLength = this.getInput('LENGTH');
-                    clauseBlock.valueConnection_ = inputLength && inputLength.connection.targetConnection;
-                    break;
-                case 'shaftwidth':
-                    var inputShaftWidth = this.getInput('SHAFTWIDTH');
-                    clauseBlock.valueConnection_ = inputShaftWidth && inputShaftWidth.connection.targetConnection;
-                    break;
-                case 'headwidth':
-                    var inputHeadWidth = this.getInput('HEADWIDTH');
-                    clauseBlock.valueConnection_ = inputHeadWidth && inputHeadWidth.connection.targetConnection;
-                    break;
-                case 'headlength':
-                    var inputHeadLength = this.getInput('HEADLENGTH');
-                    clauseBlock.valueConnection_ = inputHeadLength && inputHeadLength.connection.targetConnection;
-                    break;
-                case 'up':
-                    var inputUp = this.getInput('UP');
-                    clauseBlock.valueConnection_ = inputUp && inputUp.connection.targetConnection;
-                    break;
-                case 'color':
-                    var inputColor = this.getInput('COLOR');
-                    clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
-                    break;
-                case 'texture':
-                    var inputTexture = this.getInput('TEXTURE');
-                    clauseBlock.valueConnection_ = inputTexture && inputTexture.connection.targetConnection;
-                    break;
-                case 'opacity':
-                    var inputOpacity = this.getInput('OPACITY');
-                    clauseBlock.valueConnection_ = inputOpacity && inputOpacity.connection.targetConnection;
-                    break;
-                case 'make_trail':
-                    var inputTrail = this.getInput('TRAIL');
-                    clauseBlock.valueConnection_ = inputTrail && inputTrail.connection.targetConnection;
-                    break;
-
-                default:
-                    throw 'Unknown block type.';
-
-            }
-            clauseBlock = clauseBlock.nextConnection &&
-                clauseBlock.nextConnection.targetBlock(); 
-        }
-
-        
-
-    },
-
-    updateShape_: function(){
-        
-        if(this.getInput('POS')){
-            this.removeInput('POS');
-        }
-        if(this.getInput('AXIS')){
-            this.removeInput('AXIS');
-        }
-        if(this.getInput('LENGTH')){
-            this.removeInput('LENGTH');
-        }
-        if(this.getInput('SHAFTWIDTH')){
-            this.removeInput('SHAFTWIDTH');
-        }
-        if(this.getInput('HEADWIDTH')){
-            this.removeInput('HEADWIDTH');
-        }
-        if(this.getInput('HEADLENGTH')){
-            this.removeInput('HEADLENGTH');
-        }
-        if(this.getInput('UP')){
-            this.removeInput('UP');
-        }
-        if(this.getInput('COLOR')){
-            this.removeInput('COLOR');
-        }
-        if(this.getInput('TEXTURE')){
-            this.removeInput('TEXTURE');
-        }
-        if(this.getInput('OPACITY')){
-            this.removeInput('OPACITY');
-        }
-        if(this.getInput('TRAIL')){
-            this.removeInput('TRAIL');
-            this.removeInput('RETAIN_INPUT');
-        }
-
-        if(this.hasPos){
-            this.appendValueInput("POS")
-                .setCheck("Vector")
-                .appendField("pos");
-        }
-
-        if(this.hasAxis){
-            this.appendValueInput("AXIS")
-                .setCheck("Vector")
-                .appendField("axis");
-        }
-
-        if(this.hasLength){
-            this.appendValueInput("LENGTH")
-                .setCheck("Number")
-                .appendField("length");
-        }
-
-        if(this.hasShaftWidth){
-            this.appendValueInput("SHAFTWIDTH")
-                .setCheck("Number")
-                .appendField("shaft width");
-        }
-
-        if(this.hasHeadWidth){
-            this.appendValueInput("HEADWIDTH")
-                .setCheck("Number")
-                .appendField("head width");
-        }
-
-        if(this.hasHeadLength){
-            this.appendValueInput("HEADLENGTH")
-                .setCheck("Number")
-                .appendField("head length");
-        }
-
-        if(this.hasUp){
-            this.appendValueInput("UP")
-                .setCheck("Vector")
-                .appendField("up");
-        }
-
-        if(this.hasColor){
-            this.appendValueInput("COLOR")
-                .setCheck(["Vector", "Colour"])
-                .appendField("color");
-        }
-
-        if(this.hasTexture){
-            this.appendValueInput("TEXTURE")
-                .setCheck("Texture")
-                .appendField("texture");
-        }
-
-        if(this.hasOpacity){
-            this.appendValueInput("OPACITY")
-                .setCheck("Number")
-                .appendField("opacity");
-        }
-        
-        if(this.hasTrail){
-            this.appendValueInput("TRAIL")
-                .setCheck("Boolean")
-                .appendField("make trail");
-            this.appendDummyInput("RETAIN_INPUT")
-                .appendField("retain")
-                .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
-        }
+    if(!this.elementCount_){
+        return null;
     }
-};
 
-Blockly.Blocks['vpython_cylinder'] = {
-  init: function(){
-    this.appendDummyInput()
-        .appendField("cylinder");
-    this.setInputsInline(false);
-    this.setOutput(true, 'Cylinder');
-    this.setColour(Blockly.Blocks.shapes.HUE);
-    this.setTooltip('');
-    this.itemCount_ = 0;
-    this.setHelpUrl('http://www.example.com/');
-    this.setMutator(new Blockly.Mutator(['pos',
-                                         'axis',
-                                         'radius',
-                                         'length',
-                                         'size',
-                                         'up',
-                                         'color',
-                                         'texture',
-                                         'opacity',
-                                         'make_trail']));
-    this.hasPos = false;
-    this.hasAxis = false;
-    this.hasRadius = false;
-    this.hasLength = false;
-    this.hasSize = false;
-    this.hasUp = false;
-    this.hasColor = false;
-    this.hasTexture = false;
-    this.hasOpacity = false;
-    this.hasTrail = false;
-    this.elementCount_ = 0;
-    },
-
-    // xml values for names must be lowercased (for some reason)
-    // do not camel case when setting or reading values from
-    // xml element or writing to container
-
-    mutationToDom: function(){
-        if(!this.elementCount_){
-            return null;
-        }
-        var container = document.createElement('mutation');
-
-        if(this.hasPos){
-            container.setAttribute('pos', 1);
-        }
-        if(this.hasAxis){
-            container.setAttribute('axis', 1);
-        }
-        if(this.hasRadius){
-            container.setAttribute('radius', 1);
-        }
-        if(this.hasLength){
-            container.setAttribute('length', 1);
-        }
-        if(this.hasSize){
-            container.setAttribute('size', 1);
-        }
-        if(this.hasUp){
-            container.setAttribute('up', 1);
-        }
-        if(this.hasColor){
-            container.setAttribute('color', 1);
-        }
-        if(this.hasTexture){
-            container.setAttribute('texture', 1);
-        }
-        if(this.hasOpacity){
-            container.setAttribute('opacity', 1);
-        }
-        if(this.hasTrail){
-            container.setAttribute('make_trail', 1);
-        }
-        container.setAttribute('element_count', this.elementCount_)
-        return container;
-    },
-
-    // xml values for names must be lowercased (for some reason)
-    // do not camel case when setting or reading values from
-    // xml element or writing to container
-
-    domToMutation: function(xmlElement){
-
-        this.hasPos = parseInt(xmlElement.getAttribute('pos'), 10) || 0;
-        this.hasAxis = parseInt(xmlElement.getAttribute('axis'), 10) || 0;
-        this.hasRadius = parseInt(xmlElement.getAttribute('radius'), 10) || 0;
-        this.hasLengths = parseInt(xmlElement.getAttribute('length'), 10) || 0;
-        this.hasSize = parseInt(xmlElement.getAttribute('size'), 10) || 0;
-        this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
-        this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
-        this.hasTexture = parseInt(xmlElement.getAttribute('texture'), 10) || 0;
-        this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
-        this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
-        this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
-        this.updateShape_();
-
-    },
-    decompose: function(workspace){
-        var containerBlock = workspace.newBlock('vpython_create_cylinder');
-        containerBlock.initSvg();
-        var connection = containerBlock.nextConnection;
-
-        if(this.hasPos){
-            
-            var posBlock = workspace.newBlock('pos');
-            posBlock.initSvg();
-            connection.connect(posBlock.previousConnection);
-            connection = posBlock.nextConnection;
-        }
-
-        if(this.hasAxis){
-            var axisBlock = workspace.newBlock('axis')
-            axisBlock.initSvg();
-            connection.connect(axisBlock.previousConnection);
-            connection = axisBlock.nextConnection;
-
-        }
-
-        if(this.hasRadius){
-            var radiusBlock = workspace.newBlock('radius');
-            radiusBlock.initSvg();
-            connection.connect(radiusBlock.previousConnection);
-            connection = radiusBlock.nextConnection;
-        }
-
-        if(this.hasLength){
-            var lengthBlock = workspace.newBlock('length');
-            lengthBlock.initSvg();
-            connection.connect(lengthBlock.previousConnection);
-            connection = lengthBlock.nextConnection;
-        }
-
-        if(this.hasSize){
-            var sizeBlock = workspace.newBlock('size');
-            sizeBlock.initSvg();
-            connection.connect(sizeBlock.previousConnection);
-            connection = sizeBlock.nextConnection;
-        }
-
-        if(this.hasUp){
-            var upBlock = workspace.newBlock('up');
-            upBlock.initSvg();
-            connection.connect(upBlock.previousConnection);
-            connection = upBlock.nextConnection;
-        }
-
-        if(this.hasColor){
-            var colorBlock = workspace.newBlock('color');
-            colorBlock.initSvg();
-            connection.connect(colorBlock.previousConnection);
-            connection = colorBlock.nextConnection;
-        }
-
-        if(this.hasTexture){
-            var textureBlock = workspace.newBlock('texture');
-            textureBlock.initSvg();
-            connection.connect(textureBlock.previousConnection);
-            connection = textureBlock.nextConnection;
-        }
-
-        if(this.hasOpacity){
-            var opacityBlock = workspace.newBlock('opacity');
-            opacityBlock.initSvg();
-            connection.connect(opacityBlock.previousConnection);
-            connection = opacityBlock.nextConnection;
-        }
-
-        if(this.hasTrail){
-            var trailBlock = workspace.newBlock('make_trail');
-            trailBlock.initSvg();
-            connection.connect(trailBlock.previousConnection);
-            connection = trailBlock.nextConnection;
-        }
-
-        return containerBlock;
-    },
-
-    compose: function(containerBlock){
-
-        var clauseBlock = containerBlock.nextConnection.targetBlock();
-        
-        this.hasPos = false;
-        this.hasAxis = false;
-        this.hasRadius = false;
-        this.hasLength = false;
-        this.hasSize = false;
-        this.hasUp = false;
-        this.hasColor = false;
-        this.hasTexture = false;
-        this.hasOpacity = false;
-        this.hasTrail = false;
-        this.elementCount_ = 0;
-        //alert("compose");
-        var valueConnections = [];
-        var i = 0;
-        while(clauseBlock){
-
-
-            switch(clauseBlock.type){
-
-                case 'pos':
-                    this.hasPos = true;
-                    this.elementCount_++;
-                    valueConnections.push(['pos', clauseBlock.valueConnection_]);
-                    break;
-                case 'axis':
-                    this.hasAxis = true;
-                    this.elementCount_++;
-                    valueConnections.push(['axis', clauseBlock.valueConnections_]);
-                    break;
-                case 'radius':
-                    this.hasRadius = true;
-                    this.elementCount_++;
-                    valueConnections.push(['radius', clauseBlock.valueConnection_]);
-                    break; 
-                case 'length':
-                    this.hasLength = true;
-                    this.elementCount_++;
-                    valueConnections.push(['length', clauseBlock.valueConnection_]);
-                    break; 
-                case 'size':
-                    this.hasSize = true;
-                    this.elementCount_++;
-                    valueConnections.push(['size', clauseBlock.valueConnection_]);
-                    break; 
-                case 'up':
-                    this.hasUp = true;
-                    this.elementCount_++;
-                    valueConnections.push(['up', clauseBlock.valueConnection_]);
-                    break;
-                case 'color':
-                    this.hasColor = true;
-                    this.elementCount_++;
-                    valueConnections.push(['color', clauseBlock.valueConnection_]);
-                    break;
-                case 'texture':
-                    this.hasTexture = true;
-                    this.elementCount_++;
-                    valueConnections.push(['texture', clauseBlock.valueConnection_]);
-                    break;
-                case 'opacity':
-                    this.hasOpacity = true;
-                    this.elementCount_++;
-                    valueConnections.push(['opacity', clauseBlock.valueConnection_]);
-                    break;
-                case 'make_trail':
-                    this.hasTrail = true;
-                    this.elementCount_++;
-                    valueConnections.push(['make_trail', clauseBlock.valueConnection_]);
-                    break;
-
-                default:
-                    throw "Unknown block type.";
-
-            }
-            clauseBlock = clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
-            i++;
-            
-        }
-        
-        this.updateShape_();
-
-        // Was unsure of this sections purpose or whether it will be implemented
-        // later on so I copied it over
-        /*for(var i = 0; i <= this.elementCount_ - 1; i++){
-            Blockly.Mutator.reconnect(valueConnections[i][1], 
-                                      this, 
-                                      valueConnections[i][0]);
-        }*/
-
-    },
-
-    saveConnections: function(containerBlock){
-        var clauseBlock = containerBlock.nextConnection.targetBlock();
-        
-        while(clauseBlock){
-           
-            switch(clauseBlock.type){
-                case 'pos':
-                    var inputPos = this.getInput('POS');
-                    clauseBlock.valueConnection_ = inputPos && inputPos.connection.targetConnection;
-                    break;
-                case 'axis':
-                    var inputAxis = this.getInput('AXIS');
-                    clauseBlock.valueConnection_ = inputAxis && inputAxis.connection.targetConnection;
-                    break;
-                case 'radius':
-                    var inputRadius = this.getInput('RADIUS');
-                    clauseBlock.valueConnection_ = inputRadius && inputRadius.connection.targetConnection;
-                    break;
-                case 'length':
-                    var inputLength = this.getInput('LENGTH');
-                    clauseBlock.valueConnection_ = inputLength && inputLength.connection.targetConnection;
-                    break;
-                case 'size':
-                    var inputSize = this.getInput('SIZE');
-                    clauseBlock.valueConnection_ = inputSize && inputSize.connection.targetConnection;
-                    break;
-                case 'up':
-                    var inputUp = this.getInput('UP');
-                    clauseBlock.valueConnection_ = inputUp && inputUp.connection.targetConnection;
-                    break;
-                case 'color':
-                    var inputColor = this.getInput('COLOR');
-                    clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
-                    break;
-                case 'texture':
-                    var inputTexture = this.getInput('TEXTURE');
-                    clauseBlock.valueConnection_ = inputTexture && inputTexture.connection.targetConnection;
-                    break;
-                case 'opacity':
-                    var inputOpacity = this.getInput('OPACITY');
-                    clauseBlock.valueConnection_ = inputOpacity && inputOpacity.connection.targetConnection;
-                    break;
-                case 'make_trail':
-                    var inputTrail = this.getInput('TRAIL');
-                    clauseBlock.valueConnection_ = inputTrail && inputTrail.connection.targetConnection;
-                    break;
-
-                default:
-                    throw 'Unknown block type.';
-
-            }
-            clauseBlock = clauseBlock.nextConnection &&
-                clauseBlock.nextConnection.targetBlock(); 
-        }
-
-        
-
-    },
-
-    updateShape_: function(){
-        
-        if(this.getInput('POS')){
-            this.removeInput('POS');
-        }
-        if(this.getInput('AXIS')){
-            this.removeInput('AXIS');
-        }
-        if(this.getInput('RADIUS')){
-            this.removeInput('RADIUS');
-        }
-        if(this.getInput('LENGTH')){
-            this.removeInput('LENGTH');
-        }
-        if(this.getInput('SIZE')){
-            this.removeInput('SIZE');
-        }
-        if(this.getInput('UP')){
-            this.removeInput('UP');
-        }
-        if(this.getInput('COLOR')){
-            this.removeInput('COLOR');
-        }
-        if(this.getInput('TEXTURE')){
-            this.removeInput('TEXTURE');
-        }
-        if(this.getInput('OPACITY')){
-            this.removeInput('OPACITY');
-        }
-        if(this.getInput('TRAIL')){
-            this.removeInput('TRAIL');
-            this.removeInput('RETAIN_INPUT');
-        }
-
-        if(this.hasPos){
-            this.appendValueInput("POS")
-                .setCheck("Vector")
-                .appendField("pos");
-        }
-
-        if(this.hasAxis){
-            this.appendValueInput("AXIS")
-                .setCheck("Vector")
-                .appendField("axis");
-        }
-
-        if(this.hasRadius){
-            this.appendValueInput("RADIUS")
-                .setCheck("Number")
-                .appendField("radius");
-        }
-        if(this.hasLength){
-            this.appendValueInput("LENGTH")
-                .setCheck("Number")
-                .appendField("length");
-        }
-
-        if(this.hasSize){
-            this.appendValueInput("SIZE")
-                .setCheck("Vector")
-                .appendField("size");
-        }
-
-        if(this.hasUp){
-            this.appendValueInput("UP")
-                .setCheck("Vector")
-                .appendField("up");
-        }
-
-        if(this.hasColor){
-            this.appendValueInput("COLOR")
-                .setCheck(["Vector", "Colour"])
-                .appendField("color");
-        }
-
-        if(this.hasTexture){
-            this.appendValueInput("TEXTURE")
-                .setCheck("Texture")
-                .appendField("texture");
-        }
-
-        if(this.hasOpacity){
-            this.appendValueInput("OPACITY")
-                .setCheck("Number")
-                .appendField("opacity");
-        }
-        
-        if(this.hasTrail){
-            this.appendValueInput("TRAIL")
-                .setCheck("Boolean")
-                .appendField("make trail");
-            this.appendDummyInput("RETAIN_INPUT")
-                .appendField("retain")
-                .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
-        }
-    }
-};
-
-
-Blockly.Blocks['vpython_ring'] = {
-  init: function(){
-    this.appendDummyInput()
-        .appendField("ring");
-    this.setInputsInline(false);
-    this.setOutput(true, 'Ring');
-    this.setColour(Blockly.Blocks.shapes.HUE);
-    this.setTooltip('');
-    this.itemCount_ = 0;
-    this.setHelpUrl('http://www.example.com/');
-    this.setMutator(new Blockly.Mutator(['pos',
-                                         'axis',
-                                         'radius',
-                                         'length',
-                                         'thickness',
-                                         'size',
-                                         'up',
-                                         'color',
-                                         'texture',
-                                         'opacity',
-                                         'make_trail']));
-    this.hasPos = false;
-    this.hasAxis = false;
-    this.hasRadius = false;
-    this.hasLength = false;
-    this.hasThickness = false;
-    this.hasSize = false;
-    this.hasUp = false;
-    this.hasColor = false;
-    this.hasTexture = false;
-    this.hasOpacity = false;
-    this.hasTrail = false;
-    this.elementCount_ = 0;
-    },
-
-    // xml values for names must be lowercased (for some reason)
-    // do not camel case when setting or reading values from
-    // xml element or writing to container
-
-    mutationToDom: function(){
-        if(!this.elementCount_){
-            return null;
-        }
-        var container = document.createElement('mutation');
-
-        if(this.hasPos){
-            container.setAttribute('pos', 1);
-        }
-        if(this.hasAxis){
-            container.setAttribute('axis', 1);
-        }
-        if(this.hasRadius){
-            container.setAttribute('radius', 1);
-        }
-        if(this.hasLength){
-            container.setAttribute('length', 1);
-        }
-        if(this.hasThickness){
-            container.setAttribute('thickness', 1);
-        }
-        if(this.hasSize){
-            container.setAttribute('size', 1);
-        }
-        if(this.hasUp){
-            container.setAttribute('up', 1);
-        }
-        if(this.hasColor){
-            container.setAttribute('color', 1);
-        }
-        if(this.hasTexture){
-            container.setAttribute('texture', 1);
-        }
-        if(this.hasOpacity){
-            container.setAttribute('opacity', 1);
-        }
-        if(this.hasTrail){
-            container.setAttribute('make_trail', 1);
-        }
-        container.setAttribute('element_count', this.elementCount_)
-        return container;
-    },
-
-    // xml values for names must be lowercased (for some reason)
-    // do not camel case when setting or reading values from
-    // xml element or writing to container
-
-    domToMutation: function(xmlElement){
-
-        this.hasPos = parseInt(xmlElement.getAttribute('pos'), 10) || 0;
-        this.hasAxis = parseInt(xmlElement.getAttribute('axis'), 10) || 0;
-        this.hasRadius = parseInt(xmlElement.getAttribute('radius'), 10) || 0;
-        this.hasLengths = parseInt(xmlElement.getAttribute('length'), 10) || 0;
-        this.hasThickness = parseInt(xmlElement.getAttribute('thickness'), 10) || 0;
-        this.hasSize = parseInt(xmlElement.getAttribute('size'), 10) || 0;
-        this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
-        this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
-        this.hasTexture = parseInt(xmlElement.getAttribute('texture'), 10) || 0;
-        this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
-        this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
-        this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
-        this.updateShape_();
-
-    },
-    decompose: function(workspace){
-        var containerBlock = workspace.newBlock('vpython_create_ring');
-        containerBlock.initSvg();
-        var connection = containerBlock.nextConnection;
-
-        if(this.hasPos){
-            
-            var posBlock = workspace.newBlock('pos');
-            posBlock.initSvg();
-            connection.connect(posBlock.previousConnection);
-            connection = posBlock.nextConnection;
-        }
-
-        if(this.hasAxis){
-            var axisBlock = workspace.newBlock('axis')
-            axisBlock.initSvg();
-            connection.connect(axisBlock.previousConnection);
-            connection = axisBlock.nextConnection;
-
-        }
-
-        if(this.hasRadius){
-            var radiusBlock = workspace.newBlock('radius');
-            radiusBlock.initSvg();
-            connection.connect(radiusBlock.previousConnection);
-            connection = radiusBlock.nextConnection;
-        }
-
-        if(this.hasLength){
-            var lengthBlock = workspace.newBlock('length');
-            lengthBlock.initSvg();
-            connection.connect(lengthBlock.previousConnection);
-            connection = lengthBlock.nextConnection;
-        }
-
-        if(this.hasThickness){
-            var thicknessBlock = workspace.newBlock('thickness');
-            thicknessBlock.initSvg();
-            connection.connect(thicknessBlock.previousConnection);
-            connection = thicknessBlock.nextConnection;
-        }
-
-        if(this.hasSize){
-            var sizeBlock = workspace.newBlock('size');
-            sizeBlock.initSvg();
-            connection.connect(sizeBlock.previousConnection);
-            connection = sizeBlock.nextConnection;
-        }
-
-        if(this.hasUp){
-            var upBlock = workspace.newBlock('up');
-            upBlock.initSvg();
-            connection.connect(upBlock.previousConnection);
-            connection = upBlock.nextConnection;
-        }
-
-        if(this.hasColor){
-            var colorBlock = workspace.newBlock('color');
-            colorBlock.initSvg();
-            connection.connect(colorBlock.previousConnection);
-            connection = colorBlock.nextConnection;
-        }
-
-        if(this.hasTexture){
-            var textureBlock = workspace.newBlock('texture');
-            textureBlock.initSvg();
-            connection.connect(textureBlock.previousConnection);
-            connection = textureBlock.nextConnection;
-        }
-
-        if(this.hasOpacity){
-            var opacityBlock = workspace.newBlock('opacity');
-            opacityBlock.initSvg();
-            connection.connect(opacityBlock.previousConnection);
-            connection = opacityBlock.nextConnection;
-        }
-
-        if(this.hasTrail){
-            var trailBlock = workspace.newBlock('make_trail');
-            trailBlock.initSvg();
-            connection.connect(trailBlock.previousConnection);
-            connection = trailBlock.nextConnection;
-        }
-
-        return containerBlock;
-    },
-
-    compose: function(containerBlock){
-
-        var clauseBlock = containerBlock.nextConnection.targetBlock();
-        
-        this.hasPos = false;
-        this.hasAxis = false;
-        this.hasRadius = false;
-        this.hasLength = false;
-        this.hasThickness = false;
-        this.hasSize = false;
-        this.hasUp = false;
-        this.hasColor = false;
-        this.hasTexture = false;
-        this.hasOpacity = false;
-        this.hasTrail = false;
-        this.elementCount_ = 0;
-        //alert("compose");
-        var valueConnections = [];
-        var i = 0;
-        while(clauseBlock){
-
-
-            switch(clauseBlock.type){
-
-                case 'pos':
-                    this.hasPos = true;
-                    this.elementCount_++;
-                    valueConnections.push(['pos', clauseBlock.valueConnection_]);
-                    break;
-                case 'axis':
-                    this.hasAxis = true;
-                    this.elementCount_++;
-                    valueConnections.push(['axis', clauseBlock.valueConnections_]);
-                    break;
-                case 'radius':
-                    this.hasRadius = true;
-                    this.elementCount_++;
-                    valueConnections.push(['radius', clauseBlock.valueConnection_]);
-                    break; 
-                case 'length':
-                    this.hasLength = true;
-                    this.elementCount_++;
-                    valueConnections.push(['length', clauseBlock.valueConnection_]);
-                    break; 
-                case 'thickness':
-                    this.hasThickness = true;
-                    this.elementCount_++;
-                    valueConnections.push(['thickness', clauseBlock.valueConnection_]);
-                    break; 
-                case 'size':
-                    this.hasSize = true;
-                    this.elementCount_++;
-                    valueConnections.push(['size', clauseBlock.valueConnection_]);
-                    break; 
-                case 'up':
-                    this.hasUp = true;
-                    this.elementCount_++;
-                    valueConnections.push(['up', clauseBlock.valueConnection_]);
-                    break;
-                case 'color':
-                    this.hasColor = true;
-                    this.elementCount_++;
-                    valueConnections.push(['color', clauseBlock.valueConnection_]);
-                    break;
-                case 'texture':
-                    this.hasTexture = true;
-                    this.elementCount_++;
-                    valueConnections.push(['texture', clauseBlock.valueConnection_]);
-                    break;
-                case 'opacity':
-                    this.hasOpacity = true;
-                    this.elementCount_++;
-                    valueConnections.push(['opacity', clauseBlock.valueConnection_]);
-                    break;
-                case 'make_trail':
-                    this.hasTrail = true;
-                    this.elementCount_++;
-                    valueConnections.push(['make_trail', clauseBlock.valueConnection_]);
-                    break;
-
-                default:
-                    throw "Unknown block type.";
-
-            }
-            clauseBlock = clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
-            i++;
-            
-        }
-        
-        this.updateShape_();
-
-        // Was unsure of this sections purpose or whether it will be implemented
-        // later on so I copied it over
-        /*for(var i = 0; i <= this.elementCount_ - 1; i++){
-            Blockly.Mutator.reconnect(valueConnections[i][1], 
-                                      this, 
-                                      valueConnections[i][0]);
-        }*/
-
-    },
-
-    saveConnections: function(containerBlock){
-        var clauseBlock = containerBlock.nextConnection.targetBlock();
-        
-        while(clauseBlock){
-           
-            switch(clauseBlock.type){
-                case 'pos':
-                    var inputPos = this.getInput('POS');
-                    clauseBlock.valueConnection_ = inputPos && inputPos.connection.targetConnection;
-                    break;
-                case 'axis':
-                    var inputAxis = this.getInput('AXIS');
-                    clauseBlock.valueConnection_ = inputAxis && inputAxis.connection.targetConnection;
-                    break;
-                case 'radius':
-                    var inputRadius = this.getInput('RADIUS');
-                    clauseBlock.valueConnection_ = inputRadius && inputRadius.connection.targetConnection;
-                    break;
-                case 'length':
-                    var inputLength = this.getInput('LENGTH');
-                    clauseBlock.valueConnection_ = inputLength && inputLength.connection.targetConnection;
-                    break;
-                case 'thickness':
-                    var inputThickness = this.getInput('THICKNESS');
-                    clauseBlock.valueConnection_ = inputThickness && inputThickness.connection.targetConnection;
-                    break;
-                case 'size':
-                    var inputSize = this.getInput('SIZE');
-                    clauseBlock.valueConnection_ = inputSize && inputSize.connection.targetConnection;
-                    break;
-                case 'up':
-                    var inputUp = this.getInput('UP');
-                    clauseBlock.valueConnection_ = inputUp && inputUp.connection.targetConnection;
-                    break;
-                case 'color':
-                    var inputColor = this.getInput('COLOR');
-                    clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
-                    break;
-                case 'texture':
-                    var inputTexture = this.getInput('TEXTURE');
-                    clauseBlock.valueConnection_ = inputTexture && inputTexture.connection.targetConnection;
-                    break;
-                case 'opacity':
-                    var inputOpacity = this.getInput('OPACITY');
-                    clauseBlock.valueConnection_ = inputOpacity && inputOpacity.connection.targetConnection;
-                    break;
-                case 'make_trail':
-                    var inputTrail = this.getInput('TRAIL');
-                    clauseBlock.valueConnection_ = inputTrail && inputTrail.connection.targetConnection;
-                    break;
-
-                default:
-                    throw 'Unknown block type.';
-
-            }
-            clauseBlock = clauseBlock.nextConnection &&
-                clauseBlock.nextConnection.targetBlock(); 
-        }
-
-        
-
-    },
-
-    updateShape_: function(){
-        
-        if(this.getInput('POS')){
-            this.removeInput('POS');
-        }
-        if(this.getInput('AXIS')){
-            this.removeInput('AXIS');
-        }
-        if(this.getInput('RADIUS')){
-            this.removeInput('RADIUS');
-        }
-        if(this.getInput('LENGTH')){
-            this.removeInput('LENGTH');
-        }
-        if(this.getInput('THICKNESS')){
-            this.removeInput('THICKNESS');
-        }
-        if(this.getInput('SIZE')){
-            this.removeInput('SIZE');
-        }
-        if(this.getInput('UP')){
-            this.removeInput('UP');
-        }
-        if(this.getInput('COLOR')){
-            this.removeInput('COLOR');
-        }
-        if(this.getInput('TEXTURE')){
-            this.removeInput('TEXTURE');
-        }
-        if(this.getInput('OPACITY')){
-            this.removeInput('OPACITY');
-        }
-        if(this.getInput('TRAIL')){
-            this.removeInput('TRAIL');
-            this.removeInput('RETAIN_INPUT');
-        }
-
-        if(this.hasPos){
-            this.appendValueInput("POS")
-                .setCheck("Vector")
-                .appendField("pos");
-        }
-
-        if(this.hasAxis){
-            this.appendValueInput("AXIS")
-                .setCheck("Vector")
-                .appendField("axis");
-        }
-
-        if(this.hasRadius){
-            this.appendValueInput("RADIUS")
-                .setCheck("Number")
-                .appendField("radius");
-        }
-
-        if(this.hasLength){
-            this.appendValueInput("LENGTH")
-                .setCheck("Number")
-                .appendField("length");
-        }
-
-        if(this.hasThickness){
-            this.appendValueInput("THICKNESS")
-                .setCheck("Number")
-                .appendField("thickness");
-        }
-
-        if(this.hasSize){
-            this.appendValueInput("SIZE")
-                .setCheck("Vector")
-                .appendField("size");
-        }
-
-        if(this.hasUp){
-            this.appendValueInput("UP")
-                .setCheck("Vector")
-                .appendField("up");
-        }
-
-        if(this.hasColor){
-            this.appendValueInput("COLOR")
-                .setCheck(["Vector", "Colour"])
-                .appendField("color");
-        }
-
-        if(this.hasTexture){
-            this.appendValueInput("TEXTURE")
-                .setCheck("Texture")
-                .appendField("texture");
-        }
-
-        if(this.hasOpacity){
-            this.appendValueInput("OPACITY")
-                .setCheck("Number")
-                .appendField("opacity");
-        }
-        
-        if(this.hasTrail){
-            this.appendValueInput("TRAIL")
-                .setCheck("Boolean")
-                .appendField("make trail");
-            this.appendDummyInput("RETAIN_INPUT")
-                .appendField("retain")
-                .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
-        }
-    }
-};
-
-
-Blockly.Blocks['vpython_helix'] = {
-  init: function(){
-    this.appendDummyInput()
-        .appendField("helix");
-    this.setInputsInline(false);
-    this.setOutput(true, 'Helix');
-    this.setColour(Blockly.Blocks.shapes.HUE);
-    this.setTooltip('');
-    this.itemCount_ = 0;
-    this.setHelpUrl('http://www.example.com/');
-    this.setMutator(new Blockly.Mutator(['pos',
-                                         'axis',
-                                         'radius',
-                                         'length',
-                                         'coils',
-                                         'thickness',
-                                         'size',
-                                         'up',
-                                         'color',
-                                         'texture',
-                                         'opacity',
-                                         'make_trail']));
-    this.hasPos = false;
-    this.hasAxis = false;
-    this.hasRadius = false;
-    this.hasLength = false;
-    this.hasCoils = false;
-    this.hasThickness = false;
-    this.hasSize = false;
-    this.hasUp = false;
-    this.hasColor = false;
-    this.hasTexture = false;
-    this.hasOpacity = false;
-    this.hasTrail = false;
-    this.elementCount_ = 0;
-    },
-
-    // xml values for names must be lowercased (for some reason)
-    // do not camel case when setting or reading values from
-    // xml element or writing to container
-
-    mutationToDom: function(){
-        if(!this.elementCount_){
-            return null;
-        }
-        var container = document.createElement('mutation');
-
-        if(this.hasPos){
-            container.setAttribute('pos', 1);
-        }
-        if(this.hasAxis){
-            container.setAttribute('axis', 1);
-        }
-        if(this.hasRadius){
-            container.setAttribute('radius', 1);
-        }
-        if(this.hasLength){
-            container.setAttribute('length', 1);
-        }
-        if(this.hasCoils){
-            container.setAttribute('coils', 1);
-        }
-        if(this.hasThickness){
-            container.setAttribute('thickness', 1);
-        }
-        if(this.hasSize){
-            container.setAttribute('size', 1);
-        }
-        if(this.hasUp){
-            container.setAttribute('up', 1);
-        }
-        if(this.hasColor){
-            container.setAttribute('color', 1);
-        }
-        if(this.hasTexture){
-            container.setAttribute('texture', 1);
-        }
-        if(this.hasOpacity){
-            container.setAttribute('opacity', 1);
-        }
-        if(this.hasTrail){
-            container.setAttribute('make_trail', 1);
-        }
-        container.setAttribute('element_count', this.elementCount_)
-        return container;
-    },
-
-    // xml values for names must be lowercased (for some reason)
-    // do not camel case when setting or reading values from
-    // xml element or writing to container
-
-    domToMutation: function(xmlElement){
-
-        this.hasPos = parseInt(xmlElement.getAttribute('pos'), 10) || 0;
-        this.hasAxis = parseInt(xmlElement.getAttribute('axis'), 10) || 0;
-        this.hasRadius = parseInt(xmlElement.getAttribute('radius'), 10) || 0;
-        this.hasLengths = parseInt(xmlElement.getAttribute('length'), 10) || 0;
-        this.hasCoils = parseInt(xmlElement.getAttribute('coils'), 10) || 0;
-        this.hasThickness = parseInt(xmlElement.getAttribute('thickness'), 10) || 0;
-        this.hasSize = parseInt(xmlElement.getAttribute('size'), 10) || 0;
-        this.hasUp = parseInt(xmlElement.getAttribute('up'), 10) || 0;
-        this.hasColor = parseInt(xmlElement.getAttribute('color'), 10) || 0;
-        this.hasTexture = parseInt(xmlElement.getAttribute('texture'), 10) || 0;
-        this.hasOpacity = parseInt(xmlElement.getAttribute('opacity'), 10) || 0;
-        this.hasTrail = parseInt(xmlElement.getAttribute('make_trail'), 10) || 0;
-        this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
-        this.updateShape_();
-
-    },
-    decompose: function(workspace){
-        var containerBlock = workspace.newBlock('vpython_create_helix');
-        containerBlock.initSvg();
-        var connection = containerBlock.nextConnection;
-
-        if(this.hasPos){
-            
-            var posBlock = workspace.newBlock('pos');
-            posBlock.initSvg();
-            connection.connect(posBlock.previousConnection);
-            connection = posBlock.nextConnection;
-        }
-
-        if(this.hasAxis){
-            var axisBlock = workspace.newBlock('axis')
-            axisBlock.initSvg();
-            connection.connect(axisBlock.previousConnection);
-            connection = axisBlock.nextConnection;
-
-        }
-
-        if(this.hasRadius){
-            var radiusBlock = workspace.newBlock('radius');
-            radiusBlock.initSvg();
-            connection.connect(radiusBlock.previousConnection);
-            connection = radiusBlock.nextConnection;
-        }
-
-        if(this.hasLength){
-            var lengthBlock = workspace.newBlock('length');
-            lengthBlock.initSvg();
-            connection.connect(lengthBlock.previousConnection);
-            connection = lengthBlock.nextConnection;
-        }
-
-        if(this.hasCoils){
-            var coilBlock = workspace.newBlock('coils');
-            coilBlock.initSvg();
-            connection.connect(coilBlock.previousConnection);
-            connection = coilBlock.nextConnection;
-        }
-
-        if(this.hasThickness){
-            var thicknessBlock = workspace.newBlock('thickness');
-            thicknessBlock.initSvg();
-            connection.connect(thicknessBlock.previousConnection);
-            connection = thicknessBlock.nextConnection;
-        }
-
-        if(this.hasSize){
-            var sizeBlock = workspace.newBlock('size');
-            sizeBlock.initSvg();
-            connection.connect(sizeBlock.previousConnection);
-            connection = sizeBlock.nextConnection;
-        }
-
-        if(this.hasUp){
-            var upBlock = workspace.newBlock('up');
-            upBlock.initSvg();
-            connection.connect(upBlock.previousConnection);
-            connection = upBlock.nextConnection;
-        }
-
-        if(this.hasColor){
-            var colorBlock = workspace.newBlock('color');
-            colorBlock.initSvg();
-            connection.connect(colorBlock.previousConnection);
-            connection = colorBlock.nextConnection;
-        }
-
-        if(this.hasTexture){
-            var textureBlock = workspace.newBlock('texture');
-            textureBlock.initSvg();
-            connection.connect(textureBlock.previousConnection);
-            connection = textureBlock.nextConnection;
-        }
-
-        if(this.hasOpacity){
-            var opacityBlock = workspace.newBlock('opacity');
-            opacityBlock.initSvg();
-            connection.connect(opacityBlock.previousConnection);
-            connection = opacityBlock.nextConnection;
-        }
-
-        if(this.hasTrail){
-            var trailBlock = workspace.newBlock('make_trail');
-            trailBlock.initSvg();
-            connection.connect(trailBlock.previousConnection);
-            connection = trailBlock.nextConnection;
-        }
-
-        return containerBlock;
-    },
-
-    compose: function(containerBlock){
-
-        var clauseBlock = containerBlock.nextConnection.targetBlock();
-        
-        this.hasPos = false;
-        this.hasAxis = false;
-        this.hasRadius = false;
-        this.hasLength = false;
-        this.hasCoils = false;
-        this.hasThickness = false;
-        this.hasSize = false;
-        this.hasUp = false;
-        this.hasColor = false;
-        this.hasTexture = false;
-        this.hasOpacity = false;
-        this.hasTrail = false;
-        this.elementCount_ = 0;
-        //alert("compose");
-        var valueConnections = [];
-        var i = 0;
-        while(clauseBlock){
-
-
-            switch(clauseBlock.type){
-
-                case 'pos':
-                    this.hasPos = true;
-                    this.elementCount_++;
-                    valueConnections.push(['pos', clauseBlock.valueConnection_]);
-                    break;
-                case 'axis':
-                    this.hasAxis = true;
-                    this.elementCount_++;
-                    valueConnections.push(['axis', clauseBlock.valueConnections_]);
-                    break;
-                case 'radius':
-                    this.hasRadius = true;
-                    this.elementCount_++;
-                    valueConnections.push(['radius', clauseBlock.valueConnection_]);
-                    break; 
-                case 'length':
-                    this.hasLength = true;
-                    this.elementCount_++;
-                    valueConnections.push(['length', clauseBlock.valueConnection_]);
-                    break; 
-                case 'coils':
-                    this.hasCoils = true;
-                    this.elementCount_++;
-                    valueConnections.push(['coils', clauseBlock.valueConnection_]);
-                    break; 
-                case 'thickness':
-                    this.hasThickness = true;
-                    this.elementCount_++;
-                    valueConnections.push(['thickness', clauseBlock.valueConnection_]);
-                    break; 
-                case 'size':
-                    this.hasSize = true;
-                    this.elementCount_++;
-                    valueConnections.push(['size', clauseBlock.valueConnection_]);
-                    break; 
-                case 'up':
-                    this.hasUp = true;
-                    this.elementCount_++;
-                    valueConnections.push(['up', clauseBlock.valueConnection_]);
-                    break;
-                case 'color':
-                    this.hasColor = true;
-                    this.elementCount_++;
-                    valueConnections.push(['color', clauseBlock.valueConnection_]);
-                    break;
-                case 'texture':
-                    this.hasTexture = true;
-                    this.elementCount_++;
-                    valueConnections.push(['texture', clauseBlock.valueConnection_]);
-                    break;
-                case 'opacity':
-                    this.hasOpacity = true;
-                    this.elementCount_++;
-                    valueConnections.push(['opacity', clauseBlock.valueConnection_]);
-                    break;
-                case 'make_trail':
-                    this.hasTrail = true;
-                    this.elementCount_++;
-                    valueConnections.push(['make_trail', clauseBlock.valueConnection_]);
-                    break;
-
-                default:
-                    throw "Unknown block type.";
-
-            }
-            clauseBlock = clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
-            i++;
-            
-        }
-        
-        this.updateShape_();
-
-        // Was unsure of this sections purpose or whether it will be implemented
-        // later on so I copied it over
-        /*for(var i = 0; i <= this.elementCount_ - 1; i++){
-            Blockly.Mutator.reconnect(valueConnections[i][1], 
-                                      this, 
-                                      valueConnections[i][0]);
-        }*/
-
-    },
-
-    saveConnections: function(containerBlock){
-        var clauseBlock = containerBlock.nextConnection.targetBlock();
-        
-        while(clauseBlock){
-           
-            switch(clauseBlock.type){
-                case 'pos':
-                    var inputPos = this.getInput('POS');
-                    clauseBlock.valueConnection_ = inputPos && inputPos.connection.targetConnection;
-                    break;
-                case 'axis':
-                    var inputAxis = this.getInput('AXIS');
-                    clauseBlock.valueConnection_ = inputAxis && inputAxis.connection.targetConnection;
-                    break;
-                case 'radius':
-                    var inputRadius = this.getInput('RADIUS');
-                    clauseBlock.valueConnection_ = inputRadius && inputRadius.connection.targetConnection;
-                    break;
-                case 'length':
-                    var inputLength = this.getInput('LENGTH');
-                    clauseBlock.valueConnection_ = inputLength && inputLength.connection.targetConnection;
-                    break;
-                case 'coils':
-                    var inputCoils = this.getInput('COILS');
-                    clauseBlock.valueConnection_ = inputCoils && inputCoils.connection.targetConnection;
-                    break;
-                case 'thickness':
-                    var inputThickness = this.getInput('THICKNESS');
-                    clauseBlock.valueConnection_ = inputThickness && inputThickness.connection.targetConnection;
-                    break;
-                case 'size':
-                    var inputSize = this.getInput('SIZE');
-                    clauseBlock.valueConnection_ = inputSize && inputSize.connection.targetConnection;
-                    break;
-                case 'up':
-                    var inputUp = this.getInput('UP');
-                    clauseBlock.valueConnection_ = inputUp && inputUp.connection.targetConnection;
-                    break;
-                case 'color':
-                    var inputColor = this.getInput('COLOR');
-                    clauseBlock.valueConnection_ = inputColor && inputColor.connection.targetConnection;
-                    break;
-                case 'texture':
-                    var inputTexture = this.getInput('TEXTURE');
-                    clauseBlock.valueConnection_ = inputTexture && inputTexture.connection.targetConnection;
-                case 'opacity':
-                    var inputOpacity = this.getInput('OPACITY');
-                    clauseBlock.valueConnection_ = inputOpacity && inputOpacity.connection.targetConnection;
-                    break;
-                case 'make_trail':
-                    var inputTrail = this.getInput('TRAIL');
-                    clauseBlock.valueConnection_ = inputTrail && inputTrail.connection.targetConnection;
-                    break;
-
-                default:
-                    throw 'Unknown block type.';
-
-            }
-            clauseBlock = clauseBlock.nextConnection &&
-                clauseBlock.nextConnection.targetBlock(); 
-        }
-
-        
-
-    },
-
-    updateShape_: function(){
-        
-        if(this.getInput('POS')){
-            this.removeInput('POS');
-        }
-        if(this.getInput('AXIS')){
-            this.removeInput('AXIS');
-        }
-        if(this.getInput('RADIUS')){
-            this.removeInput('RADIUS');
-        }
-        if(this.getInput('LENGTH')){
-            this.removeInput('LENGTH');
-        }
-        if(this.getInput('COILS')){
-            this.removeInput('COILS');
-        }
-        if(this.getInput('THICKNESS')){
-            this.removeInput('THICKNESS');
-        }
-        if(this.getInput('SIZE')){
-            this.removeInput('SIZE');
-        }
-        if(this.getInput('UP')){
-            this.removeInput('UP');
-        }
-        if(this.getInput('COLOR')){
-            this.removeInput('COLOR');
-        }
-        if(this.getInput('TEXTURE')){
-            this.removeInput('TEXTURE');
-        }
-        if(this.getInput('OPACITY')){
-            this.removeInput('OPACITY');
-        }
-        if(this.getInput('TRAIL')){
-            this.removeInput('TRAIL');
-            this.removeInput('RETAIN_INPUT');
-        }
-
-        if(this.hasPos){
-            this.appendValueInput("POS")
-                .setCheck("Vector")
-                .appendField("pos");
-        }
-
-        if(this.hasAxis){
-            this.appendValueInput("AXIS")
-                .setCheck("Vector")
-                .appendField("axis");
-        }
-
-        if(this.hasRadius){
-            this.appendValueInput("RADIUS")
-                .setCheck("Number")
-                .appendField("radius");
-        }
-
-        if(this.hasLength){
-            this.appendValueInput("LENGTH")
-                .setCheck("Number")
-                .appendField("length");
-        }
-
-        if(this.hasCoils){
-            this.appendValueInput("COILS")
-                .setCheck("Number")
-                .appendField("coils");
-        }
-
-        if(this.hasThickness){
-            this.appendValueInput("THICKNESS")
-                .setCheck("Number")
-                .appendField("thickness");
-        }
-
-        if(this.hasSize){
-            this.appendValueInput("SIZE")
-                .setCheck("Vector")
-                .appendField("size");
-        }
-
-        if(this.hasUp){
-            this.appendValueInput("UP")
-                .setCheck("Vector")
-                .appendField("up");
-        }
-
-        if(this.hasColor){
-            this.appendValueInput("COLOR")
-                .setCheck(["Vector", "Colour"])
-                .appendField("color");
-        }
-
-        if(this.hasTexture){
-            this.appendValueInput("TEXTURE")
-                .setCheck("Texture")
-                .appendField("texture");
-        }
-
-        if(this.hasOpacity){
-            this.appendValueInput("OPACITY")
-                .setCheck("Number")
-                .appendField("opacity");
-        }
-        
-        if(this.hasTrail){
-            this.appendValueInput("TRAIL")
-                .setCheck("Boolean")
-                .appendField("make trail");
-            this.appendDummyInput("RETAIN_INPUT")
-                .appendField("retain")
-                .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
-        }
-    }
-};
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-//------------------------Get and Set Blocks---------------------------------//
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-Blockly.Blocks['set_shape'] = {
-  init: function() {
-    var thisBlock = this;
-
-    this.setInputsInline(false);
-
-    this.appendDummyInput("SHAPE")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("set shape", "Object")
-        .appendField(new Blockly.FieldShapeVariable(
-          Blockly.Msg.VARIABLES_DEFAULT_NAME), 'SHAPE_VAR')
-
-    this.appendDummyInput("SHAPE_ATTRIBUTE")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField(new Blockly.FieldDropdown(Blockly.Blocks.shapes.objectDropDown, function(objectSelected){
-            thisBlock.updateShape_(objectSelected);
-        }), "OBJECT_TYPE")
-        .appendField("->", "FIELD_TEXT")
-        .appendField(new Blockly.FieldDropdown(boxDropDown, function(attSelected){
-            thisBlock.updateVector_(attSelected);
-        }), "ATTRIBUTE"); 
-
-    this.appendDummyInput('VECTOR')
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("component")
-        .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
-
-    this.appendValueInput("VALUE")
-        .setCheck(null)
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("to");
-
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(Blockly.Blocks.shapes.HUE);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
-    this.objectSelected = '';
-    this.attSelected = '';
-  },
-
-
- // xml values for names must be lowercased (for some reason)
- // do not camel case when setting or reading values from
- // xml element or writing to container
-
-  mutationToDom: function(){
     var container = document.createElement('mutation');
-    this.objectSelected = this.getFieldValue('OBJECT_TYPE');
-    this.attSelected = this.getFieldValue('ATTRIBUTE');
-    container.setAttribute('object_selected', this.objectSelected);
-    container.setAttribute('att_selected', this.attSelected);
-    return container;
-  },
 
-  domToMutation: function(xmlElement){
-    this.objectSelected = xmlElement.getAttribute('object_selected');
-    this.attSelected = xmlElement.getAttribute('att_selected');
-    //alert(selected);
-    this.updateShape_(this.objectSelected);
-    this.updateVector_(this.attSelected);
-  },
-
-
-  updateShape_: function(selected){
-
-    var thisBlock = this;
-    var input = this.getInput('SHAPE_ATTRIBUTE');
-    if(this.getFieldValue('FIELD_TEXT'))
-        input.removeField('FIELD_TEXT');
-    if(this.getFieldValue('ATTRIBUTE'))
-        input.removeField('ATTRIBUTE');
-    
-
-    switch(selected){
-
-        case 'box':
-            input.appendField('->', 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(boxDropDown, function(attSelected){
-            thisBlock.updateVector_(attSelected);
-        }), "ATTRIBUTE");
-            var vectorExists = this.getInput('VECTOR');
-            if(!vectorExists)
-                this.updateVector_("pos");
-            break;
-
-        case 'vector':
-            input.appendField("component", 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(vectorDropDown, function(attSelected){
-            thisBlock.updateVector_(attSelected);
-        }), "ATTRIBUTE");
-            var vectorExists = this.getInput('VECTOR');
-            if(vectorExists)
-                this.removeInput('VECTOR');
-            break;
-
-        case 'cylinder':
-            input.appendField('->', 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(cylinderDropDown, function(attSelected){
-            thisBlock.updateVector_(attSelected);
-        }), "ATTRIBUTE");
-            var vectorExists = this.getInput('VECTOR');
-            if(!vectorExists)
-                this.updateVector_("pos");
-            break;
-
-        case 'sphere': 
-            input.appendField('->', 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(sphereDropDown, function(attSelected){
-            thisBlock.updateVector_(attSelected);
-        }), "ATTRIBUTE");
-            var vectorExists = this.getInput('VECTOR');
-            if(!vectorExists)
-                this.updateVector_("pos");
-            break;
-
-        case 'arrow': 
-            input.appendField('->', 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(arrowDropDown, function(attSelected){
-            thisBlock.updateVector_(attSelected);
-        }), "ATTRIBUTE");
-            var vectorExists = this.getInput('VECTOR');
-            if(!vectorExists)
-                this.updateVector_("pos");
-            break;
-
-        case 'ring': 
-            input.appendField('->', 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(ringDropDown, function(attSelected){
-            thisBlock.updateVector_(attSelected);
-        }), "ATTRIBUTE");
-            var vectorExists = this.getInput('VECTOR');
-            if(!vectorExists)
-                this.updateVector_("pos");
-            break;
-
-        case 'helix': 
-            input.appendField('->', 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(helixDropDown, function(attSelected){
-            thisBlock.updateVector_(attSelected);
-        }), "ATTRIBUTE");
-            var vectorExists = this.getInput('VECTOR');
-            if(!vectorExists)
-                this.updateVector_("pos");
-            break;
-
-    }
-    
-  },
-
-  updateVector_:  function(attSelection){
-
-    var vectorExists = this.getInput('VECTOR');
-    if(vectorList.indexOf(attSelection) >= 0){
-        if(!vectorExists){
-            this.removeInput('VALUE');
-
-            
-            this.appendDummyInput('VECTOR')
-                .setAlign(Blockly.ALIGN_RIGHT)
-                .appendField("component")
-                .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
-
-            this.appendValueInput("VALUE")
-                .setCheck("Vector")
-                .setAlign(Blockly.ALIGN_RIGHT)
-                .appendField("to");
-
-
+    for (var attribute in this.hasXml){
+        if (this.hasXml[attribute]){
+            container.setAttribute(attribute, 1);
         }
-    }else if(vectorExists){
-        this.removeInput('VECTOR');
     }
-  }   
+   
+    container.setAttribute('element_count', this.elementCount_)
+
+    return container;
 };
 
-  
+/**
+ * Parse XML to restore the hasXml of Boolean values
+ * @param {!Element} xmlElement XML storage element.
+ * @this Blockly.Block
+ */
+
+Blockly.Blocks.Shape.prototype.domToMutation = function(xmlElement){
+
+    for (var attribute in this.hasXml){
+        this.hasXml[attribute] = parseInt(xmlElement.getAttribute(attribute), 10) || 0;
+    }
+
+
+    this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
+    this.updateShape_();
+};
+
+/**
+ * Populate the mutator's dialog with this block's components.
+ * @param {!Blockly.Workspace} workspace Mutator's workspace.
+ * @return {!Blockly.Block} Root block in mutator.
+ * @this Blockly.Block
+ */
+
+Blockly.Blocks.Shape.prototype.decompose = function(workspace){
+
+    var containerBlock = workspace.newBlock('vpython_create_' + this.info.name);
+    containerBlock.initSvg();
+    var connection = containerBlock.nextConnection;
+
+
+    for (var attribute in this.hasXml){
+        if(this.hasXml[attribute]){
+            var mutatorBlock = workspace.newBlock(attribute);
+            mutatorBlock.initSvg();
+            connection.connect(mutatorBlock.previousConnection);
+            connection = mutatorBlock.nextConnection;
+        }
+    }
+
+    return containerBlock;
+};
+
+/**
+ * Reconfigure this block based on the mutator dialog's components.
+ * @param {!Blockly.Block} containerBlock Root block in mutator.
+ * @this Blockly.Block
+ */
+
+Blockly.Blocks.Shape.prototype.compose = function(containerBlock){
+    var clauseBlock = containerBlock.nextConnection.targetBlock();
+    for (var attribute in this.hasXml){
+        this.hasXml[attribute] = false;
+    }
+
+    this.elementCount_ = 0;
+
+    var valueConnections = [];
+    while (clauseBlock){
+        try{
+            this.hasXml[clauseBlock.type] = true;
+            this.elementCount_++;
+            valueConnections.push([clauseBlock.type.toUpperCase(), clauseBlock.valueConnection_]);
+        }catch(err){
+            console.log("error in Shape compose");
+        }
+
+        clauseBlock = clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();      
+    }
+
+    this.updateShape_();
+
+    for(var i = 0; i <= this.elementCount_ - 1; i++){
+        Blockly.Mutator.reconnect(valueConnections[i][1], 
+                                  this, 
+                                  valueConnections[i][0]);
+    }
+};
+
+/**
+ * Store pointers to any connected child blocks.
+ * @param {!Blockly.Block} containerBlock Root block in mutator.
+ * @this Blockly.Block
+ */
+
+Blockly.Blocks.Shape.prototype.saveConnections = function(containerBlock){
+    var clauseBlock = containerBlock.nextConnection.targetBlock();
+    
+    while(clauseBlock){
+
+        var valueInput = this.getInput(this.inputs[clauseBlock.type].inputName);
+        if (!(valueInput.connection==null))
+          clauseBlock.valueConnection_ = valueInput && valueInput.connection.targetConnection;
+       
+        clauseBlock = clauseBlock.nextConnection &&
+            clauseBlock.nextConnection.targetBlock(); 
+    }
+};
+
+/**
+ * Modify this block to have the correct number of inputs.
+ * @private
+ * @this Blockly.Block
+ */
  
-Blockly.Blocks['get_shape'] = {
-  init: function() {
-    this.setInputsInline(false);
-    var thisBlock = this;
+Blockly.Blocks.Shape.prototype.updateShape_ = function(){
+    
+    // reset all inputs
+    for (var input in this.inputs){
 
-    this.appendDummyInput("SHAPE")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("get shape", "Object")
-        .appendField(new Blockly.FieldShapeVariable(
-          Blockly.Msg.VARIABLES_DEFAULT_NAME), 'SHAPE_VAR')
-
-    this.appendDummyInput("SHAPE_ATTRIBUTE")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField(new Blockly.FieldDropdown(Blockly.Blocks.shapes.objectDropDown, function(selection){
-            thisBlock.updateShape_(selection);
-        }), "OBJECT")
-        .appendField('->', 'FIELD_TEXT')
-        .appendField(new Blockly.FieldDropdown(boxDropDown, function(selection){
-            thisBlock.updateVector_(selection);
-        }), "VALUE");
-
-    this.appendDummyInput('VECTOR')
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("component")
-        .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
-
-    this.setOutput(true, null);
-    this.setColour(Blockly.Blocks.shapes.HUE);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
-    this.objectSelected = '';
-    this.attSelected = '';
-  },
-
-
-  // xml values for names must be lowercased (for some reason)
-  // do not camel case when setting or reading values from
-  // xml element or writing to container
-
-  mutationToDom: function(){
-    var container = document.createElement('mutation');
-    this.objectSelected = this.getFieldValue('OBJECT');
-    this.attSelected = this.getFieldValue('VALUE');
-    container.setAttribute('object_selected', this.objectSelected);
-    container.setAttribute('att_selected', this.attSelected);
-    return container;
-  },
-
-  domToMutation: function(xmlElement){
-    this.objectSelected = xmlElement.getAttribute('object_selected');
-    this.attSelected = xmlElement.getAttribute('att_selected');
-    this.updateShape_(this.objectSelected);
-    this.updateVector_(this.attSelected);
-  },
-
-
-  updateShape_: function(selected){
-
-    var input = this.getInput('SHAPE_ATTRIBUTE');
-    var thisBlock = this;
-    input.removeField('FIELD_TEXT');
-    input.removeField('VALUE');
-
-    switch(selected){
-
-        case 'box':
-            input.appendField('->', 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(boxDropDown, function(selection){
-            thisBlock.updateVector_(selection);
-        }), "VALUE");
-            var vectorExists = this.getInput('VECTOR');
-            if(!vectorExists)
-                this.updateVector_("pos");
-            break;
-
-        case 'vector':
-            input.appendField("component", 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(vectorDropDown, function(selection){
-            thisBlock.updateVector_(selection);
-        }), "VALUE");
-            var vectorExists = this.getInput('VECTOR');
-            if(vectorExists)
-                this.removeInput('VECTOR');
-            break;
-
-        case 'cylinder':
-            input.appendField('->', 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(cylinderDropDown, function(selection){
-            thisBlock.updateVector_(selection);
-        }), "VALUE");
-            var vectorExists = this.getInput('VECTOR');
-            if(!vectorExists)
-                this.updateVector_("pos");
-            break;
-
-        case 'sphere': 
-            input.appendField('->', 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(sphereDropDown, function(selection){
-            thisBlock.updateVector_(selection);
-        }), "VALUE");
-            var vectorExists = this.getInput('VECTOR');
-            if(!vectorExists)
-                this.updateVector_("pos");
-            break;
-
-        case 'arrow': 
-            input.appendField('->', 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(arrowDropDown, function(selection){
-            thisBlock.updateVector_(selection);
-        }), "VALUE");
-            var vectorExists = this.getInput('VECTOR');
-            if(!vectorExists)
-                this.updateVector_("pos");
-            break;
-
-        case 'ring': 
-            input.appendField('->', 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(ringDropDown, function(selection){
-            thisBlock.updateVector_(selection);
-        }), "VALUE");
-            var vectorExists = this.getInput('VECTOR');
-            if(!vectorExists)
-                this.updateVector_("pos");
-            break;
-
-        case 'helix': 
-            input.appendField('->', 'FIELD_TEXT');
-            input.appendField(new Blockly.FieldDropdown(helixDropDown, function(selection){
-            thisBlock.updateVector_(selection);
-        }), "VALUE");
-            var vectorExists = this.getInput('VECTOR');
-            if(!vectorExists)
-                this.updateVector_("pos");
-            break;
-
-    }
-  },
-
-  updateVector_:  function(attSelection){
-
-    var vectorExists = this.getInput('VECTOR');
-    if(vectorList.indexOf(attSelection) >= 0){
-        if(!vectorExists){
-            
-
-            this.appendDummyInput('VECTOR')
-                .setAlign(Blockly.ALIGN_RIGHT)
-                .appendField("component")
-                .appendField(new Blockly.FieldDropdown(vectorDropDown), "VECTOR_SELECTION");
-
+        // special case for make trail 
+        if (input === "make_trail"){
+            if(this.getInput(this.inputs[input].inputName)){
+                this.removeInput(this.inputs[input].inputName);
+                this.removeInput("RETAIN_INPUT");
+                this.removeInput("TRAIL_FIELD");
+                this.removeInput("INTERVAL_INPUT")
+            }
+        }else{
+            if(this.getInput(this.inputs[input].inputName))
+                this.removeInput(this.inputs[input].inputName);
         }
-    }else if(vectorExists){
-        this.removeInput('VECTOR');
     }
-  }
+
+    // create inputs based on what is recorded
+    for (var has in this.hasXml){
+        if(has === "make_trail"){   
+            if (this.hasXml[has]){
+                this.appendDummyInput(this.inputs[has].inputName)
+                    .appendField(this.inputs[has].field)
+                    .appendField(new Blockly.FieldDropdown([
+                                    ['true','TRUE'],
+                                    ['false','FALSE']
+                                ]), 'TRAIL_VALUE');
+                this.appendDummyInput("TRAIL_FIELD")
+                    .appendField("type")
+                    .appendField(new Blockly.FieldDropdown([
+                                    ['curve','CURVE'],
+                                    ['points','POINTS']
+                                ]), 'TRAIL_TYPE');
+                this.appendDummyInput("RETAIN_INPUT")
+                .appendField("retain")
+                .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
+                this.appendDummyInput("INTERVAL_INPUT")
+                .appendField("interval")
+                .appendField(new Blockly.FieldTextInput("2"), "INTERVAL_VALUE");
+            }
+        }else{
+            if (this.hasXml[has]){
+                this.appendValueInput(this.inputs[has].inputName)
+                    .setCheck(this.inputs[has].check)
+                    .appendField(this.inputs[has].field);
+            }   
+        }
+        
+    }
 };
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+//--------------------------3D Objects Definitions---------------------------//
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+var boxInfo = {name: "box", type: "Box"};
+
+var boxMutator = ['pos','axis', 'size', 'up', 
+                  'color', 'texture', 'opacity', 
+                  'make_trail', 'vel', 'acc', 
+                  'mass', 'charge'];
+
+var boxXml = {pos: 0, axis: 0, size:0, up: 0, 
+              color: 0, texture: 0, opacity: 0, 
+              make_trail: 0, vel: 0, acc: 0,
+              mass: 0, charge: 0};
+
+var boxInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 };
+
+
+Blockly.Blocks['vpython_box'] = new Blockly.Blocks.Shape(boxInfo, 
+                                                          boxMutator,
+                                                          boxInputs,
+                                                          boxXml);
+
+
+var sphereInfo = {name: "sphere", type: "Sphere"};
+
+var sphereMutator = ['pos', 'axis', 'radius', 'up', 
+                  'color', 'texture', 'opacity', 
+                  'make_trail', 'vel', 'acc', 
+                  'mass', 'charge'];
+
+var sphereXml = {pos: 0, axis: 0, radius:0, 
+              up: 0, color: 0, texture: 0, opacity: 0, 
+              make_trail: 0, vel: 0, acc: 0,
+              mass: 0, charge: 0};
+
+var sphereInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 };
+
+
+Blockly.Blocks['vpython_sphere'] = new Blockly.Blocks.Shape(sphereInfo, 
+                                                          sphereMutator,
+                                                          sphereInputs,
+                                                          sphereXml);
+
+
+var arrowInfo = {name: "arrow", type: "Arrow"};
+
+var arrowMutator = ['pos', 'axis', 'length', 'shaftwidth', 
+                  'headwidth', 'headlength', 'up',
+                  'color', 'texture', 'opacity', 
+                  'make_trail', 'vel', 'acc', 
+                  'mass', 'charge'];
+
+var arrowXml = {pos: 0, axis: 0, length:0, shaftwidth:0,
+              headwidth:0, headlength:0, up:0,
+              color: 0, texture: 0, opacity: 0, 
+              make_trail: 0, vel: 0, acc: 0,
+              mass: 0, charge: 0};
+
+var arrowInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
+                 shaftwidth: {inputName: 'SHAFTWIDTH', check: 'Number', field: 'shaft width'},
+                 headwidth: {inputName: 'HEADWIDTH', check: 'Number', field: 'head width'},
+                 headlength: {inputName: 'HEADLENGTH', check: 'Number', field: 'head length'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 };
+
+
+Blockly.Blocks['vpython_arrow'] = new Blockly.Blocks.Shape(arrowInfo, 
+                                                          arrowMutator,
+                                                          arrowInputs,
+                                                          arrowXml);
+
+
+var cylinderInfo = {name: "cylinder", type: "Cylinder"};
+
+var cylinderMutator = ['pos', 'axis', 'radius', 'length', 
+                  'up', 'color', 'texture', 'opacity', 
+                  'make_trail', 'vel', 'acc', 
+                  'mass', 'charge'];
+
+var cylinderXml = {pos: 0, axis: 0, radius:0, length:0,
+              up: 0, color: 0, texture: 0, opacity: 0, 
+              make_trail: 0, vel: 0, acc: 0,
+              mass: 0, charge: 0};
+
+var cylinderInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius'},
+                 length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 };
+
+
+Blockly.Blocks['vpython_cylinder'] = new Blockly.Blocks.Shape(cylinderInfo, 
+                                                          cylinderMutator,
+                                                          cylinderInputs,
+                                                          cylinderXml);
+
+
+var ringInfo = {name: "ring", type: "Ring"};
+
+var ringMutator = ['pos', 'axis', 'radius', 'length', 
+                  'thickness', 'size', 'up', 'color',
+                  'texture', 'opacity', 'make_trail',
+                  'vel', 'acc', 'mass', 'charge'];
+
+var ringXml = {pos: 0, axis: 0, radius:0, length:0,
+              thickness:0, size:0, up: 0, color: 0, 
+              texture: 0, opacity: 0, make_trail: 0,
+              vel: 0, acc: 0, mass: 0, charge: 0};
+
+var ringInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius'},
+                 length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
+                 thickness: {inputName: 'THICKNESS', check: 'Number', field: 'thickness'},
+                 size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 };
+
+
+Blockly.Blocks['vpython_ring'] = new Blockly.Blocks.Shape(ringInfo, 
+                                                          ringMutator,
+                                                          ringInputs,
+                                                          ringXml);
+
+
+var helixInfo = {name: "helix", type: "Helix"};
+
+var helixMutator = ['pos', 'axis', 'radius', 'length', 'coils',
+                  'thickness', 'size', 'up', 'color',
+                  'texture', 'opacity', 'make_trail',
+                  'vel', 'acc', 'mass', 'charge'];
+
+var helixXml = {pos: 0, axis: 0, radius:0, length:0, coils:0,
+              thickness:0, size:0, up: 0, color: 0, 
+              texture: 0, opacity: 0, make_trail: 0,
+              vel: 0, acc: 0, mass: 0, charge: 0};
+
+var helixInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
+                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius'},
+                 length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
+                 coils: {inputName: 'COILS', check: 'Number', field: 'coils'},
+                 thickness: {inputName: 'THICKNESS', check: 'Number', field: 'thickness'},
+                 size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 };
+
+
+Blockly.Blocks['vpython_helix'] = new Blockly.Blocks.Shape(helixInfo, 
+                                                          helixMutator,
+                                                          helixInputs,
+                                                          helixXml);
 
 
 
@@ -3117,6 +552,7 @@ Blockly.Blocks['pos']= {
         this.setHelpUrl('http://www.example.com/');
     }
 };
+
 
 Blockly.Blocks['axis']= {
     init: function(){
@@ -3217,7 +653,7 @@ Blockly.Blocks['opacity'] = {
 Blockly.Blocks['make_trail'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("make_trail");
+        .appendField("make trail");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(Blockly.Blocks.shapes.HUE);
@@ -3278,6 +714,54 @@ Blockly.Blocks['coils'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("coils");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Blocks.shapes.HUE);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['vel'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("vel");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Blocks.shapes.HUE);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['acc'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("acc");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Blocks.shapes.HUE);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['mass'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("mass");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Blocks.shapes.HUE);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['charge'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("charge");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(Blockly.Blocks.shapes.HUE);

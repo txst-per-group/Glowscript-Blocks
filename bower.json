@@ -1,0 +1,37 @@
+{
+  "name": "blocks-vpython",
+  "version": "0.0.1",
+  "description": "Blockly + VPython Glowscript",
+  "main": [
+    "blockly_compressed.js",
+    "blocks_compressed.js",
+    "ms/js/en.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:codestar12/Blocks-For-Vpython.git"
+  },
+  "bugs": {
+    "url": "https://github.com/codestar12/Blocks-For-Vpython/issues"
+  },
+  "authors": [
+    "authors'",
+    "github",
+    "usernames"
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "blockly"
+  ],
+  "homepage": "https://github.com/codestar12/Blocks-For-Vpython",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "php_compressed.js",
+    "tests",
+    "appengine",
+    "demos"
+  ]
+}

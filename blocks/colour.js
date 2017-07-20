@@ -46,8 +46,8 @@ Blockly.Blocks['colour_picker'] = {
           "colour": "#ff0000"
         }
       ],
-      "output": "Colour",
-      "colour": Blockly.Blocks.colour.HUE,
+      "output": "Vector",
+      "colour": Blockly.Blocks.vectors.HUE,
       "helpUrl": Blockly.Msg.COLOUR_PICKER_HELPURL
     });
     // Assign 'this' to a variable for use in the tooltip closure below.
@@ -65,7 +65,7 @@ Blockly.Blocks['colour_picker'] = {
 Blockly.Blocks['texture_picker'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Texture")
+        .appendField("texture")
         .appendField(new Blockly.FieldDropdown([["flower", "flower"], 
                                                 ["granite", "granite"], 
                                                 ["gravel", "gravel"], 
@@ -77,8 +77,8 @@ Blockly.Blocks['texture_picker'] = {
                                                 ["wood", "wood"], 
                                                 ["wood_old", "wood_old"], 
                                                 ["earth", "earth"]]), "TEXTURE_SELECTION");
-    this.setOutput(true, "Texture");
-    this.setColour(Blockly.Blocks.colour.HUE);
+    this.setOutput(true, "String");
+    this.setColour(Blockly.Blocks.texts.HUE);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }
@@ -93,7 +93,7 @@ Blockly.Blocks['colour_random'] = {
     this.jsonInit({
       "message0": Blockly.Msg.COLOUR_RANDOM_TITLE,
       "output": "Colour",
-      "colour": Blockly.Blocks.colour.HUE,
+      "colour": Blockly.Blocks.vectors.HUE,
       "tooltip": Blockly.Msg.COLOUR_RANDOM_TOOLTIP,
       "helpUrl": Blockly.Msg.COLOUR_RANDOM_HELPURL
     });
@@ -107,7 +107,7 @@ Blockly.Blocks['colour_rgb'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.COLOUR_RGB_HELPURL);
-    this.setColour(Blockly.Blocks.colour.HUE);
+    this.setColour(Blockly.Blocks.vectors.HUE);
     this.appendValueInput('RED')
         .setCheck('Number')
         .setAlign(Blockly.ALIGN_RIGHT)
@@ -133,7 +133,7 @@ Blockly.Blocks['colour_blend'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.COLOUR_BLEND_HELPURL);
-    this.setColour(Blockly.Blocks.colour.HUE);
+    this.setColour(Blockly.Blocks.vectors.HUE);
     this.appendValueInput('COLOUR1')
         .setCheck('Colour')
         .setAlign(Blockly.ALIGN_RIGHT)
@@ -149,5 +149,23 @@ Blockly.Blocks['colour_blend'] = {
         .appendField(Blockly.Msg.COLOUR_BLEND_RATIO);
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_BLEND_TOOLTIP);
+  }
+};
+
+Blockly.Blocks['scene_colour'] = {
+  /**
+   * Block for scene background color.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.appendValueInput('COLOUR')
+        .setCheck('Vector')
+        .appendField('scene color');
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(Blockly.Blocks.colour.HUE);
+    this.setTooltip(function() {
+      return 'Change the color of the scene background';
+    });
   }
 };

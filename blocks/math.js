@@ -240,34 +240,34 @@ Blockly.Blocks['math_single'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.jsonInit({
-      "message0": "%1 %2",
-      "args0": [
-        {
-          "type": "field_dropdown",
-          "name": "OP",
-          "options": [
-            [Blockly.Msg.MATH_SINGLE_OP_ROOT, 'ROOT'],
-            [Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE, 'ABS'],
-            ['-', 'NEG'],
-            ['ln', 'LN'],
-            ['log10', 'LOG10'],
-            ['e^', 'EXP'],
-            ['10^', 'POW10']
-          ]
-        },
-        {
-          "type": "input_value",
-          "name": "NUM",
-          "check": "Number"
-        }
-      ],
-      "output": "Number",
-      "colour": Blockly.Blocks.math.MATH_HUE,
-      "helpUrl": Blockly.Msg.MATH_SINGLE_HELPURL
-    });
-    // Assign 'this' to a variable for use in the tooltip closure below.
+
     var thisBlock = this;
+    this.appendValueInput("NUM")
+        .setCheck("Number")
+        .appendField(new Blockly.FieldDropdown([[Blockly.Msg.MATH_SINGLE_OP_ROOT, 'ROOT'],
+                                                [Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE, 'ABS'],
+                                                ['-', 'NEG'],
+                                                ['ln', 'LN'],
+                                                ['log10', 'LOG10'],
+                                                ['e^', 'EXP'],
+                                                ['!', 'FACT'],
+                                                ['10^', 'POW10']],
+                                                function(selected){
+                                                  if(selected === 'NEG'){
+                                                    thisBlock.getInput("NUM").setCheck(
+                                                                    ['Vector', 'Number']);
+                                                    
+                                                  }else{
+                                                    thisBlock.getInput("NUM").setCheck("Number");
+                                                    thisBlock.setOutput(true, "Number");
+                                                    thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+                                                    thisBlock.onchange = undefined;
+                                                  };
+                                                }),
+                                                'OP');
+    this.setOutput(true, "Number");
+    this.setColour(Blockly.Blocks.math.MATH_HUE);
+    this.selection = "";
     this.setTooltip(function() {
       var mode = thisBlock.getFieldValue('OP');
       var TOOLTIPS = {
@@ -281,6 +281,45 @@ Blockly.Blocks['math_single'] = {
       };
       return TOOLTIPS[mode];
     });
+  },
+
+  onchange: function(e){
+
+    if(this.workspace.isDragging())
+      return;
+
+    this.type_ = this.getInput("NUM")
+             .connection
+             .targetConnection
+             .sourceBlock_
+             .outputConnection
+             .check_[0];
+
+    this.modifyBlock();
+  },
+
+  modifyBlock: function(){
+
+    if(this.type_ == "Vector"){
+      this.getField('OP').setValue('NEG');
+      this.getInput("NUM").setCheck(['Vector', 'Number']);     
+      this.setOutput(true, "Vector");
+      this.setColour(Blockly.Blocks.vectors.HUE);
+    }else{
+      this.setOutput(true, "Number");
+      this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+    };
+  },
+
+  mutationToDom: function(){
+    var container = document.createElement('mutation');
+    container.setAttribute('input_type', this.type_);
+    return container;
+  },
+
+  domToMutation: function(xmlElement){
+    this.type_ = xmlElement.getAttribute('input_type');
+    this.modifyBlock();
   }
 };
 
@@ -349,8 +388,8 @@ Blockly.Blocks['math_constant'] = {
             ['e', 'E'],
             ['\u03c6', 'GOLDEN_RATIO'],
             ['sqrt(2)', 'SQRT2'],
-            ['sqrt(\u00bd)', 'SQRT1_2'],
-            ['\u221e', 'INFINITY']
+            ['sqrt(\u00bd)', 'SQRT1_2']/*,
+            ['\u221e', 'INFINITY'] */
           ]
         }
       ],
@@ -372,7 +411,7 @@ Blockly.Blocks['math_number_property'] = {
     var PROPERTIES =
         [[Blockly.Msg.MATH_IS_EVEN, 'EVEN'],
          [Blockly.Msg.MATH_IS_ODD, 'ODD'],
-         [Blockly.Msg.MATH_IS_PRIME, 'PRIME'],
+         /*[Blockly.Msg.MATH_IS_PRIME, 'PRIME'], */
          [Blockly.Msg.MATH_IS_WHOLE, 'WHOLE'],
          [Blockly.Msg.MATH_IS_POSITIVE, 'POSITIVE'],
          [Blockly.Msg.MATH_IS_NEGATIVE, 'NEGATIVE'],
@@ -496,6 +535,7 @@ Blockly.Blocks['math_round'] = {
   }
 };
 
+
 Blockly.Blocks['math_on_list'] = {
   /**
    * Block for evaluating a list of numbers to return sum, average, min, max,
@@ -507,11 +547,17 @@ Blockly.Blocks['math_on_list'] = {
         [[Blockly.Msg.MATH_ONLIST_OPERATOR_SUM, 'SUM'],
          [Blockly.Msg.MATH_ONLIST_OPERATOR_MIN, 'MIN'],
          [Blockly.Msg.MATH_ONLIST_OPERATOR_MAX, 'MAX'],
+
+/*
          [Blockly.Msg.MATH_ONLIST_OPERATOR_AVERAGE, 'AVERAGE'],
          [Blockly.Msg.MATH_ONLIST_OPERATOR_MEDIAN, 'MEDIAN'],
          [Blockly.Msg.MATH_ONLIST_OPERATOR_MODE, 'MODE'],
          [Blockly.Msg.MATH_ONLIST_OPERATOR_STD_DEV, 'STD_DEV'],
-         [Blockly.Msg.MATH_ONLIST_OPERATOR_RANDOM, 'RANDOM']];
+         [Blockly.Msg.MATH_ONLIST_OPERATOR_RANDOM, 'RANDOM']
+*/
+
+         ];
+
     // Assign 'this' to a variable for use in the closures below.
     var thisBlock = this;
     this.setHelpUrl(Blockly.Msg.MATH_ONLIST_HELPURL);
@@ -649,3 +695,21 @@ Blockly.Blocks['math_random_float'] = {
     });
   }
 };
+
+Blockly.Blocks['radian_degree'] = {
+  /**
+   * Block for converting number to degree or radian.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.appendValueInput("NUM")
+        .setCheck("Number")
+        .appendField(new Blockly.FieldDropdown([["radians","RADIANS"], ["degrees","DEGREES"]]), "OP");
+    this.setInputsInline(false);
+    this.setOutput(true, "Number");
+    this.setColour(Blockly.Blocks.math.MATH_HUE);
+    this.setTooltip('Converts an input into a radian or to degrees.');
+  }
+};
+
+

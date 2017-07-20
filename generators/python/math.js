@@ -83,7 +83,6 @@ Blockly.Python['math_single'] = function(block) {
         Blockly.Python.ORDER_UNARY_SIGN) || '0';
     return ['-' + code, Blockly.Python.ORDER_UNARY_SIGN];
   }
-  Blockly.Python.definitions_['import_math'] = 'import math';
   if (operator == 'SIN' || operator == 'COS' || operator == 'TAN') {
     arg = Blockly.Python.valueToCode(block, 'NUM',
         Blockly.Python.ORDER_MULTIPLICATIVE) || '0';
@@ -95,40 +94,43 @@ Blockly.Python['math_single'] = function(block) {
   // wrapping the code.
   switch (operator) {
     case 'ABS':
-      code = 'math.fabs(' + arg + ')';
+      code = 'abs(' + arg + ')';
       break;
     case 'ROOT':
-      code = 'math.sqrt(' + arg + ')';
+      code = 'sqrt(' + arg + ')';
       break;
     case 'LN':
-      code = 'math.log(' + arg + ')';
+      code = 'log(' + arg + ')';
       break;
     case 'LOG10':
-      code = 'math.log10(' + arg + ')';
+      code = 'log(' + arg + ')/log(10)';
       break;
     case 'EXP':
-      code = 'math.exp(' + arg + ')';
+      code = 'exp(' + arg + ')';
       break;
     case 'POW10':
-      code = 'math.pow(10,' + arg + ')';
+      code = 'pow(10,' + arg + ')';
       break;
     case 'ROUND':
       code = 'round(' + arg + ')';
       break;
     case 'ROUNDUP':
-      code = 'math.ceil(' + arg + ')';
+      code = 'ceil(' + arg + ')';
       break;
     case 'ROUNDDOWN':
-      code = 'math.floor(' + arg + ')';
+      code = 'floor(' + arg + ')';
       break;
     case 'SIN':
-      code = 'math.sin(' + arg + ' / 180.0 * math.pi)';
+      code = 'sin(' + arg + ')';
       break;
     case 'COS':
-      code = 'math.cos(' + arg + ' / 180.0 * math.pi)';
+      code = 'cos(' + arg + ')';
       break;
     case 'TAN':
-      code = 'math.tan(' + arg + ' / 180.0 * math.pi)';
+      code = 'tan(' + arg + ')';
+      break;
+    case 'FACT':
+      code = 'factorial(' + arg + ')';
       break;
   }
   if (code) {
@@ -138,13 +140,13 @@ Blockly.Python['math_single'] = function(block) {
   // wrapping the code.
   switch (operator) {
     case 'ASIN':
-      code = 'math.asin(' + arg + ') / math.pi * 180';
+      code = 'asin(' + arg + ')';
       break;
     case 'ACOS':
-      code = 'math.acos(' + arg + ') / math.pi * 180';
+      code = 'acos(' + arg + ')';
       break;
     case 'ATAN':
-      code = 'math.atan(' + arg + ') / math.pi * 180';
+      code = 'atan(' + arg + ')';
       break;
     default:
       throw 'Unknown math operator: ' + operator;
@@ -155,18 +157,18 @@ Blockly.Python['math_single'] = function(block) {
 Blockly.Python['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   var CONSTANTS = {
-    'PI': ['math.pi', Blockly.Python.ORDER_MEMBER],
-    'E': ['math.e', Blockly.Python.ORDER_MEMBER],
-    'GOLDEN_RATIO': ['(1 + math.sqrt(5)) / 2',
+    'PI': ['pi', Blockly.Python.ORDER_MEMBER],
+    'E': ['exp(1)', Blockly.Python.ORDER_MEMBER],
+    'GOLDEN_RATIO': ['(1 + sqrt(5)) / 2',
                      Blockly.Python.ORDER_MULTIPLICATIVE],
-    'SQRT2': ['math.sqrt(2)', Blockly.Python.ORDER_MEMBER],
-    'SQRT1_2': ['math.sqrt(1.0 / 2)', Blockly.Python.ORDER_MEMBER],
+    'SQRT2': ['sqrt(2)', Blockly.Python.ORDER_MEMBER],
+    'SQRT1_2': ['sqrt(1.0 / 2)', Blockly.Python.ORDER_MEMBER],
     'INFINITY': ['float(\'inf\')', Blockly.Python.ORDER_ATOMIC]
   };
   var constant = block.getFieldValue('CONSTANT');
-  if (constant != 'INFINITY') {
+  /* if (constant != 'INFINITY') {
     Blockly.Python.definitions_['import_math'] = 'import math';
-  }
+  } */
   return CONSTANTS[constant];
 };
 
@@ -383,6 +385,15 @@ Blockly.Python['math_random_int'] = function(block) {
 
 Blockly.Python['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
-  Blockly.Python.definitions_['import_random'] = 'import random';
-  return ['random.random()', Blockly.Python.ORDER_FUNCTION_CALL];
+  return ['random()', Blockly.Python.ORDER_FUNCTION_CALL];
+};
+
+Blockly.Python['radian_degree'] = function(block) {
+  // Converts number input to radian or degree.
+  var dropdown_op = block.getFieldValue('OP');
+  var value_num = Blockly.Python.valueToCode(block, 'NUM', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = dropdown_op.toLowerCase() + '(' + value_num + ')';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_NONE];
 };

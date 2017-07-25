@@ -28,52 +28,168 @@ goog.provide('Blockly.Blocks.variables');
 
 goog.require('Blockly.Blocks');
 
+var setNewType = function(selection){
+
+  //if(selection === "item")
+  var variableUses = this.workspace.getVariableUses(selection);
+
+  // new variables should have no type
+  if(variableUses.length == 0 ){
+    this.modifyBlock("None");
+    this.selectedType = "None";
+    return;
+
+  }
+
+  try{
+  var topBlock = {index: null, height: null};
+  for(var i = 0; i < variableUses.length; i++){
+    // add the first value, then find the highest but only if it is not itself
+    if((topBlock.index == null || topBlock.height > variableUses[i].getRelativeToSurfaceXY().y) 
+        && variableUses[i].type == "variables_set" ){
+      topBlock["index"] = i;
+      topBlock["height"] = variableUses[i].getRelativeToSurfaceXY().y;
+    }
+  }
+
+  if(topBlock.index != null && variableUses[topBlock.index].id != this.id){
+    // find the type of the connection that has a type and set output to that type
+    var checkType;
+
+    try{checkType = variableUses[topBlock.index].inputList[0]
+                                                .connection
+                                                .targetConnection
+                                                .check_[0];
+    }catch(e){}
+    
+    if(checkType){
+      if(checkType != this.selectedType || this.selectedType == null){
+        this.modifyBlock(checkType);
+        this.selectedType = checkType;
+      }
+      return;
+    }else{
+      this.modifyBlock("None");
+      this.selectedType = "None";
+      return;
+    }
+    
+  }else{
+    this.modifyBlock("None");
+    this.selectedType = "None";
+    return;
+  }
+  
+  }catch(e){}
+};
+
+
+var mutationToDom = function(){
+
+    // create dom
+    var container = document.createElement('mutation');
+
+    // record current output type  
+    var attributeInput = this.getInput("Attribute");
+
+    // initalize field values to 'none'
+    var attribute_ = 'none';
+    var component_ = 'none';
+
+    if(attributeInput){
+
+      // loop over all fields
+      for(var i=0; i < attributeInput.fieldRow.length; i++){
+
+        // if field is attribute dropdown or component get field text
+
+        if(attributeInput.fieldRow[i].name === "attributeDropdown"){
+          attribute_ = attributeInput.fieldRow[i].getText();
+        }
+
+        if(attributeInput.fieldRow[i].name === "componentDropdown"){
+          component_ = attributeInput.fieldRow[i].getText();
+        }  
+      }
+  
+    }
+
+    // write attribute and component state
+    container.setAttribute('attribute_', attribute_);
+    container.setAttribute('component_', component_);
+
+
+    if(this.selectedType == null){
+      container.setAttribute('type_', 'None');
+    }else{
+      container.setAttribute('type_', this.selectedType);
+    }
+
+    return container;
+  };
+
+var domToMutation = function(xmlElement){
+    //this.vecPos = xmlElement.getAttribute('vector_pos');
+    //this.updateDropDown(this.vecPos);
+    this.selectedType = xmlElement.getAttribute('type_');
+    this.selectedType = this.selectedType ? this.selectedType : 'None';
+    this.attribute = xmlElement.getAttribute('attribute_');
+    this.component = xmlElement.getAttribute('component_');
+    console.log(xmlElement.getAttribute('type_'));
+    this.modifyBlock(this.selectedType, this.attribute, this.component);
+  };
+
 
 Blockly.Blocks.variables.HUE = '#607D8B';
 
 var boxDropDown = [["box", "box"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                    ["axis", "axis"], ["mass", "mass"], ["charge", "charge"],
                    ["size", "size"], ["up", "up"],
-                   ["color","color"],["texture", "texture"],
-                   ["trail", "trail"],
-                   ["retain", "retain"]];
+                   ["color","color"], ["texture", "texture"],
+                   ["make_trail", "make_trail"], ["retain", "retain"],
+                   ["interval", "interval"], ["trail type", "trail type"]];
 
-var vectorDropDown = [["all", "all"],["x", "x"], ["y", "y"],
+var vectorDropDown = [["vector", "vector"],["x", "x"], ["y", "y"],
                       ["z", "z"]];
 
-var vectorList = ["pos", "vel", "acc", "axis", "up", "size", "all"];
+var vectorList = ["pos", "vel", "acc", "axis", "up", "size", "color", "vector"];
 var numberList = ["radius", "mass", "charge", "opacity", "retain", "shaftwidth", 
-                  "headwidth", "headlength", "thickness", "x", "y", "z"];
+                  "headwidth", "headlength", "thickness", "x", "y", "z",
+                  "retain", "interval"];
+var stringList = ["texture", "trail type"];
 
 var cylinderDropDown = [["cylinder", "cylinder"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                       ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
                       ["radius", "radius"],["length", "length"],
                       ["up", "up"], ["color", "color"], ["texture", "texture"],
-                      ["opacity", "opacity"], ["trail", "trail"],
-                      ["retain", "retain"]];
+                      ["opacity", "opacity"], ["make_trail", "make_trail"],
+                      ["retain", "retain"],["interval", "interval"],
+                      ["trail type", "trail type"]];
 
 var sphereDropDown = [["sphere", "sphere"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                       ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
                       ["radius", "radius"], ["up", "up"],
                       ["color", "color"], ["texture", "texture"],
                       ["opacity", "opacity"],
-                      ["trail", "trail"], ["retain", "retain"]
-                      ];
+                      ["make_trail", "make_trail"], ["retain", "retain"],
+                      ["interval", "interval"], ["trail type", "trail type"]];
 
 var arrowDropDown = [["arrow", "arrow"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                      ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["length", "length"],
                      ["shaftwidth", "shaftwidth"], ["headwidth", "headwidth"],
                      ["headlength", "headlength"], ["up", "up"], 
                      ["color", "color"], ["texture", "texture"],
-                     ["opacity", "opacity"],
-                     ["make_trail"], ["retain", "retain"]];
+                     ["opacity", "opacity"], ["make_trail", "make_trail"], 
+                     ["retain", "retain"], ["interval", "interval"],
+                     ["trail type", "trail type"]];
 
 var ringDropDown = [["ring", "ring"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                     ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["radius", "radius"],
                     ["length", "length"], ["thickness", "thickness"], 
                     ["size", "size"], ["up", "up"], ["color", "color"],
-                    ["texture", "texture"],["opacity", "opacity"], ["make_trail", "make_trail"],
-                    ["retain", "retain"]];
+                    ["texture", "texture"],["opacity", "opacity"],
+                    ["make_trail", "make_trail"], ["retain", "retain"],
+                    ["interval", "interval"], ["trail type", "trail type"]];
 
 var helixDropDown = [["helix", "helix"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
                     ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["radius", "radius"],
@@ -81,7 +197,8 @@ var helixDropDown = [["helix", "helix"],["pos", "pos"], ["vel", "vel"], ["acc", 
                     ["thickness", "thickness"], ["size", "size"],
                     ["up", "up"], ["color", "color"], ["texture", "texture"],
                     ["opacity", "opacity"], ["make_trail", "make_trail"],
-                    ["retain", "retain"]];
+                    ["retain", "retain"], ["interval", "interval"],
+                    ["trail type", "trail type"]];
 
 var shapeDropDowns = {};
 
@@ -104,8 +221,10 @@ Blockly.Blocks['variables_get'] = {
     this.setColour(Blockly.Blocks.variables.HUE);
     this.appendDummyInput("FieldVariable")
         .appendField(new Blockly.FieldVariable(
-        Blockly.Msg.VARIABLES_DEFAULT_NAME, function(selection){
+        Blockly.Msg.VARIABLES_DEFAULT_NAME , function(selection){
+          thisBlock.component = 'none';
           thisBlock.setNewType(selection);
+
         })
         , 'VAR');
     this.setOutput(true);
@@ -116,39 +235,7 @@ Blockly.Blocks['variables_get'] = {
     this.component = 'none';
   },
 
-  mutationToDom: function(){
-    var container = document.createElement('mutation');
-    // record current output type
-    
-    var attributeInput = this.getInput("Attribute");
-    if(attributeInput){
-      container.setAttribute('attribute_', 
-                              attributeInput.fieldRow[0].name == "attributeDropdown" ? 
-                              attributeInput.fieldRow[0].getText() : 'none');
-    }else{
-      container.setAttribute('attribute_', 'none');
-    }
-
-    if(this.selectedType == null){
-      container.setAttribute('type_', 'None');
-    }else{
-      container.setAttribute('type_', this.selectedType);
-    }
-    container.setAttribute('component_', this.component);
-
-    return container;
-  },
-
-  domToMutation: function(xmlElement){
-    //this.vecPos = xmlElement.getAttribute('vector_pos');
-    //this.updateDropDown(this.vecPos);
-    this.selectedType = xmlElement.getAttribute('type_');
-    this.selectedType = this.selectedType ? this.selectedType : 'None';
-    this.attribute = xmlElement.getAttribute('attribute_');
-    this.component = xmlElement.getAttribute('component_');
-    console.log(xmlElement.getAttribute('type_'));
-    this.modifyBlock(this.selectedType, this.attribute, this.component);
-  },
+ 
 
   contextMenuType_: 'variables_set',
   /**
@@ -169,44 +256,10 @@ Blockly.Blocks['variables_get'] = {
   },
 
   onchange: function(){
+    
     this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
   },
 
-  setNewType: function(selection){
-    //if(selection === "item")
-    var variableUses = this.workspace.getVariableUses(selection);
-    try{
-    var topBlock = {index: null, height: null};
-    for(var i = 0; i < variableUses.length; i++){
-      // add the first value, then find the highest but only if it is not itself
-      if((topBlock.index == null || topBlock.height < variableUses[i].getRelativeToSurfaceXY().y) 
-          && (this.id != variableUses[i].id && variableUses[i].type == "variables_set") ){
-        topBlock["index"] = i;
-        topBlock["height"] = variableUses[i].getRelativeToSurfaceXY().y;
-      }
-
-      if(topBlock.index != null){
-        // find the type of the child that has a type and set output to that type
-        var checkType;
-        var children = variableUses[topBlock.index].getChildren();
-        if(children.length == 0){
-          this.modifyBlock("None");
-        }else{
-          for(var i = 0; i < children.length; i++){
-            try{checkType = children[i].outputConnection.check_[0];}catch(e){}
-            if(checkType)
-              //this.setOutput(true, checkType);
-            if(checkType != this.selectedType){
-              this.selectedType = checkType;
-              this.modifyBlock(checkType);
-            }
-          }
-        }
-      }
-    }
-    }catch(e){}
-    
-  },
 
   modifyBlock: function(newType = 'None', attribute = 'none', component = 'none'){
     //**
@@ -236,6 +289,10 @@ Blockly.Blocks['variables_get'] = {
         break;
       case 'Boolean':
         this.setColour(Blockly.Blocks.logic.VARIABLE_HUE);
+        this.setOutput(true, newType);
+        break;
+      case 'Line':
+        this.setColour(Blockly.Blocks.graphs.HUE);
         this.setOutput(true, newType);
         break;
       case 'None':
@@ -294,7 +351,14 @@ Blockly.Blocks['variables_get'] = {
           if(thisBlock.getInput("Attribute").fieldRow.length > 1){
             thisBlock.getInput("Attribute").removeField("componentDropdown");
           }
-          //else boolean (write me)
+          // if selected attribute is "trail" (boolean)
+          }else if(attribute==="make_trail"){
+          thisBlock.setColour(Blockly.Blocks.logic.HUE);
+          thisBlock.setOutput(true, "Boolean");
+          // if selected attribute is a string
+          }else if(stringList.indexOf(attribute) > -1){
+          thisBlock.setColour(Blockly.Blocks.texts.HUE);
+          thisBlock.setOutput(true, "String");
           }
         }), "attributeDropdown");
 
@@ -312,10 +376,16 @@ Blockly.Blocks['variables_get'] = {
       }else if(numberList.indexOf(attribute) > -1){
         this.setColour(Blockly.Blocks.math.VAR_ARITHMETICS_HUE);
         this.setOutput(true, "Number");
+      }else if(attribute==="make_trail"){
+        this.setColour(Blockly.Blocks.logic.HUE);
+        this.setOutput(true, "Boolean");
+      }else if(stringList.indexOf(attribute) > -1){
+        this.setColour(Blockly.Blocks.texts.HUE);
+        this.setOutput(true, "String");
       }
     }else{
         this.setColour(Blockly.Blocks.shapes.VARIABLE_HUE);
-        this.setOutput(true, "Number");
+        this.setOutput(true, type);
         this.attribute = shapeDropDowns[type][0][0];
     }  
   },
@@ -334,7 +404,8 @@ Blockly.Blocks['variables_get'] = {
 
     if(att.fieldRow.length <= 1){
         att.appendField(new Blockly.FieldDropdown(vectorDropDown, function(component){
-              if(component === 'all'){
+
+              if(component === 'vector'){
                 thisBlock.setColour(Blockly.Blocks.vectors.VARIABLE_HUE);
                 thisBlock.setOutput(true, 'Vector');
               }else{
@@ -346,7 +417,7 @@ Blockly.Blocks['variables_get'] = {
             }), "componentDropdown");
     }
 
-    if(component !== 'none' && component !== 'all'){
+    if(component !== 'none' && component !== 'vector'){
         for(var field of this.getInput("Attribute").fieldRow){
             if(field.name === "componentDropdown"){
                 field.setValue(component);
@@ -356,13 +427,17 @@ Blockly.Blocks['variables_get'] = {
         this.setColour(Blockly.Blocks.math.VAR_ARITHMETICS_HUE);
         this.setOutput(true, "Number");
     }else{
-        this.component == 'all';
+        this.component == 'vector';
         thisBlock.setColour(Blockly.Blocks.vectors.VARIABLE_HUE);
         thisBlock.setOutput(true, 'Vector');
     }
   }
 
 };
+
+Blockly.Blocks['variables_get'].setNewType = setNewType;
+Blockly.Blocks['variables_get'].mutationToDom = mutationToDom;
+Blockly.Blocks['variables_get'].domToMutation = domToMutation;
 
 Blockly.Blocks['variables_set'] = {
   /**
@@ -394,59 +469,9 @@ Blockly.Blocks['variables_set'] = {
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
   },
 
-  mutationToDom: function(){
-    var container = document.createElement('mutation');
-    // record current output type
-    container.setAttribute('type_', this.currentType);
-    return container;
-  },
-
-  domToMutation: function(xmlElement){
-    //this.vecPos = xmlElement.getAttribute('vector_pos');
-    //this.updateDropDown(this.vecPos);
-    console.log(xmlElement.getAttribute('type_'));
-    this.modifyBlock(xmlElement.getAttribute('type_'));
-  },
-
   onchange: function(){
-    this.setNewType(this.getInput("VALUE").fieldRow[1].value_);
-  },
-
-  setNewType: function(selection){
-    //if(selection === "item")
-   var variableUses = this.workspace.getVariableUses(selection);
-    try{
-    var topBlock = {index: null, height: null};
-    for(var i = 0; i < variableUses.length; i++){
-      // add the first value, then find the highest but only if it is not itself
-      if((topBlock.index == null || topBlock.height < variableUses[i].getRelativeToSurfaceXY().y) 
-           && variableUses[i].type == "variables_set") {
-        topBlock["index"] = i;
-        topBlock["height"] = variableUses[i].getRelativeToSurfaceXY().y;
-      }
-
-      if(topBlock.index != null){
-        // find the type of the child that has a type and set output to that type
-        var checkType;
-        var children = variableUses[topBlock.index].getChildren();
-        if(children.length == 0){
-          this.modifyBlock("None");
-        }else{
-          for(var i = 0; i < children.length; i++){
-            try{checkType = children[i].outputConnection.check_[0];}catch(e){}
-            if(checkType && this.id != variableUses[topBlock.index].id)
-              if(this.currentType != checkType){
-                //this.setOutput(true, checkType);
-                this.currentType = checkType;
-                this.modifyBlock(checkType);
-              }
-              
-          }
-        }
-      }
-    }
-    }catch(e){}
     
+    this.setNewType(this.getInput("VALUE").fieldRow[1].value_);
   },
 
   modifyBlock: function(newType = 'None', attribute = 'none', component = 'none'){
@@ -477,6 +502,10 @@ Blockly.Blocks['variables_set'] = {
         break;
       case 'Boolean':
         this.setColour(Blockly.Blocks.logic.HUE);
+        input.setCheck(newType);
+        break;
+      case 'Line':
+        this.setColour(Blockly.Blocks.graphs.HUE);
         input.setCheck(newType);
         break;
       case 'None':
@@ -531,6 +560,13 @@ Blockly.Blocks['variables_set'] = {
           if(thisBlock.getInput("Attribute").fieldRow.length > 1){
             thisBlock.getInput("Attribute").removeField("componentDropdown");
           }
+          // if selected attribute is "make_trail" (boolean)
+          }else if(attribute==="make_trail"){
+          thisBlock.setColour(Blockly.Blocks.logic.HUE);
+          thisBlock.getInput("VALUE").setCheck("Boolean");
+          }else if(stringList.indexOf(attribute) > -1){
+          thisBlock.setColour(Blockly.Blocks.texts.HUE);
+          thisBlock.getInput("VALUE").setCheck("String");
           }
         }), "attributeDropdown");
 
@@ -544,7 +580,7 @@ Blockly.Blocks['variables_set'] = {
       this.getInput("Attribute").fieldRow[0].setValue(attribute);
     }else{
         this.setColour(Blockly.Blocks.shapes.HUE);
-        this.getInput("VALUE").setCheck("Number");
+        this.getInput("VALUE").setCheck(type);
         this.attribute = shapeDropDowns[type][0][0];
     }
 
@@ -555,6 +591,12 @@ Blockly.Blocks['variables_set'] = {
       //this.modifyBlock("Number");
       this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
       this.getInput("VALUE").setCheck("Number");
+    }else if(attribute==="make_trail"){
+      this.setColour(Blockly.Blocks.logic.HUE);
+      this.getInput("VALUE").setCheck("Boolean");
+    }else if(stringList.indexOf(attribute) > -1){
+      this.setColour(Blockly.Blocks.texts.HUE);
+      this.getInput("VALUE").setCheck("String");
     }
     
   },
@@ -577,7 +619,7 @@ Blockly.Blocks['variables_set'] = {
 
     if(att.fieldRow.length <= 1){
         att.appendField(new Blockly.FieldDropdown(vectorDropDown, function(component){
-              if(component === 'all'){
+              if(component === 'vector'){
                 thisBlock.setColour(Blockly.Blocks.vectors.HUE);
                 thisBlock.getInput("VALUE").setCheck('Vector');
               }else{
@@ -589,7 +631,7 @@ Blockly.Blocks['variables_set'] = {
             }), "componentDropdown");
     }
 
-    if(component !== 'none' && component !== 'all'){
+    if(component !== 'none' && component !== 'vector'){
         for(var field of this.getInput("Attribute").fieldRow){
             if(field.name === "componentDropdown"){
                 field.setValue(component);
@@ -599,7 +641,7 @@ Blockly.Blocks['variables_set'] = {
         this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
         this.getInput("VALUE").setCheck("Number");
     }else{
-        this.component == 'all';
+        this.component == 'vector';
         thisBlock.setColour(Blockly.Blocks.vectors.HUE);
         thisBlock.getInput("VALUE").setCheck('Vector');
     }
@@ -608,3 +650,7 @@ Blockly.Blocks['variables_set'] = {
   contextMenuType_: 'variables_get',
   customContextMenu: Blockly.Blocks['variables_get'].customContextMenu
 };
+
+Blockly.Blocks['variables_set'].setNewType = setNewType;
+Blockly.Blocks['variables_set'].mutationToDom = mutationToDom;
+Blockly.Blocks['variables_set'].domToMutation = domToMutation;

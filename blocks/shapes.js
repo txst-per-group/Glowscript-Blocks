@@ -49,6 +49,7 @@ Blockly.Blocks.Shape.prototype.init = function(){
     this.appendDummyInput()
         .appendField(this.info.name);
     this.setInputsInline(false);
+    this.hasXml = Object.assign({},this.hasXml);
     this.setOutput(true, this.info.type);
     this.setColour(Blockly.Blocks.shapes.HUE);
     this.setMutator(new Blockly.Mutator(this.mutatorName));
@@ -176,7 +177,8 @@ Blockly.Blocks.Shape.prototype.saveConnections = function(containerBlock){
     while(clauseBlock){
 
         var valueInput = this.getInput(this.inputs[clauseBlock.type].inputName);
-        clauseBlock.valueConnection_ = valueInput && valueInput.connection.targetConnection;
+        if (!(valueInput.connection==null))
+          clauseBlock.valueConnection_ = valueInput && valueInput.connection.targetConnection;
        
         clauseBlock = clauseBlock.nextConnection &&
             clauseBlock.nextConnection.targetBlock(); 
@@ -199,6 +201,8 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
             if(this.getInput(this.inputs[input].inputName)){
                 this.removeInput(this.inputs[input].inputName);
                 this.removeInput("RETAIN_INPUT");
+                this.removeInput("TRAIL_FIELD");
+                this.removeInput("INTERVAL_INPUT")
             }
         }else{
             if(this.getInput(this.inputs[input].inputName))
@@ -210,12 +214,24 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
     for (var has in this.hasXml){
         if(has === "make_trail"){   
             if (this.hasXml[has]){
-                this.appendValueInput(this.inputs[has].inputName)
-                    .setCheck(this.inputs[has].check)
-                    .appendField(this.inputs[has].field);
+                this.appendDummyInput(this.inputs[has].inputName)
+                    .appendField(this.inputs[has].field)
+                    .appendField(new Blockly.FieldDropdown([
+                                    ['true','TRUE'],
+                                    ['false','FALSE']
+                                ]), 'TRAIL_VALUE');
+                this.appendDummyInput("TRAIL_FIELD")
+                    .appendField("type")
+                    .appendField(new Blockly.FieldDropdown([
+                                    ['curve','CURVE'],
+                                    ['points','POINTS']
+                                ]), 'TRAIL_TYPE');
                 this.appendDummyInput("RETAIN_INPUT")
                 .appendField("retain")
                 .appendField(new Blockly.FieldTextInput("50"), "RETAIN_VALUE");
+                this.appendDummyInput("INTERVAL_INPUT")
+                .appendField("interval")
+                .appendField(new Blockly.FieldTextInput("2"), "INTERVAL_VALUE");
             }
         }else{
             if (this.hasXml[has]){
@@ -242,21 +258,27 @@ var boxInfo = {name: "box", type: "Box"};
 
 var boxMutator = ['pos','axis', 'size', 'up', 
                   'color', 'texture', 'opacity', 
-                  'make_trail'];
+                  'make_trail', 'vel', 'acc', 
+                  'mass', 'charge'];
 
-var boxXml = {pos: 0, vel: 0, axis: 0, size:0, 
-              up: 0, color: 0, texture: 0, opacity: 0, 
-              make_trail: 0};
+var boxXml = {pos: 0, axis: 0, size:0, up: 0, 
+              color: 0, texture: 0, opacity: 0, 
+              make_trail: 0, vel: 0, acc: 0,
+              mass: 0, charge: 0};
 
 var boxInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
                  size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
                  up: {inputName: 'UP', check: 'Vector', field: 'up'},
                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
-                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
-                 }
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 };
 
 
 Blockly.Blocks['vpython_box'] = new Blockly.Blocks.Shape(boxInfo, 
@@ -269,21 +291,27 @@ var sphereInfo = {name: "sphere", type: "Sphere"};
 
 var sphereMutator = ['pos', 'axis', 'radius', 'up', 
                   'color', 'texture', 'opacity', 
-                  'make_trail'];
+                  'make_trail', 'vel', 'acc', 
+                  'mass', 'charge'];
 
 var sphereXml = {pos: 0, axis: 0, radius:0, 
               up: 0, color: 0, texture: 0, opacity: 0, 
-              make_trail: 0};
+              make_trail: 0, vel: 0, acc: 0,
+              mass: 0, charge: 0};
 
 var sphereInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
-                 radius: {inputName: 'RADIUS', check: 'Vector', field: 'radius'},
+                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius'},
                  up: {inputName: 'UP', check: 'Vector', field: 'up'},
                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
-                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
-                 }
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 };
 
 
 Blockly.Blocks['vpython_sphere'] = new Blockly.Blocks.Shape(sphereInfo, 
@@ -297,25 +325,31 @@ var arrowInfo = {name: "arrow", type: "Arrow"};
 var arrowMutator = ['pos', 'axis', 'length', 'shaftwidth', 
                   'headwidth', 'headlength', 'up',
                   'color', 'texture', 'opacity', 
-                  'make_trail'];
+                  'make_trail', 'vel', 'acc', 
+                  'mass', 'charge'];
 
 var arrowXml = {pos: 0, axis: 0, length:0, shaftwidth:0,
               headwidth:0, headlength:0, up:0,
               color: 0, texture: 0, opacity: 0, 
-              make_trail: 0};
+              make_trail: 0, vel: 0, acc: 0,
+              mass: 0, charge: 0};
 
 var arrowInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
                  length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
-                 shaftwidth: {inputName: 'SHAFTWIDTH', check: 'Number', field: 'shaftwidth'},
-                 headwidth: {inputName: 'HEADWIDTH', check: 'Number', field: 'headwidth'},
-                 headlength: {inputName: 'HEADLENGTH', check: 'Number', field: 'headlength'},
+                 shaftwidth: {inputName: 'SHAFTWIDTH', check: 'Number', field: 'shaft width'},
+                 headwidth: {inputName: 'HEADWIDTH', check: 'Number', field: 'head width'},
+                 headlength: {inputName: 'HEADLENGTH', check: 'Number', field: 'head length'},
                  up: {inputName: 'UP', check: 'Vector', field: 'up'},
                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
-                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
-                 }
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 };
 
 
 Blockly.Blocks['vpython_arrow'] = new Blockly.Blocks.Shape(arrowInfo, 
@@ -328,22 +362,28 @@ var cylinderInfo = {name: "cylinder", type: "Cylinder"};
 
 var cylinderMutator = ['pos', 'axis', 'radius', 'length', 
                   'up', 'color', 'texture', 'opacity', 
-                  'make_trail'];
+                  'make_trail', 'vel', 'acc', 
+                  'mass', 'charge'];
 
 var cylinderXml = {pos: 0, axis: 0, radius:0, length:0,
               up: 0, color: 0, texture: 0, opacity: 0, 
-              make_trail: 0};
+              make_trail: 0, vel: 0, acc: 0,
+              mass: 0, charge: 0};
 
 var cylinderInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
-                 radius: {inputName: 'RADIUS', check: 'Vector', field: 'radius'},
+                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius'},
                  length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
                  up: {inputName: 'UP', check: 'Vector', field: 'up'},
                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
-                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
-                 }
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 };
 
 
 Blockly.Blocks['vpython_cylinder'] = new Blockly.Blocks.Shape(cylinderInfo, 
@@ -356,24 +396,30 @@ var ringInfo = {name: "ring", type: "Ring"};
 
 var ringMutator = ['pos', 'axis', 'radius', 'length', 
                   'thickness', 'size', 'up', 'color',
-                  'texture', 'opacity', 'make_trail'];
+                  'texture', 'opacity', 'make_trail',
+                  'vel', 'acc', 'mass', 'charge'];
 
 var ringXml = {pos: 0, axis: 0, radius:0, length:0,
               thickness:0, size:0, up: 0, color: 0, 
-              texture: 0, opacity: 0, make_trail: 0};
+              texture: 0, opacity: 0, make_trail: 0,
+              vel: 0, acc: 0, mass: 0, charge: 0};
 
 var ringInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
-                 radius: {inputName: 'RADIUS', check: 'Vector', field: 'radius'},
+                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius'},
                  length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
                  thickness: {inputName: 'THICKNESS', check: 'Number', field: 'thickness'},
                  size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
                  up: {inputName: 'UP', check: 'Vector', field: 'up'},
                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
-                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
-                 }
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 };
 
 
 Blockly.Blocks['vpython_ring'] = new Blockly.Blocks.Shape(ringInfo, 
@@ -386,25 +432,31 @@ var helixInfo = {name: "helix", type: "Helix"};
 
 var helixMutator = ['pos', 'axis', 'radius', 'length', 'coils',
                   'thickness', 'size', 'up', 'color',
-                  'texture', 'opacity', 'make_trail'];
+                  'texture', 'opacity', 'make_trail',
+                  'vel', 'acc', 'mass', 'charge'];
 
 var helixXml = {pos: 0, axis: 0, radius:0, length:0, coils:0,
               thickness:0, size:0, up: 0, color: 0, 
-              texture: 0, opacity: 0, make_trail: 0};
+              texture: 0, opacity: 0, make_trail: 0,
+              vel: 0, acc: 0, mass: 0, charge: 0};
 
 var helixInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
                  axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
-                 radius: {inputName: 'RADIUS', check: 'Vector', field: 'radius'},
+                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius'},
                  length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
                  coils: {inputName: 'COILS', check: 'Number', field: 'coils'},
                  thickness: {inputName: 'THICKNESS', check: 'Number', field: 'thickness'},
                  size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
                  up: {inputName: 'UP', check: 'Vector', field: 'up'},
                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
-                 texture: {inputName: 'TEXTURE', check: 'Texture', field: 'texture'},
+                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make_trail'}
-                 }
+                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 };
 
 
 Blockly.Blocks['vpython_helix'] = new Blockly.Blocks.Shape(helixInfo, 
@@ -662,6 +714,54 @@ Blockly.Blocks['coils'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("coils");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Blocks.shapes.HUE);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['vel'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("vel");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Blocks.shapes.HUE);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['acc'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("acc");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Blocks.shapes.HUE);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['mass'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("mass");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Blocks.shapes.HUE);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['charge'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("charge");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(Blockly.Blocks.shapes.HUE);

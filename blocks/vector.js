@@ -49,7 +49,7 @@ Blockly.Blocks['vector_math'] = {
                                                 function(selected){
                                                     thisBlock.updateShape_(selected);
                                                 }), 
-                                                "operation");
+                                                "OP");
     this.setOutput(true, "Number");
     this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
     this.setTooltip('');
@@ -59,7 +59,7 @@ Blockly.Blocks['vector_math'] = {
 
   mutationToDom: function(){
     var container = document.createElement('mutation');
-    this.selection = this.getFieldValue("operation");
+    this.selection = this.getFieldValue("OP");
     container.setAttribute('selection', this.selection);
     return container;
   },

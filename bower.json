@@ -29,6 +29,7 @@
     "node_modules",
     "bower_components",
     "test",
+    "php_compressed.js",
     "tests",
     "appengine",
     "demos"

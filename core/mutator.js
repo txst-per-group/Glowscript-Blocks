@@ -70,14 +70,17 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
        'rx': '4', 'ry': '4',
        'height': '16', 'width': '16'},
        group);
-  // Gear teeth.
-  Blockly.createSvgElement('path',
-      {'class': 'blocklyIconSymbol',
-       'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 -0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z'},
+  // Horizontal Cross Bar.
+  Blockly.createSvgElement('rect',
+      {'class': 'blocklyIconShape',
+       'x': '3.5', 'y': '7.9',
+       'height': '1', 'width': '9'},
        group);
-  // Axle hole.
-  Blockly.createSvgElement('circle',
-      {'class': 'blocklyIconShape', 'r': '2.7', 'cx': '8', 'cy': '8'},
+  // Vertical Cross Bar.
+  Blockly.createSvgElement('rect',
+      {'class': 'blocklyIconShape',
+       'x': '7.3', 'y': '4',
+       'height': '8.5', 'width': '1'},
        group);
 };
 

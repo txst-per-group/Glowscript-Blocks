@@ -73,13 +73,13 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
   // Horizontal Cross Bar.
   Blockly.createSvgElement('rect',
       {'class': 'blocklyIconShape',
-       'x': '3.5', 'y': '7.9',
-       'height': '1', 'width': '9'},
+       'x': '3.75', 'y': '7.7',
+       'height': '1', 'width': '8.5'},
        group);
   // Vertical Cross Bar.
   Blockly.createSvgElement('rect',
       {'class': 'blocklyIconShape',
-       'x': '7.3', 'y': '4',
+       'x': '7.4', 'y': '4',
        'height': '8.5', 'width': '1'},
        group);
 };

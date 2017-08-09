@@ -216,14 +216,21 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
         this.createEditor_(), this.block_.svgPath_, this.iconXY_, null, null);
+    // Get the xml of all blocks so they can be added to flyout.
     var tree = this.workspace_.options.languageTree;
+    // Get the information for the root block to made in the workspace.
     this.rootBlock_ = this.block_.decompose(this.workspace_);
+    // Get all blocks already connect to rootBlock so they can be rendered.
     var blocks = this.rootBlock_.getDescendants();
     if (tree) {
-      for (var i = 0, child; child = blocks[i]; i++) {
-        for (var j = 0, attrType; attrType = tree.childNodes[j]; j++) {
-          if (child.type == attrType.outerHTML.split('"')[1]) {
-            tree.removeChild(attrType)
+      // Check if this mutator belongs to a shape block or graph block
+      // If so, remove attribute blocks that have already composed.
+      if (this.rootBlock_.type.substr(0,14) == "vpython_create" || "display_root") {
+        for (var i = 0, child; child = blocks[i]; i++) {
+          for (var j = 0, attrType; attrType = tree.childNodes[j]; j++) {
+            if (child.type == attrType.outerHTML.split('"')[1]) {
+              tree.removeChild(attrType)
+            }
           }
         }
       }

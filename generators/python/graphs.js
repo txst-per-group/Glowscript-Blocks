@@ -7,12 +7,10 @@ goog.require('Blockly.Python');
 Blockly.Python['series'] = function(block) {
   var code = 'g';
   var type = block.getFieldValue('TYPE');
-  var color = block.getFieldValue('COLOR');
-  var R = hexToR(color);
-  var G = hexToG(color);
-  var B = hexToB(color);
-  code = code + type.toLowerCase() + '(color=vector('
-  		 + R + '/255, ' + G + '/255, ' + B + '/255))';
+  var color = Blockly.Python.valueToCode(block, 'COLOR',
+      Blockly.Python.ORDER_NONE) || '\'\'';
+  code = code + type.toLowerCase() + '(color='
+  		 + color + ')';
 
   return [code, Blockly.Python.ORDER_ATOMIC];
 };

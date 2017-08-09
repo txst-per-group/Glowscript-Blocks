@@ -223,9 +223,9 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     // Get all blocks already connect to rootBlock so they can be rendered.
     var blocks = this.rootBlock_.getDescendants();
     if (tree) {
-      // Check if this mutator belongs to a shape block or graph block
+      // Check if this mutator belongs to a shape block
       // If so, remove attribute blocks that have already composed.
-      if (this.rootBlock_.type.substr(0,14) == "vpython_create" || "display_root") {
+      if (this.rootBlock_.type.substr(0,14) == "vpython_create") {
         for (var i = 0, child; child = blocks[i]; i++) {
           for (var j = 0, attrType; attrType = tree.childNodes[j]; j++) {
             if (child.type == attrType.outerHTML.split('"')[1]) {
@@ -335,6 +335,23 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
     }
     if (block.rendered) {
       block.render();
+    }
+    // If this mutator menu belongs to a shape block, update flyout in realtime
+    if (block.type.substr(0,7) == "vpython") {
+      this.workspace_.flyout_.hide();
+      var quarkXml = goog.dom.createDom('xml');
+      for (var i = 0, quarkName; quarkName = Blockly.Blocks[block.type].mutatorName[i]; i++) {
+        quarkXml.appendChild(goog.dom.createDom('block', {'type': quarkName}));
+      }
+      var blocks = this.rootBlock_.getDescendants();
+      for (var i = 0, child; child = blocks[i]; i++) {
+        for (var j = 0, attrType; attrType = quarkXml.childNodes[j]; j++) {
+          if (child.type == attrType.outerHTML.split('"')[1]) {
+            quarkXml.removeChild(attrType)
+          }
+        }
+      }
+      this.workspace_.flyout_.show(quarkXml.childNodes, 1);
     }
     this.resizeBubble_();
     Blockly.Events.setGroup(false);

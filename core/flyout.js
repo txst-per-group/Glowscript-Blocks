@@ -566,8 +566,10 @@ Blockly.Flyout.prototype.hide = function() {
  * Show and populate the flyout.
  * @param {!Array|string} xmlList List of blocks to show.
  *     Variables and procedures have a custom set of blocks.
+ * @param {number} number for scaling margin between blocks, used in mutator UI.
+ *     Default for large gap in toolbox.
  */
-Blockly.Flyout.prototype.show = function(xmlList) {
+Blockly.Flyout.prototype.show = function(xmlList, mutatorGap = 3) {
   this.hide();
   this.clearOldBlocks_();
 
@@ -596,7 +598,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       }
       blocks.push(curBlock);
       var gap = parseInt(xml.getAttribute('gap'), 10);
-      gaps.push(isNaN(gap) ? this.MARGIN * 3 : gap);
+      gaps.push(isNaN(gap) ? this.MARGIN * mutatorGap : gap);
     }
   }
 

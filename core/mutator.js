@@ -64,22 +64,21 @@ Blockly.Mutator.prototype.workspaceHeight_ = 0;
  * @private
  */
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
-  // Square with rounded corners.
-  Blockly.createSvgElement('rect',
+  // Cirlce container.
+  Blockly.createSvgElement('circle',
       {'class': 'blocklyIconShape',
-       'rx': '4', 'ry': '4',
-       'height': '16', 'width': '16'},
+      'r': '8.5', 'cx': '8', 'cy': '8'},
        group);
   // Horizontal Cross Bar.
   Blockly.createSvgElement('rect',
       {'class': 'blocklyIconShape',
-       'x': '3.75', 'y': '7.7',
+       'x': '3.75', 'y': '7.4',
        'height': '1', 'width': '8.5'},
        group);
   // Vertical Cross Bar.
   Blockly.createSvgElement('rect',
       {'class': 'blocklyIconShape',
-       'x': '7.4', 'y': '4',
+       'x': '7.4', 'y': '3.7',
        'height': '8.5', 'width': '1'},
        group);
 };
@@ -218,13 +217,20 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
         /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
         this.createEditor_(), this.block_.svgPath_, this.iconXY_, null, null);
     var tree = this.workspace_.options.languageTree;
-    if (tree) {
-      this.workspace_.flyout_.init(this.workspace_);
-      this.workspace_.flyout_.show(tree.childNodes);
-    }
-
     this.rootBlock_ = this.block_.decompose(this.workspace_);
     var blocks = this.rootBlock_.getDescendants();
+    if (tree) {
+      for (var i = 0, child; child = blocks[i]; i++) {
+        for (var j = 0, attrType; attrType = tree.childNodes[j]; j++) {
+          if (child.type == attrType.outerHTML.split('"')[1]) {
+            tree.removeChild(attrType)
+          }
+        }
+      }
+      this.workspace_.flyout_.init(this.workspace_);
+      this.workspace_.flyout_.show(tree.childNodes, 1);
+    }
+
     for (var i = 0, child; child = blocks[i]; i++) {
       child.render();
     }

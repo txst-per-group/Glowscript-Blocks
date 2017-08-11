@@ -69,6 +69,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       {'class': 'blocklyIconShape',
       'r': '8.5', 'cx': '8', 'cy': '8'},
        group);
+
   // Horizontal Cross Bar.
   Blockly.createSvgElement('rect',
       {'class': 'blocklyIconShape',
@@ -80,6 +81,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       {'class': 'blocklyIconShape',
        'x': '7.4', 'y': '3.7',
        'height': '8.5', 'width': '1'},
+
        group);
 };
 

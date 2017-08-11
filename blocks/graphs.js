@@ -8,11 +8,11 @@ Blockly.Blocks.graphs.HUE = '#26A69A';
 
 Blockly.Blocks['series'] = {
   init: function() {
-    this.appendDummyInput()
+    this.appendValueInput("COLOR")
+        .setCheck('Vector')
         .appendField(new Blockly.FieldDropdown([["curve", "CURVE"],
         										["dots", "DOTS"]]), "TYPE")
-        .appendField(new Blockly.FieldColour("#ff0000"), "COLOR");
-    this.setInputsInline(true);
+    this.setInputsInline(false);
     this.setOutput(true, "Series");
     this.setColour(Blockly.Blocks.graphs.HUE);
     this.setTooltip('Creates a series for plotting on a graph as either a solid\

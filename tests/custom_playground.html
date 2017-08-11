@@ -517,16 +517,24 @@ h1 {
           <block type="variables_set">
             <field name="VAR">series1</field>
               <value name="VALUE">
-                <block type="series"></block>
-              <value>
+                <block type="series">
+                  <value name="COLOR">
+                    <shadow type="colour_picker"></shadow>
+                  </value>
+                </block>
+              </value>
           </block>
         </value>
       </block>
       <block type="variables_set">
         <field name="VAR">series</field>
-          <value name="VALUE">
-            <block type="series"></block>
-          <value>
+        <value name="VALUE">
+          <block type="series">
+            <value name="COLOR">
+              <shadow type="colour_picker"></shadow>
+            </value>
+          </block>
+        <value>
       </block>
       <block type="plot">
         <value name="X_VALUE">
@@ -737,7 +745,7 @@ h1 {
       <block type="texture_picker"></block>
       <block type="scene_colour">
         <value name="COLOUR">
-          <shadow type=colour_picker></shadow>
+          <shadow type="colour_picker"></shadow>
         </value>
       </block>      
     </category>

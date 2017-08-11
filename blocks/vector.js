@@ -6,7 +6,7 @@ goog.require('Blockly.Blocks');
 
 
 Blockly.Blocks.vectors.HUE = '#42A5F5'; 
-
+Blockly.Blocks.vectors.HUE_ALT = '#1E88E5';
 
 ////////////////////////////////////////////////
 

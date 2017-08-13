@@ -238,10 +238,67 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
                 this.appendValueInput(this.inputs[has].inputName)
                     .setCheck(this.inputs[has].check)
                     .appendField(this.inputs[has].field);
+
+                if(this.inputs[has].check == "Vector"){
+                  var newVect = this.createVector(this.workspace);
+                  this.getInput(this.inputs[has].inputName).connection.connect(newVect.outputConnection);
+                  newVect.setShadow(true);
+                }
+                if(this.inputs[has].check == "Number"){
+                  var newNumber = this.workspace.newBlock("math_number");
+                  newNumber.initSvg();
+                  newNumber.render();
+                  this.getInput(this.inputs[has].inputName).connection.connect(newNumber.outputConnection);
+                  newNumber.setShadow(true);
+                }
+                if(has === "color"){
+                  var newColour = this.workspace.newBlock('colour_picker');
+                  newColour.initSvg();
+                  newColour.render();
+                  this.getInput(this.inputs[has].inputName).connection.connect(newColour.outputConnection);
+                  newColour.setShadow(true);
+                }
+                if(has === "texture"){
+                  var newTexture = this.workspace.newBlock('texture_picker');
+                  newTexture.initSvg();
+                  newTexture.render();
+                  this.getInput(this.inputs[has].inputName).connection.connect(newTexture.outputConnection);
+                  newTexture.setShadow(true);
+                }
             }   
         }
         
     }
+};
+
+Blockly.Blocks.Shape.prototype.createVector = function(workspace){
+
+  var newVect = workspace.newBlock("vector");
+  newVect.initSvg();
+  newVect.render();
+
+  var mathBlocksX = workspace.newBlock("math_number");
+  mathBlocksX.initSvg();
+  mathBlocksX.render();
+
+  var mathBlocksY = workspace.newBlock("math_number");
+  mathBlocksY.initSvg();
+  mathBlocksY.render();
+
+  var mathBlocksZ = workspace.newBlock("math_number");
+  mathBlocksZ.initSvg();
+  mathBlocksZ.render();
+
+  newVect.inputList[0].connection.connect(mathBlocksX.outputConnection);
+  mathBlocksX.setShadow(true);
+  newVect.inputList[1].connection.connect(mathBlocksY.outputConnection);
+  mathBlocksY.setShadow(true);
+  newVect.inputList[2].connection.connect(mathBlocksZ.outputConnection);
+  mathBlocksZ.setShadow(true);
+                    
+  //newVect.setShadow(true);
+
+  return newVect;
 };
 
 

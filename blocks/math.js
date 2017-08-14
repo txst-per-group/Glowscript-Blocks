@@ -274,11 +274,24 @@ Blockly.Blocks['math_single'] = {
         .setCheck("Number")
         .appendField(new Blockly.FieldDropdown([[Blockly.Msg.MATH_SINGLE_OP_ROOT, 'ROOT'],
                                                 [Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE, 'ABS'],
+                                                ['-', 'NEG'],
                                                 ['ln', 'LN'],
                                                 ['log10', 'LOG10'],
                                                 ['e^', 'EXP'],
                                                 ['!', 'FACT'],
-                                                ['10^', 'POW10']]),
+                                                ['10^', 'POW10']],
+                                                function(selected){
+                                                  if(selected === 'NEG'){
+                                                    thisBlock.getInput("NUM").setCheck(
+                                                                    ['Vector', 'Number']);
+                                                    
+                                                  }else{
+                                                    thisBlock.getInput("NUM").setCheck("Number");
+                                                    thisBlock.setOutput(true, "Number");
+                                                    thisBlock.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+                                                    thisBlock.onchange = undefined;
+                                                  };
+                                                }),
                                                 'OP');
     this.setOutput(true, "Number");
     this.setColour(Blockly.Blocks.math.MATH_HUE);
@@ -296,6 +309,45 @@ Blockly.Blocks['math_single'] = {
       };
       return TOOLTIPS[mode];
     });
+  },
+
+  onchange: function(e){
+
+    if(this.workspace.isDragging())
+      return;
+
+    this.type_ = this.getInput("NUM")
+             .connection
+             .targetConnection
+             .sourceBlock_
+             .outputConnection
+             .check_[0];
+
+    this.modifyBlock();
+  },
+
+  modifyBlock: function(){
+
+    if(this.type_ == "Vector"){
+      this.getField('OP').setValue('NEG');
+      this.getInput("NUM").setCheck(['Vector', 'Number']);     
+      this.setOutput(true, "Vector");
+      this.setColour(Blockly.Blocks.vectors.HUE);
+    }else{
+      this.setOutput(true, "Number");
+      this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+    };
+  },
+
+  mutationToDom: function(){
+    var container = document.createElement('mutation');
+    container.setAttribute('input_type', this.type_);
+    return container;
+  },
+
+  domToMutation: function(xmlElement){
+    this.type_ = xmlElement.getAttribute('input_type');
+    this.modifyBlock();
   }
 };
 

@@ -154,6 +154,14 @@ Blockly.Python['math_single'] = function(block) {
   return [code, Blockly.Python.ORDER_MULTIPLICATIVE];
 };
 
+Blockly.Python['math_negation'] = function(block){
+  var code = Blockly.Python.valueToCode(block, 'NUM', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = '-' + code;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+}
+
 Blockly.Python['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   var CONSTANTS = {

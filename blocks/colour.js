@@ -66,7 +66,8 @@ Blockly.Blocks['texture_picker'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("texture")
-        .appendField(new Blockly.FieldDropdown([["flower", "flower"], 
+        .appendField(new Blockly.FieldDropdown([["earth", "earth"],
+                                                ["flower", "flower"], 
                                                 ["granite", "granite"], 
                                                 ["gravel", "gravel"], 
                                                 ["rock", "rock"], 
@@ -76,7 +77,7 @@ Blockly.Blocks['texture_picker'] = {
                                                 ["stucco", "stucco"], 
                                                 ["wood", "wood"], 
                                                 ["wood_old", "wood_old"], 
-                                                ["earth", "earth"]]), "TEXTURE_SELECTION");
+                                                ["metal", "metal"]]), "TEXTURE_SELECTION");
     this.setOutput(true, "String");
     this.setColour(Blockly.Blocks.texts.HUE);
     this.setTooltip('');

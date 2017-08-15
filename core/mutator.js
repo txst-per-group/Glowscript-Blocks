@@ -179,18 +179,14 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
     height = Math.max(height, flyoutMetrics.contentHeight + 20);
   }
   width += doubleBorderWidth * 3;
-  // Only resize if the size difference is significant.  Eliminates shuddering.
-  if (Math.abs(this.workspaceWidth_ - width) > doubleBorderWidth ||
-      Math.abs(this.workspaceHeight_ - height) > doubleBorderWidth) {
-    // Record some layout information for getFlyoutMetrics_.
-    this.workspaceWidth_ = width;
-    this.workspaceHeight_ = height;
-    // Resize the bubble.
-    this.bubble_.setBubbleSize(width + doubleBorderWidth,
-                               height + doubleBorderWidth);
-    this.svgDialog_.setAttribute('width', this.workspaceWidth_);
-    this.svgDialog_.setAttribute('height', this.workspaceHeight_);
-  }
+  // Record some layout information for getFlyoutMetrics_.
+  this.workspaceWidth_ = width;
+  this.workspaceHeight_ = height;
+  // Resize the bubble.
+  this.bubble_.setBubbleSize(width + doubleBorderWidth,
+                             height + doubleBorderWidth);
+  this.svgDialog_.setAttribute('width', this.workspaceWidth_);
+  this.svgDialog_.setAttribute('height', this.workspaceHeight_);
 
   if (this.block_.RTL) {
     // Scroll the workspace to always left-align.
@@ -343,7 +339,10 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
       for (var i = 0, quarkName; quarkName = Blockly.Blocks[block.type].mutatorName[i]; i++) {
         quarkXml.appendChild(goog.dom.createDom('block', {'type': quarkName}));
       }
-      var blocks = this.rootBlock_.getDescendants();
+      var blocks = this.workspace_.getTopBlocks(false);
+        for (var i = 0; i < blocks.length; i++) {
+          blocks.push.apply(blocks, blocks[i].getChildren());
+        }
       for (var i = 0, child; child = blocks[i]; i++) {
         for (var j = 0, attrType; attrType = quarkXml.childNodes[j]; j++) {
           if (child.type == attrType.outerHTML.split('"')[1]) {

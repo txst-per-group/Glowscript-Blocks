@@ -158,9 +158,9 @@ var numberList = ["radius", "mass", "charge", "opacity", "retain", "shaftwidth",
                   "retain", "interval"];
 var stringList = ["texture", "trail type"];
 
-var cylinderDropDown = [["cylinder", "cylinder"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
-                      ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
-                      ["radius", "radius"],["length", "length"],
+var cylinderDropDown = [["cylinder", "cylinder"],["pos", "pos"], ["vel", "vel"],
+                      ["acc", "acc"], ["axis", "axis"],["mass", "mass"],
+                      ["charge", "charge"], ["radius", "radius"], ["length", "length"],
                       ["up", "up"], ["color", "color"], ["texture", "texture"],
                       ["opacity", "opacity"], ["make_trail", "make_trail"],
                       ["retain", "retain"],["interval", "interval"],
@@ -175,25 +175,25 @@ var sphereDropDown = [["sphere", "sphere"],["pos", "pos"], ["vel", "vel"], ["acc
                       ["interval", "interval"], ["trail type", "trail type"]];
 
 var arrowDropDown = [["arrow", "arrow"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
-                     ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["length", "length"],
-                     ["shaftwidth", "shaftwidth"], ["headwidth", "headwidth"],
-                     ["headlength", "headlength"], ["up", "up"], 
-                     ["color", "color"], ["texture", "texture"],
+                     ["axis", "axis"], ["mass", "mass"], ["charge", "charge"],
+                     ["length", "length"], ["shaftwidth", "shaftwidth"], 
+                     ["headwidth", "headwidth"], ["headlength", "headlength"],  
+                     ["up", "up"], ["color", "color"], ["texture", "texture"],
                      ["opacity", "opacity"], ["make_trail", "make_trail"], 
                      ["retain", "retain"], ["interval", "interval"],
                      ["trail type", "trail type"]];
 
 var ringDropDown = [["ring", "ring"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
-                    ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["radius", "radius"],
-                    ["length", "length"], ["thickness", "thickness"], 
+                    ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
+                    ["radius", "radius"], ["length", "length"], ["thickness", "thickness"], 
                     ["size", "size"], ["up", "up"], ["color", "color"],
                     ["texture", "texture"],["opacity", "opacity"],
                     ["make_trail", "make_trail"], ["retain", "retain"],
                     ["interval", "interval"], ["trail type", "trail type"]];
 
 var helixDropDown = [["helix", "helix"],["pos", "pos"], ["vel", "vel"], ["acc", "acc"],
-                    ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], ["radius", "radius"],
-                    ["length", "length"], ["coils", "coils"],
+                    ["axis", "axis"], ["mass", "mass"], ["charge", "charge"], 
+                    ["radius", "radius"], ["length", "length"], ["coils", "coils"],
                     ["thickness", "thickness"], ["size", "size"],
                     ["up", "up"], ["color", "color"], ["texture", "texture"],
                     ["opacity", "opacity"], ["make_trail", "make_trail"],
@@ -291,7 +291,11 @@ Blockly.Blocks['variables_get'] = {
         this.setColour(Blockly.Blocks.logic.HUE);
         this.setOutput(true, newType);
         break;
-      case 'Line':
+      case 'Series':
+        this.setColour(Blockly.Blocks.graphs.HUE);
+        this.setOutput(true, newType);
+        break;
+      case 'Graph':
         this.setColour(Blockly.Blocks.graphs.HUE);
         this.setOutput(true, newType);
         break;
@@ -507,9 +511,13 @@ Blockly.Blocks['variables_set'] = {
         this.setColour(Blockly.Blocks.logic.HUE);
         input.setCheck(newType);
         break;
-      case 'Line':
+      case 'Series':
         this.setColour(Blockly.Blocks.graphs.HUE);
-        input.setCheck(newType);
+        input.setCheck('None');
+        break;
+      case 'Graph':
+        this.setColour(Blockly.Blocks.graphs.HUE);
+        input.setCheck('None');
         break;
       case 'None':
         this.setColour(Blockly.Blocks.variables.HUE);

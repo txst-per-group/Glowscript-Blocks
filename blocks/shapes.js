@@ -147,8 +147,12 @@ Blockly.Blocks.Shape.prototype.compose = function(containerBlock){
     while (clauseBlock){
         try{
             this.hasXml[clauseBlock.type] = true;
-            this.elementCount_++;
-            valueConnections.push([clauseBlock.type.toUpperCase(), clauseBlock.valueConnection_]);
+            if (clauseBlock.type=="make_trail" && clauseBlock.trailValues_) {
+              var trailValues = clauseBlock.trailValues_;
+            } else {
+              this.elementCount_++;
+              valueConnections.push([clauseBlock.type.toUpperCase(), clauseBlock.valueConnection_]);
+            }
         }catch(err){
             console.log("error in Shape compose");
         }
@@ -157,11 +161,15 @@ Blockly.Blocks.Shape.prototype.compose = function(containerBlock){
     }
 
     this.updateShape_();
-
+    // Reconnect blocks to value inputs.
     for(var i = 0; i <= this.elementCount_ - 1; i++){
         Blockly.Mutator.reconnect(valueConnections[i][1], 
                                   this, 
                                   valueConnections[i][0]);
+    }
+    // Set saved values for field values (trail attributes).
+    for (var key in trailValues) {
+                this.setFieldValue(trailValues[key],key);
     }
 };
 
@@ -179,7 +187,13 @@ Blockly.Blocks.Shape.prototype.saveConnections = function(containerBlock){
         var valueInput = this.getInput(this.inputs[clauseBlock.type].inputName);
         if (!(valueInput.connection==null))
           clauseBlock.valueConnection_ = valueInput && valueInput.connection.targetConnection;
-       
+
+        if (valueInput.name=="MAKE_TRAIL")
+          clauseBlock.trailValues_ = {"TRAIL_VALUE":this.getInput("MAKE_TRAIL").fieldRow[1].value_,
+                                      "TRAIL_TYPE":this.getInput("TRAIL_FIELD").fieldRow[1].value_,
+                                      "RETAIN_VALUE":this.getInput("RETAIN_INPUT").fieldRow[1].text_,
+                                      "INTERVAL_VALUE":this.getInput("INTERVAL_INPUT").fieldRow[1].text_};
+
         clauseBlock = clauseBlock.nextConnection &&
             clauseBlock.nextConnection.targetBlock(); 
     }

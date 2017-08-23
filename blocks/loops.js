@@ -137,7 +137,7 @@ Blockly.Blocks['controls_for'] = {
    */
   init: function() {
     this.jsonInit({
-      "message0": Blockly.Msg.CONTROLS_FOR_TITLE,
+      "message0": "for item %1 in range from %2 to %3 count by %4",
       "args0": [
         {
           "type": "field_variable",

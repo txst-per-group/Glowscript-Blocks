@@ -197,9 +197,6 @@ Blockly.Blocks['math_arithmetic'] = {
 
   onchange: function(e){
 
-    if(this.workspace.isDragging())
-      return;
-
     var newVec = this.vectorPositions();
     if(this.vecPos != newVec){
       this.vecPos = newVec;

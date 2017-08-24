@@ -80,24 +80,24 @@ Blockly.Blocks['plot'] = {
   	return options;
   },
   // onchange to update current selection if it changes from a line type
-  onchange: function() {
+    onchange: function() {
     // Do nothing if block is only being dragged to avoid unnecessary calls
     if(this.workspace.isDragging())
       return;
     // Do nothing if there is no variable selected
     if (this.inputList[3].fieldRow[1] !== undefined) {
-      // Gets the currently selected variable block
+      // Gets the currently selected variable block and checks if the variable
       var selection = this.inputList[3].fieldRow[1].text_;
-      // Only continue if selection is not None (default)
-      if (!(this.workspace.getVariableUses(selection).length==0)) {
-        if (!(selection==="none")) {
-          var varBlock = this.workspace.getVariableUses(selection)[0].inputList[0].connection;
-          if (varBlock.targetConnection==null || !(varBlock.targetConnection
-                                                              .check_[0]==="Series")){
-            // Update list with top most "Series" variable
-            this.getInput("VAR").fieldRow[1].setValue(this.dynamicOptions(this)[0][0]);
-          }
-        }      
+      // If the variable in the selection no longer exists, update menu
+      if (this.workspace.getVariableUses(selection).length==0) {
+        this.getInput("VAR").fieldRow[1].setValue(this.dynamicOptions(this)[0][0]);
+      } else if (this.workspace.getVariableUses(selection)[0]) {
+        // If the selction variable still exists, check if its connection is 'Series'
+        var varBlock = this.workspace.getVariableUses(selection)[0].inputList[0].connection;
+          if (varBlock.targetConnection==null || 
+          varBlock.targetConnection.check_[0]===!("Series")) {
+            // If not 'Series', update list with top most 'Series' variable
+            this.getInput("VAR").fieldRow[1].setValue(this.dynamicOptions(this)[0][0]);}
       }
     }
   }

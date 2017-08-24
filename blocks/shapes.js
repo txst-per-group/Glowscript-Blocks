@@ -143,12 +143,12 @@ Blockly.Blocks.Shape.prototype.compose = function(containerBlock){
 
     this.elementCount_ = 0;
 
-    var valueConnections = [];
+    this.valueConnections = [];
     while (clauseBlock){
         try{
             this.hasXml[clauseBlock.type] = true;
             this.elementCount_++;
-            valueConnections.push([clauseBlock.type.toUpperCase(), clauseBlock.valueConnection_]);
+            this.valueConnections.push([clauseBlock.type.toUpperCase(), clauseBlock.valueConnection_]);
         }catch(err){
             console.log("error in Shape compose");
         }
@@ -159,9 +159,9 @@ Blockly.Blocks.Shape.prototype.compose = function(containerBlock){
     this.updateShape_();
 
     for(var i = 0; i <= this.elementCount_ - 1; i++){
-        Blockly.Mutator.reconnect(valueConnections[i][1], 
+        Blockly.Mutator.reconnect(this.valueConnections[i][1], 
                                   this, 
-                                  valueConnections[i][0]);
+                                  this.valueConnections[i][0]);
     }
 };
 
@@ -239,31 +239,39 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
                     .setCheck(this.inputs[has].check)
                     .appendField(this.inputs[has].field);
 
-                if(this.inputs[has].check == "Vector"){
-                  var newVect = this.createVector(this.workspace);
-                  this.getInput(this.inputs[has].inputName).connection.connect(newVect.outputConnection);
-                  newVect.setShadow(true);
-                }
-                if(this.inputs[has].check == "Number"){
-                  var newNumber = this.workspace.newBlock("math_number");
-                  newNumber.initSvg();
-                  newNumber.render();
-                  this.getInput(this.inputs[has].inputName).connection.connect(newNumber.outputConnection);
-                  newNumber.setShadow(true);
-                }
-                if(has === "color"){
-                  var newColour = this.workspace.newBlock('colour_picker');
-                  newColour.initSvg();
-                  newColour.render();
-                  this.getInput(this.inputs[has].inputName).connection.connect(newColour.outputConnection);
-                  newColour.setShadow(true);
-                }
-                if(has === "texture"){
-                  var newTexture = this.workspace.newBlock('texture_picker');
-                  newTexture.initSvg();
-                  newTexture.render();
-                  this.getInput(this.inputs[has].inputName).connection.connect(newTexture.outputConnection);
-                  newTexture.setShadow(true);
+               if(!this.hasConnection(has.toUpperCase())){
+
+                  if(this.inputs[has].check == "Vector"){
+                    var newVect = this.createVector(this.workspace,
+                                                    this.inputs[has].default.x,
+                                                    this.inputs[has].default.y,
+                                                    this.inputs[has].default.z);
+                    this.getInput(this.inputs[has].inputName).connection.connect(newVect.outputConnection);
+                    //newVect.setShadow(true);
+                  }
+                  if(this.inputs[has].check == "Number"){
+                    var newNumber = this.workspace.newBlock("math_number");
+                    newNumber.initSvg();
+                    newNumber.render();
+                    newNumber.setFieldValue(this.inputs[has].default, 'NUM');
+                    this.getInput(this.inputs[has].inputName).connection.connect(newNumber.outputConnection);
+                    //newNumber.setShadow(true);
+                  }
+                  if(has === "color"){
+                    var newColour = this.workspace.newBlock('colour_picker');
+                    newColour.initSvg();
+                    newColour.render();
+                    newColour
+                    this.getInput(this.inputs[has].inputName).connection.connect(newColour.outputConnection);
+                    //newColour.setShadow(true);
+                  }
+                  if(has === "texture"){
+                    var newTexture = this.workspace.newBlock('texture_picker');
+                    newTexture.initSvg();
+                    newTexture.render();
+                    this.getInput(this.inputs[has].inputName).connection.connect(newTexture.outputConnection);
+                    //newTexture.setShadow(true);
+                  }
                 }
             }   
         }
@@ -271,7 +279,15 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
     }
 };
 
-Blockly.Blocks.Shape.prototype.createVector = function(workspace){
+Blockly.Blocks.Shape.prototype.hasConnection = function(inputName){
+  for(var connec of this.valueConnections){
+    if(inputName === connec[0] && connec[1] !== undefined)
+      return true
+  }
+  return false
+}
+
+Blockly.Blocks.Shape.prototype.createVector = function(workspace, x=0, y=0, z=0){
 
   var newVect = workspace.newBlock("vector");
   newVect.initSvg();
@@ -280,14 +296,17 @@ Blockly.Blocks.Shape.prototype.createVector = function(workspace){
   var mathBlocksX = workspace.newBlock("math_number");
   mathBlocksX.initSvg();
   mathBlocksX.render();
+  mathBlocksX.setFieldValue(x, 'NUM');
 
   var mathBlocksY = workspace.newBlock("math_number");
   mathBlocksY.initSvg();
   mathBlocksY.render();
+  mathBlocksY.setFieldValue(y, 'NUM');
 
   var mathBlocksZ = workspace.newBlock("math_number");
   mathBlocksZ.initSvg();
   mathBlocksZ.render();
+  mathBlocksZ.setFieldValue(z, 'NUM');
 
   newVect.inputList[0].connection.connect(mathBlocksX.outputConnection);
   mathBlocksX.setShadow(true);
@@ -323,18 +342,18 @@ var boxXml = {pos: 0, axis: 0, size:0, up: 0,
               make_trail: 0, vel: 0, acc: 0,
               mass: 0, charge: 0};
 
-var boxInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
-                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
-                 size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
-                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
-                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+var boxInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos', default:{x: 0, y: 0, z: 0}},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis', default: {x: 1, y: 0, z: 0}},
+                 size: {inputName: 'SIZE', check: 'Vector', field: 'size', default: {x: 1, y: 1, z: 1}},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up', default: {x: 0, y: 1, z: 0}},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color', default: '#ffffff'},
                  texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
-                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity', default: 1},
                  make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
-                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
-                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
-                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
-                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel', default: {x: 0, y: 0, z: 0}},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc', default: {x: 0, y: 0, z: 0}},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass', default: 0},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge', default: 0}
                  };
 
 
@@ -356,18 +375,18 @@ var sphereXml = {pos: 0, axis: 0, radius:0,
               make_trail: 0, vel: 0, acc: 0,
               mass: 0, charge: 0};
 
-var sphereInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
-                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
-                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius'},
-                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
-                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+var sphereInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos', default: {x: 0, y: 0, z:0}},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis', default: {x: 1, y: 0, z:0}},
+                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius', default: 1},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up', default: {x: 0, y: 1, z: 0}},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color', default: '#ffffff'},
                  texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
-                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity', default: 1},
                  make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
-                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
-                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
-                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
-                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel', default: {x: 0, y: 0, z: 0}},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc', default: {x: 0, y: 0, z: 0}},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass', default: 0},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge', default: 0}
                  };
 
 
@@ -391,21 +410,21 @@ var arrowXml = {pos: 0, axis: 0, length:0, shaftwidth:0,
               make_trail: 0, vel: 0, acc: 0,
               mass: 0, charge: 0};
 
-var arrowInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
-                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
-                 length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
-                 shaftwidth: {inputName: 'SHAFTWIDTH', check: 'Number', field: 'shaft width'},
-                 headwidth: {inputName: 'HEADWIDTH', check: 'Number', field: 'head width'},
-                 headlength: {inputName: 'HEADLENGTH', check: 'Number', field: 'head length'},
-                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
-                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
+var arrowInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos', default: {x: 0, y: 0, z:0}},
+                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis', default: {x: 1, y: 0, z:0}},
+                 length: {inputName: 'LENGTH', check: 'Number', field: 'length', default: 1},
+                 shaftwidth: {inputName: 'SHAFTWIDTH', check: 'Number', field: 'shaft width', default: .1},
+                 headwidth: {inputName: 'HEADWIDTH', check: 'Number', field: 'head width', default: .2},
+                 headlength: {inputName: 'HEADLENGTH', check: 'Number', field: 'head length', default: .3},
+                 up: {inputName: 'UP', check: 'Vector', field: 'up', default: {x: 0, y: 1, z: 0}},
+                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color', default: '#ffffff'},
                  texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
-                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
+                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity', default: 1},
                  make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
-                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
-                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
-                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
-                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel', default: {x: 0, y: 0, z: 0}},
+                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc', default: {x: 0, y: 0, z: 0}},
+                 mass: {inputName: 'MASS', check: 'Number', field: 'mass', default: 0},
+                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge', default: 0}
                  };
 
 
@@ -427,20 +446,21 @@ var cylinderXml = {pos: 0, axis: 0, radius:0, length:0,
               make_trail: 0, vel: 0, acc: 0,
               mass: 0, charge: 0};
 
-var cylinderInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
-                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
-                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius'},
-                 length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
-                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
-                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
-                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
-                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
-                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
-                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
-                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
-                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
-                 };
+var cylinderInputs = {
+                        pos:{inputName: 'POS', check: 'Vector', field: 'pos', default: {x: 0, y: 0, z:0}},
+                        axis: {inputName: 'AXIS', check: 'Vector', field: 'axis', default: {x: 1, y: 0, z:0}},
+                        radius: {inputName: 'RADIUS', check: 'Number', field: 'radius', default: 1},
+                        length: {inputName: 'LENGTH', check: 'Number', field: 'length', default: 1},
+                        up: {inputName: 'UP', check: 'Vector', field: 'up', default: {x: 0, y: 1, z: 0}},
+                        color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color', default: '#ffffff'},
+                        texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
+                        opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity', default: 1},
+                        make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                        vel: {inputName: 'VEL', check: 'Vector', field: 'vel', default: {x: 0, y: 0, z: 0}},
+                        acc: {inputName: 'ACC', check: 'Vector', field: 'acc', default: {x: 0, y: 0, z: 0}},
+                        mass: {inputName: 'MASS', check: 'Number', field: 'mass', default: 0},
+                        charge: {inputName: 'CHARGE', check: 'Number', field: 'charge', default: 0}
+                     };
 
 
 Blockly.Blocks['vpython_cylinder'] = new Blockly.Blocks.Shape(cylinderInfo, 
@@ -461,21 +481,22 @@ var ringXml = {pos: 0, axis: 0, radius:0, length:0,
               texture: 0, opacity: 0, make_trail: 0,
               vel: 0, acc: 0, mass: 0, charge: 0};
 
-var ringInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
-                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
-                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius'},
-                 length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
-                 thickness: {inputName: 'THICKNESS', check: 'Number', field: 'thickness'},
-                 size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
-                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
-                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
-                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
-                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
-                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
-                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
-                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
-                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+var ringInputs = {
+                  pos: {inputName: 'POS', check: 'Vector', field: 'pos', default: {x: 0, y: 0, z:0}},
+                  axis: {inputName: 'AXIS', check: 'Vector', field: 'axis', default: {x: 1, y: 0, z:0}},
+                  radius: {inputName: 'RADIUS', check: 'Number', field: 'radius', default: 1},
+                  length: {inputName: 'LENGTH', check: 'Number', field: 'length', default: 1},
+                  thickness: {inputName: 'THICKNESS', check: 'Number', field: 'thickness'},
+                  size: {inputName: 'SIZE', check: 'Vector', field: 'size', default: {x: 1, y: 1, z: 1}},
+                  up: {inputName: 'UP', check: 'Vector', field: 'up', default: {x: 0, y: 1, z: 0}},
+                  color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color', default: '#ffffff'},
+                  texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
+                  opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity', default: 1},
+                  make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                  vel: {inputName: 'VEL', check: 'Vector', field: 'vel', default: {x: 0, y: 0, z: 0}},
+                  acc: {inputName: 'ACC', check: 'Vector', field: 'acc', default: {x: 0, y: 0, z: 0}},
+                  mass: {inputName: 'MASS', check: 'Number', field: 'mass', default: 0},
+                  charge: {inputName: 'CHARGE', check: 'Number', field: 'charge', default: 0}
                  };
 
 
@@ -497,22 +518,23 @@ var helixXml = {pos: 0, axis: 0, radius:0, length:0, coils:0,
               texture: 0, opacity: 0, make_trail: 0,
               vel: 0, acc: 0, mass: 0, charge: 0};
 
-var helixInputs = {pos:{inputName: 'POS', check: 'Vector', field: 'pos'},
-                 axis: {inputName: 'AXIS', check: 'Vector', field: 'axis'},
-                 radius: {inputName: 'RADIUS', check: 'Number', field: 'radius'},
-                 length: {inputName: 'LENGTH', check: 'Number', field: 'length'},
-                 coils: {inputName: 'COILS', check: 'Number', field: 'coils'},
-                 thickness: {inputName: 'THICKNESS', check: 'Number', field: 'thickness'},
-                 size: {inputName: 'SIZE', check: 'Vector', field: 'size'},
-                 up: {inputName: 'UP', check: 'Vector', field: 'up'},
-                 color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color'},
-                 texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
-                 opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity'},
-                 make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
-                 vel: {inputName: 'VEL', check: 'Vector', field: 'vel'},
-                 acc: {inputName: 'ACC', check: 'Vector', field: 'acc'},
-                 mass: {inputName: 'MASS', check: 'Number', field: 'mass'},
-                 charge: {inputName: 'CHARGE', check: 'Number', field: 'charge'}
+var helixInputs = {
+                    pos:{inputName: 'POS', check: 'Vector', field: 'pos', default: {x: 0, y: 0, z:0}},
+                    axis: {inputName: 'AXIS', check: 'Vector', field: 'axis', default: {x: 1, y: 0, z:0}},
+                    radius: {inputName: 'RADIUS', check: 'Number', field: 'radius', default: 1},
+                    length: {inputName: 'LENGTH', check: 'Number', field: 'length', default: 1},
+                    coils: {inputName: 'COILS', check: 'Number', field: 'coils', default: 5},
+                    thickness: {inputName: 'THICKNESS', check: 'Number', field: 'thickness', default: 1/20},
+                    size: {inputName: 'SIZE', check: 'Vector', field: 'size', default: {x: 1, y: 2, z: 2}},
+                    up: {inputName: 'UP', check: 'Vector', field: 'up', default: {x: 0, y: 1, z: 0}},
+                    color: {inputName: 'COLOR', check: ["Vector", "Colour"], field: 'color', default: '#ffffff'},
+                    texture: {inputName: 'TEXTURE', check: 'String', field: 'texture'},
+                    opacity: {inputName: 'OPACITY', check: 'Number', field: 'opacity', default: 1},
+                    make_trail: {inputName: 'MAKE_TRAIL', check: 'Boolean', field: 'make trail'},
+                    vel: {inputName: 'VEL', check: 'Vector', field: 'vel', default: {x: 0, y: 0, z: 0}},
+                    acc: {inputName: 'ACC', check: 'Vector', field: 'acc', default: {x: 0, y: 0, z: 0}},
+                    mass: {inputName: 'MASS', check: 'Number', field: 'mass', default: 0},
+                    charge: {inputName: 'CHARGE', check: 'Number', field: 'charge', default: 0}
                  };
 
 

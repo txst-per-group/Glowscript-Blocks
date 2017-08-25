@@ -39,11 +39,11 @@ Blockly.Blocks['vector_math'] = {
         .setCheck("Vector")
         .appendField(new Blockly.FieldDropdown([["magnitude", "MAG"], 
                                                 ["magnitude squared", "MAG2"], 
-                                                ["normal", "NORM"], 
+                                                ["unit vector", "NORM"], 
                                                 ["dot product", "DOT"], 
                                                 ["cross product", "CROSS"], 
                                                 ["projection", "PROJ"], 
-                                                ["comp", "COMP"], 
+                                                ["component", "COMP"], 
                                                 ["angle difference", "DIFF_ANGLE"]], 
                                                 function(selected){
                                                     thisBlock.updateShape_(selected);

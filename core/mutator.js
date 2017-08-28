@@ -64,20 +64,24 @@ Blockly.Mutator.prototype.workspaceHeight_ = 0;
  * @private
  */
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
-  // Square with rounded corners.
+  // Cirlce container.
+  Blockly.createSvgElement('circle',
+      {'class': 'blocklyIconShape',
+      'r': '8.5', 'cx': '8', 'cy': '8'},
+       group);
+
+  // Horizontal Cross Bar.
   Blockly.createSvgElement('rect',
       {'class': 'blocklyIconShape',
-       'rx': '4', 'ry': '4',
-       'height': '16', 'width': '16'},
+       'x': '3.75', 'y': '7.4',
+       'height': '1', 'width': '8.5'},
        group);
-  // Gear teeth.
-  Blockly.createSvgElement('path',
-      {'class': 'blocklyIconSymbol',
-       'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 -0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z'},
-       group);
-  // Axle hole.
-  Blockly.createSvgElement('circle',
-      {'class': 'blocklyIconShape', 'r': '2.7', 'cx': '8', 'cy': '8'},
+  // Vertical Cross Bar.
+  Blockly.createSvgElement('rect',
+      {'class': 'blocklyIconShape',
+       'x': '7.4', 'y': '3.7',
+       'height': '8.5', 'width': '1'},
+
        group);
 };
 
@@ -177,18 +181,14 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
     height = Math.max(height, flyoutMetrics.contentHeight + 20);
   }
   width += doubleBorderWidth * 3;
-  // Only resize if the size difference is significant.  Eliminates shuddering.
-  if (Math.abs(this.workspaceWidth_ - width) > doubleBorderWidth ||
-      Math.abs(this.workspaceHeight_ - height) > doubleBorderWidth) {
-    // Record some layout information for getFlyoutMetrics_.
-    this.workspaceWidth_ = width;
-    this.workspaceHeight_ = height;
-    // Resize the bubble.
-    this.bubble_.setBubbleSize(width + doubleBorderWidth,
-                               height + doubleBorderWidth);
-    this.svgDialog_.setAttribute('width', this.workspaceWidth_);
-    this.svgDialog_.setAttribute('height', this.workspaceHeight_);
-  }
+  // Record some layout information for getFlyoutMetrics_.
+  this.workspaceWidth_ = width;
+  this.workspaceHeight_ = height;
+  // Resize the bubble.
+  this.bubble_.setBubbleSize(width + doubleBorderWidth,
+                             height + doubleBorderWidth);
+  this.svgDialog_.setAttribute('width', this.workspaceWidth_);
+  this.svgDialog_.setAttribute('height', this.workspaceHeight_);
 
   if (this.block_.RTL) {
     // Scroll the workspace to always left-align.
@@ -214,14 +214,28 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
         this.createEditor_(), this.block_.svgPath_, this.iconXY_, null, null);
+    // Get the xml of all blocks so they can be added to flyout.
     var tree = this.workspace_.options.languageTree;
+    // Get the information for the root block to made in the workspace.
+    this.rootBlock_ = this.block_.decompose(this.workspace_);
+    // Get all blocks already connect to rootBlock so they can be rendered.
+    var blocks = this.rootBlock_.getDescendants();
     if (tree) {
+      // Check if this mutator belongs to a shape block
+      // If so, remove attribute blocks that have already composed.
+      if (this.rootBlock_.type.substr(0,14) == "vpython_create") {
+        for (var i = 0, child; child = blocks[i]; i++) {
+          for (var j = 0, attrType; attrType = tree.childNodes[j]; j++) {
+            if (child.type == attrType.outerHTML.split('"')[1]) {
+              tree.removeChild(attrType)
+            }
+          }
+        }
+      }
       this.workspace_.flyout_.init(this.workspace_);
-      this.workspace_.flyout_.show(tree.childNodes);
+      this.workspace_.flyout_.show(tree.childNodes, 1);
     }
 
-    this.rootBlock_ = this.block_.decompose(this.workspace_);
-    var blocks = this.rootBlock_.getDescendants();
     for (var i = 0, child; child = blocks[i]; i++) {
       child.render();
     }
@@ -319,6 +333,26 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
     }
     if (block.rendered) {
       block.render();
+    }
+    // If this mutator menu belongs to a shape block, update flyout in realtime
+    if (block.type.substr(0,7) == "vpython") {
+      this.workspace_.flyout_.hide();
+      var quarkXml = goog.dom.createDom('xml');
+      for (var i = 0, quarkName; quarkName = Blockly.Blocks[block.type].mutatorName[i]; i++) {
+        quarkXml.appendChild(goog.dom.createDom('block', {'type': quarkName}));
+      }
+      var blocks = this.workspace_.getTopBlocks(false);
+        for (var i = 0; i < blocks.length; i++) {
+          blocks.push.apply(blocks, blocks[i].getChildren());
+        }
+      for (var i = 0, child; child = blocks[i]; i++) {
+        for (var j = 0, attrType; attrType = quarkXml.childNodes[j]; j++) {
+          if (child.type == attrType.outerHTML.split('"')[1]) {
+            quarkXml.removeChild(attrType)
+          }
+        }
+      }
+      this.workspace_.flyout_.show(quarkXml.childNodes, 1);
     }
     this.resizeBubble_();
     Blockly.Events.setGroup(false);

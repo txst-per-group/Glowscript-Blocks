@@ -7,12 +7,10 @@ goog.require('Blockly.Python');
 Blockly.Python['series'] = function(block) {
   var code = 'g';
   var type = block.getFieldValue('TYPE');
-  var color = block.getFieldValue('COLOR');
-  var R = hexToR(color);
-  var G = hexToG(color);
-  var B = hexToB(color);
-  code = code + type.toLowerCase() + '(color=vector('
-  		 + R + '/255, ' + G + '/255, ' + B + '/255))';
+  var color = Blockly.Python.valueToCode(block, 'COLOR',
+      Blockly.Python.ORDER_NONE) || '\'\'';
+  code = code + type.toLowerCase() + '(color='
+  		 + color + ')';
 
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
@@ -22,7 +20,10 @@ Blockly.Python['plot'] = function(block) {
   var dropdown_name = block.getFieldValue('NAME');
   var x_value = Blockly.Python.valueToCode(block, 'X_VALUE', Blockly.Python.ORDER_ATOMIC);
   var y_value = Blockly.Python.valueToCode(block, 'Y_VALUE', Blockly.Python.ORDER_ATOMIC);
-  // TODO: Assemble Python into code variable.
+  // If variable_line is set to 'none', generate no code to avoid errors.
+  if (variable_line === "none")
+    return null;
+  // Assemble Python into code variable.
   var code = variable_line + '.plot(' + x_value + ',' + y_value + ')\n';
   return code;
 };

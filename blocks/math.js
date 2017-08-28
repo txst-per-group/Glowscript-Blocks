@@ -31,6 +31,7 @@ goog.require('Blockly.Blocks');
 
 Blockly.Blocks.math.MATH_HUE = '#4DD0E1';
 Blockly.Blocks.math.ARITHMETICS_HUE = '#4DD0E1';
+Blockly.Blocks.math.MATH_ALT = '#00BCD4';
 
 Blockly.Blocks['math_number'] = {
   /**
@@ -61,6 +62,13 @@ Blockly.Blocks['math_arithmetic'] = {
    */
 
   init: function() {
+
+    this.colorSwapMap = {
+                        '#4DD0E1': '#00BCD4',
+                        '#00BCD4': '#4DD0E1',
+                        '#42A5F5': '#1E88E5',
+                        '#1E88E5': '#42A5F5'
+                       };
        
     this.appendValueInput("A")
         .setCheck(["Number", "Vector"]);
@@ -189,14 +197,31 @@ Blockly.Blocks['math_arithmetic'] = {
 
   onchange: function(e){
 
-    if(this.workspace.isDragging())
-      return;
-
     var newVec = this.vectorPositions();
     if(this.vecPos != newVec){
       this.vecPos = newVec;
       this.updateDropDown(this.vecPos);
     }
+    try{
+      // if there is a target connection and it isn't null
+      // check to see if connection is another arithmetic block
+      // if it is check if its color is the same as this.colour_
+      // if it is swap to the other color
+      if(Object.getOwnPropertyNames(this.outputConnection).indexOf("targetConnection") > -1 && this.outputConnection.targetConnection != null){
+        if(this.outputConnection.targetConnection.sourceBlock_.type === "math_arithmetic"){
+          if(this.outputConnection.targetConnection.sourceBlock_.getColour() === this.getColour()){
+            this.setColour(this.colorSwapMap[this.getColour()]);
+          }
+        }
+      }else{
+        console.log(this.outputConnection);
+        if(this.outputConnection.check_[0] === "Number"){
+          this.setColour(Blockly.Blocks.math.MATH_HUE);
+        }else{
+          this.setColour(Blockly.Blocks.vectors.HUE);
+        }
+      }
+    }catch(e){};
   }
 
   
@@ -322,6 +347,56 @@ Blockly.Blocks['math_single'] = {
     this.modifyBlock();
   }
 };
+
+Blockly.Blocks['math_negation'] = {
+  init: function(){
+
+    this.appendValueInput("NUM")
+        .setCheck(["Number", "Vector"])
+        .appendField('-');
+    this.setOutput(true, "Number");
+    this.setColour(Blockly.Blocks.math.MATH_HUE);
+
+  },
+
+  onchange: function(e){
+
+    if(this.workspace.isDragging())
+      return;
+
+    this.type_ = this.getInput("NUM")
+             .connection
+             .targetConnection
+             .sourceBlock_
+             .outputConnection
+             .check_[0];
+
+    this.modifyBlock();
+  },
+
+  modifyBlock: function(){
+
+    if(this.type_ == "Vector"){    
+      this.setOutput(true, "Vector");
+      this.setColour(Blockly.Blocks.vectors.HUE);
+    }else{
+      this.setOutput(true, "Number");
+      this.setColour(Blockly.Blocks.math.ARITHMETICS_HUE);
+    };
+  },
+
+  mutationToDom: function(){
+    var container = document.createElement('mutation');
+    container.setAttribute('input_type', this.type_);
+    return container;
+  },
+
+  domToMutation: function(xmlElement){
+    this.type_ = xmlElement.getAttribute('input_type');
+    this.modifyBlock();
+  }
+};
+
 
 Blockly.Blocks['math_trig'] = {
   /**

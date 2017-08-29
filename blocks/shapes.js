@@ -52,6 +52,7 @@ Blockly.Blocks.Shape.prototype.init = function(){
     this.hasXml = Object.assign({},this.hasXml);
     this.setOutput(true, this.info.type);
     this.setColour(Blockly.Blocks.shapes.HUE);
+    this.valueConnections = [];
     this.setMutator(new Blockly.Mutator(this.mutatorName));
     for (var attribute in this.hasXml){
         this.hasXml[attribute] = false

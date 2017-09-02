@@ -12,6 +12,7 @@ Blockly.Blocks['series'] = {
         .setCheck('Vector')
         .appendField(new Blockly.FieldDropdown([["curve", "CURVE"],
         										["dots", "DOTS"]]), "TYPE")
+        .appendField(" color");
     this.setInputsInline(false);
     this.setOutput(true, "Series");
     this.setColour(Blockly.Blocks.graphs.HUE);

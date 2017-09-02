@@ -101,7 +101,7 @@ Blockly.Blocks.Shape.prototype.domToMutation = function(xmlElement){
 
 
     this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
-    this.updateShape_();
+    this.updateShape_(true);
 };
 
 /**
@@ -129,6 +129,7 @@ Blockly.Blocks.Shape.prototype.decompose = function(workspace){
 
     return containerBlock;
 };
+
 
 /**
  * Reconfigure this block based on the mutator dialog's components.
@@ -206,7 +207,7 @@ Blockly.Blocks.Shape.prototype.saveConnections = function(containerBlock){
  * @this Blockly.Block
  */
  
-Blockly.Blocks.Shape.prototype.updateShape_ = function(){
+Blockly.Blocks.Shape.prototype.updateShape_ = function(domLoad = false){
     
     // reset all inputs
     for (var input in this.inputs){
@@ -254,7 +255,7 @@ Blockly.Blocks.Shape.prototype.updateShape_ = function(){
                     .setCheck(this.inputs[has].check)
                     .appendField(this.inputs[has].field);
 
-               if(!this.hasConnection(has.toUpperCase())){
+               if(!this.hasConnection(has.toUpperCase()) && !domLoad){
 
                   if(this.inputs[has].check == "Vector"){
                     var newVect = this.createVector(this.workspace,

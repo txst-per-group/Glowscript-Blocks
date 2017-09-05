@@ -197,7 +197,7 @@ Blockly.Blocks['math_arithmetic'] = {
   },
 
   onchange: function(e){
-
+     console.log("changed");
      if(this.workspace.isDragging())
        return;
 

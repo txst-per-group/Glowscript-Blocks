@@ -211,21 +211,21 @@ Blockly.Blocks['math_arithmetic'] = {
       // check to see if connection is another arithmetic block
       // if it is check if its color is the same as this.colour_
       // if it is swap to the other color
-      if(Object.getOwnPropertyNames(this.outputConnection).indexOf("targetConnection") > -1 && this.outputConnection.targetConnection != null){
-        if(this.outputConnection.targetConnection.sourceBlock_.type === "math_arithmetic"){
-          if(this.outputConnection.targetConnection.sourceBlock_.getColour() === this.getColour()){
-            this.setColour(this.colorSwapMap[this.getColour()]);
-          }
-        }
-      }else{
-        console.log(this.outputConnection);
-        if(this.outputConnection.check_[0] === "Number"){
-          this.setColour(Blockly.Blocks.math.MATH_HUE);
-        }else{
-          this.setColour(Blockly.Blocks.vectors.HUE);
-        }
-      }
-    }catch(e){console.log(e)};
+    //   if(Object.getOwnPropertyNames(this.outputConnection).indexOf("targetConnection") > -1 && this.outputConnection.targetConnection != null){
+    //     if(this.outputConnection.targetConnection.sourceBlock_.type === "math_arithmetic"){
+    //       if(this.outputConnection.targetConnection.sourceBlock_.getColour() === this.getColour()){
+    //         this.setColour(this.colorSwapMap[this.getColour()]);
+    //       }
+    //     }
+    //   }else{
+    //     console.log(this.outputConnection);
+    //     if(this.outputConnection.check_[0] === "Number"){
+    //       this.setColour(Blockly.Blocks.math.MATH_HUE);
+    //     }else{
+    //       this.setColour(Blockly.Blocks.vectors.HUE);
+    //     }
+    //   }
+    // }catch(e){console.log(e)};
   }
 
   

@@ -150,6 +150,7 @@ Blockly.Blocks['math_arithmetic'] = {
                              .check_[0] == "Vector" ? '1' : '0');
     }
     catch(err){console.log("fail vector position 2")}
+    console.log(vectorPos);
     return vectorPos;
   },
 

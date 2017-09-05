@@ -141,7 +141,7 @@ Blockly.Blocks['math_arithmetic'] = {
                              .outputConnection
                              .check_[0] == "Vector" ? '1' : '0');
     }
-    catch(err){}
+    catch(err){console.log("fail vector position 1")}
     try{
       vectorPos += (inputs[1].connection
                              .targetConnection
@@ -149,7 +149,7 @@ Blockly.Blocks['math_arithmetic'] = {
                              .outputConnection
                              .check_[0] == "Vector" ? '1' : '0');
     }
-    catch(err){}
+    catch(err){console.log("fail vector position 2")}
     return vectorPos;
   },
 

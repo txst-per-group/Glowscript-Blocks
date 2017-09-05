@@ -221,7 +221,7 @@ Blockly.Blocks['math_arithmetic'] = {
           this.setColour(Blockly.Blocks.vectors.HUE);
         }
       }
-    }catch(e){};
+    }catch(e){console.log(e)};
   }
 
   

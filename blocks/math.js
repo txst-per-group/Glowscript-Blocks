@@ -201,6 +201,7 @@ Blockly.Blocks['math_arithmetic'] = {
        return;
     var newVec = this.vectorPositions();
     console.log(newVec);
+    console.log(this.vecPos);
     console.log("on change");
     if(this.vecPos !== newVec){
       console.log("vecPos reached");

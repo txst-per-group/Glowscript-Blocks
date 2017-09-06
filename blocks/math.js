@@ -103,7 +103,7 @@ Blockly.Blocks['math_arithmetic'] = {
 
   mutationToDom: function(){
     var container = document.createElement('mutation');
-    this.vecPos = this.vectorPositions();
+    //this.vecPos = this.vectorPositions();
 
     container.setAttribute('vector_pos', this.vecPos);
     return container;

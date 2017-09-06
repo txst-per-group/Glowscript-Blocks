@@ -197,14 +197,10 @@ Blockly.Blocks['math_arithmetic'] = {
 
   onchange: function(e){
 
-    if(this.workspace.isDragging())
-       return;
+
     var newVec = this.vectorPositions();
-    console.log(newVec);
-    console.log(this.vecPos);
-    console.log("on change");
+
     if(this.vecPos !== newVec){
-      console.log("vecPos reached");
       this.vecPos = newVec;
       this.updateDropDown(this.vecPos);
     }
@@ -220,7 +216,7 @@ Blockly.Blocks['math_arithmetic'] = {
           }
         }
       }else{
-        console.log(this.outputConnection);
+        
         if(this.outputConnection.check_[0] === "Number"){
           this.setColour(Blockly.Blocks.math.MATH_HUE);
         }else{

@@ -141,7 +141,7 @@ Blockly.Blocks['math_arithmetic'] = {
                              .outputConnection
                              .check_[0] == "Vector" ? '1' : '0');
     }
-    catch(err){console.log("fail vector position 1")}
+    catch(err){}
     try{
       vectorPos += (inputs[1].connection
                              .targetConnection
@@ -149,8 +149,7 @@ Blockly.Blocks['math_arithmetic'] = {
                              .outputConnection
                              .check_[0] == "Vector" ? '1' : '0');
     }
-    catch(err){console.log("fail vector position 2")}
-    console.log(vectorPos);
+    catch(err){}
     return vectorPos;
   },
 
@@ -197,9 +196,6 @@ Blockly.Blocks['math_arithmetic'] = {
   },
 
   onchange: function(e){
-     console.log("changed");
-     if(this.workspace.isDragging())
-       return;
 
     var newVec = this.vectorPositions();
     if(this.vecPos != newVec){
@@ -211,21 +207,21 @@ Blockly.Blocks['math_arithmetic'] = {
       // check to see if connection is another arithmetic block
       // if it is check if its color is the same as this.colour_
       // if it is swap to the other color
-    //   if(Object.getOwnPropertyNames(this.outputConnection).indexOf("targetConnection") > -1 && this.outputConnection.targetConnection != null){
-    //     if(this.outputConnection.targetConnection.sourceBlock_.type === "math_arithmetic"){
-    //       if(this.outputConnection.targetConnection.sourceBlock_.getColour() === this.getColour()){
-    //         this.setColour(this.colorSwapMap[this.getColour()]);
-    //       }
-    //     }
-    //   }else{
-    //     console.log(this.outputConnection);
-    //     if(this.outputConnection.check_[0] === "Number"){
-    //       this.setColour(Blockly.Blocks.math.MATH_HUE);
-    //     }else{
-    //       this.setColour(Blockly.Blocks.vectors.HUE);
-    //     }
-    //   }
-    // }catch(e){console.log(e)};
+      if(Object.getOwnPropertyNames(this.outputConnection).indexOf("targetConnection") > -1 && this.outputConnection.targetConnection != null){
+        if(this.outputConnection.targetConnection.sourceBlock_.type === "math_arithmetic"){
+          if(this.outputConnection.targetConnection.sourceBlock_.getColour() === this.getColour()){
+            this.setColour(this.colorSwapMap[this.getColour()]);
+          }
+        }
+      }else{
+        console.log(this.outputConnection);
+        if(this.outputConnection.check_[0] === "Number"){
+          this.setColour(Blockly.Blocks.math.MATH_HUE);
+        }else{
+          this.setColour(Blockly.Blocks.vectors.HUE);
+        }
+      }
+    }catch(e){console.log(e)};
   }
 
   

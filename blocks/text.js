@@ -580,7 +580,8 @@ Blockly.Blocks['text_print'] = {
       "args0": [
         {
           "type": "input_value",
-          "name": "TEXT"
+          "name": "TEXT",
+          "check": ["Number", "Vector", "Boolean", "String"]
         }
       ],
       "previousStatement": null,

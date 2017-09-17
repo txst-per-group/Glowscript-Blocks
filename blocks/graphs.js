@@ -63,7 +63,23 @@ Blockly.Blocks['plot'] = {
     			curr === "insert" ||
     			curr === "remove" ||
           curr === "+")) {
-    			var varBlock = thisBlock.workspace.getVariableUses(allVariables[curr])[0].inputList[0].connection;
+          
+    			var variableUses = thisBlock.workspace.getVariableUses(allVariables[curr])
+          if (variableUses.length > 1) {
+            var topBlock = {index: null, height: null};
+            for(var i = 0; i < variableUses.length; i++){
+              // add the first value, then find the highest but only if it is not itself
+              if((topBlock.index == null || topBlock.height > variableUses[i].getRelativeToSurfaceXY().y) 
+                  && variableUses[i].type == "variables_set" ){
+                topBlock["index"] = i;
+                topBlock["height"] = variableUses[i].getRelativeToSurfaceXY().y;
+              }
+            }
+            var varBlock = variableUses[topBlock.index];
+          } else {
+            var varBlock = variableUses[0];
+          }
+          varBlock = varBlock.inputList[0].connection;
           // Only push variable block to menu if it has a Series type connected to it
           if (!(varBlock===null)) {
       			if (!(varBlock.targetConnection==null) && varBlock.targetConnection.check_[0]==="Series") {

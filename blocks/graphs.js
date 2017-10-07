@@ -56,14 +56,9 @@ Blockly.Blocks['plot'] = {
     	for (var curr in allVariables) {
         // allVariables is not a hash list and contains variable object functions
         // Filter out the names of object funtions that get unwantingly returned
-    		if (!(curr === "append" ||
-    			curr === "copy" ||
-    			curr === "extend" ||
-    			curr === "index" ||
-    			curr === "insert" ||
-    			curr === "remove" ||
-          curr === "+")) {
-          
+        var objFuncList = ["append","copy","extend","index","insert","remove","+"];
+        
+    		if (objFuncList.indexOf(curr) < 0) { 
     			var variableUses = thisBlock.workspace.getVariableUses(allVariables[curr])
           if (variableUses.length > 1) {
             var topBlock = {index: null, height: null};

@@ -223,7 +223,8 @@ Blockly.Blocks['variables_get'] = {
         .appendField(new Blockly.FieldVariable(
         Blockly.Msg.VARIABLES_DEFAULT_NAME , function(selection){
           thisBlock.component = 'none';
-          thisBlock.setNewType(selection);
+          thisBlock.setNewType(selection)
+          thisBlock.isIterator = false;
 
         })
         , 'VAR');
@@ -233,6 +234,7 @@ Blockly.Blocks['variables_get'] = {
     this.selectedType = null;
     this.attribute = 'none';
     this.component = 'none';
+    this.isIterator = false;
   },
 
  
@@ -256,8 +258,11 @@ Blockly.Blocks['variables_get'] = {
   },
 
   onchange: function(){
-    
-    this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
+    if(this.isIterator){
+      this.modifyBlock("Number");
+    } else {
+      this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
+    }
   },
 
 

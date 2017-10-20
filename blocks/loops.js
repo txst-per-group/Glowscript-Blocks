@@ -195,6 +195,20 @@ Blockly.Blocks['controls_for'] = {
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);
     }
+  },
+  /**
+   * Add onchange function to find all "iterator" variables created 
+   * by this for_loop block and assign isIterator to True.
+   * @this Blockly.BlockSvg
+   */
+  onchange: function(){
+    var name = this.getFieldValue('VAR');
+    var allIterators = this.workspace.getVariableUses(name);
+      for (var block in allIterators) {
+        if (allIterators[block].type === "variables_get") {
+          allIterators[block].isIterator = true;
+        }
+      }
   }
 };
 

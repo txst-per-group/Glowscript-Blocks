@@ -258,8 +258,11 @@ Blockly.Blocks['variables_get'] = {
   },
 
   onchange: function(){
-    
-    this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
+    if(this.isIterator){
+      this.modifyBlock("Number");
+    } else {
+      this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
+    }
   },
 
 

@@ -45,43 +45,59 @@ Blockly.Blocks['plot'] = {
   },
 
   dynamicOptions: function(thisBlock) {
+    // Options list to fill and push to dropdown
   	var options = []
-    // Variable for storing a list of all variable blocks in workspace
-  	var allVariables = Blockly.Variables.allVariables(thisBlock.workspace);
     // Variable for menu options if no Series type variables are found in workspace
-  	var empty = ["none","none"];
+    var empty = ["none","none"];
+    // Don't push variable names if in flyout menu
     if (this.isInFlyout)
       options.push(empty);
+    // Variable for storing a list of all variable block NAMES in workspace
+  	var allVariables = Blockly.Variables.allVariables(thisBlock.workspace);
+    
   	if (!(allVariables.length==0)) {
-    	for (var curr in allVariables) {
-        // allVariables is not a hash list and contains variable object functions
-        // Filter out the names of object funtions that get unwantingly returned
-        var objFuncList = ["append","copy","extend","index","insert","remove","+"];
-        
-    		if (objFuncList.indexOf(curr) < 0) { 
-    			var variableUses = thisBlock.workspace.getVariableUses(allVariables[curr])
-          if (variableUses.length > 1) {
+
+    	for (var i = 0; i < allVariables.length; i++) {
+        // List of REFERENCES to actual blocks with given name 
+        // Used to loop through
+  			var variableUses = thisBlock.workspace.getVariableUses(allVariables[i]);
+        // List of variableUses to store only variables that are not iterators
+        var currentUses = thisBlock.workspace.getVariableUses(allVariables[i]);
+        // Check if current variable name is an iterator (or a variable_set feild on loop block)
+        // If current variable is iterator, remove from currentUses
+        for (var j = 0; j < variableUses.length; j++) {
+          if(variableUses[j].isIterator || variableUses[j].type === "controls_for") {
+            currentUses = [];
+            break;
+          }
+        }
+        // If carruentUses is now empty, then the current variable name is an iterator
+        // Move to the next variable name and check
+        // If currentUses contains more than one block reference, find the topBlock reference
+        // If it contains only one reference, that is topBlock decleration block
+        if (!(currentUses.length == 0)) {
+          if (currentUses.length > 1) {
             var topBlock = {index: null, height: null};
-            for(var i = 0; i < variableUses.length; i++){
+            for(var k = 0; k < currentUses.length; k++){
               // add the first value, then find the highest but only if it is not itself
-              if((topBlock.index == null || topBlock.height > variableUses[i].getRelativeToSurfaceXY().y) 
-                  && variableUses[i].type == "variables_set" ){
-                topBlock["index"] = i;
-                topBlock["height"] = variableUses[i].getRelativeToSurfaceXY().y;
+              if((topBlock.index == null || topBlock.height > currentUses[k].getRelativeToSurfaceXY().y) 
+                  && currentUses[k].type == "variables_set" ){
+                topBlock["index"] = k;
+                topBlock["height"] = currentUses[k].getRelativeToSurfaceXY().y;
               }
             }
-            var varBlock = variableUses[topBlock.index];
+            var varBlock = currentUses[topBlock.index];
           } else {
-            var varBlock = variableUses[0];
+            var varBlock = currentUses[0];
           }
           varBlock = varBlock.inputList[0].connection;
           // Only push variable block to menu if it has a Series type connected to it
           if (!(varBlock===null)) {
-      			if (!(varBlock.targetConnection==null) && varBlock.targetConnection.check_[0]==="Series") {
-      				options.push([allVariables[curr],allVariables[curr].toUpperCase()]);
-      			}
+            if (!(varBlock.targetConnection==null) && varBlock.targetConnection.check_[0]==="Series") {
+              options.push([allVariables[i],allVariables[i].toUpperCase()]);
+            }
           }
-    		}
+        }
     	}
       if (options.length==0) {
         options.push(empty);

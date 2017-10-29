@@ -86,7 +86,10 @@ Blockly.FieldVariable.prototype.setValue = function(newValue) {
   if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.Change(
         this.sourceBlock_, 'field', this.name, this.value_, newValue));
-        this.sourceBlock_.setNewType(newValue);
+        if(this.sourceBlock_.type!=='controls_for'){
+          this.sourceBlock_.setNewType(newValue);
+        }
+        
   }
   this.value_ = newValue;
   this.setText(newValue);

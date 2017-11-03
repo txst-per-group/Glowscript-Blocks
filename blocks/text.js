@@ -681,3 +681,15 @@ Blockly.Blocks['text_prompt'] = {
   mutationToDom: Blockly.Blocks['text_prompt_ext'].mutationToDom,
   domToMutation: Blockly.Blocks['text_prompt_ext'].domToMutation
 };
+
+Blockly.Blocks['comment_block'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("..."), "NAME");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Blocks.texts.HUE);
+    this.setTooltip('Look here for helpful hints or add text to leave yourself notes');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};

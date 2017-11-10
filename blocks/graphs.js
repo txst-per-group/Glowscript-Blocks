@@ -139,7 +139,7 @@ Blockly.Blocks['graph_display'] = {
         .setCheck('Series')
         .setAlign(Blockly.ALIGN_RIGHT);
     this.setOutput(true, 'Graph');
-    this.setMutator(new Blockly.Mutator(['title','xmax','xmin','ymax','ymin']));
+    this.setMutator(new Blockly.Mutator(['title','xtitle','ytitle','xmax','xmin','ymax','ymin']));
     this.setColour(Blockly.Blocks.graphs.HUE);
     this.setTooltip('Creates a display which contains the enclosed graph objects.');
     this.hasXml = {title:0, xmax:0, xmin:0, ymax:0, ymin:0};
@@ -249,7 +249,7 @@ Blockly.Blocks['graph_display'] = {
    */
   updateShape_: function() {
     // list of graph display inputs
-    var inputs = ['TITLE','XMAX','XMIN','YMAX','YMIN','OBJECTS']
+    var inputs = ['TITLE','XTITLE','YTITLE','XMAX','XMIN','YMAX','YMIN','OBJECTS']
     // start by resetting all inputs
     for (var input in inputs){
       if (this.getInput(inputs[input]))
@@ -258,7 +258,7 @@ Blockly.Blocks['graph_display'] = {
     // add inputs from the xml list
     for (var has in this.hasXml){
       //special case for title attribute
-      if (has === 'title'){
+      if (/title/.test(has)){
         if (this.hasXml[has]){
           this.appendValueInput(has.toUpperCase())
               .setCheck("String")
@@ -325,6 +325,28 @@ Blockly.Blocks['title'] = {
     this.setNextStatement(true, null);
     this.setColour(Blockly.Blocks.graphs.HUE);
     this.setTooltip('Sets the title of the graph to a given string.');
+  }
+};
+
+Blockly.Blocks['xtitle'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("xtitle");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Blocks.graphs.HUE);
+    this.setTooltip('Sets title of the x axis of the graph to a given string.');
+  }
+};
+
+Blockly.Blocks['ytitle'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("ytitle");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Blocks.graphs.HUE);
+    this.setTooltip('Sets title of the y axis of the graph to a given string.');
   }
 };
 

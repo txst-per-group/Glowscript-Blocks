@@ -142,10 +142,11 @@ Blockly.Blocks['graph_display'] = {
     this.setMutator(new Blockly.Mutator(['title','xtitle','ytitle','xmax','xmin','ymax','ymin']));
     this.setColour(Blockly.Blocks.graphs.HUE);
     this.setTooltip('Creates a display which contains the enclosed graph objects.');
-    this.hasXml = {title:0, xmax:0, xmin:0, ymax:0, ymin:0};
+    this.hasXml = {title:0, xtitle:0, ytitle:0, xmax:0, xmin:0, ymax:0, ymin:0};
     for (var attribute in this.hasXml){
       this.hasXml[attribute] = false;
     }
+    this.mutatorName = ["title", "xtitle", "ytitle", "xmax", "xmin", "ymax", "ymin"];
     this.element_count_ = 0;
   },
   /**

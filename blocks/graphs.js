@@ -147,6 +147,8 @@ Blockly.Blocks['graph_display'] = {
       this.hasXml[attribute] = false;
     }
     this.mutatorName = ["title", "xtitle", "ytitle", "xmax", "xmin", "ymax", "ymin"];
+    this.default = {title: 'Graph Title', xtitle: 'This is the X axis', 
+                    ytitle: 'This is the Y axis', xmax: 1, xmin: -1, ymax: 1, ymin: -1};
     this.element_count_ = 0;
   },
   /**
@@ -218,7 +220,7 @@ Blockly.Blocks['graph_display'] = {
     this.elementCount_ = 0;
     // Stores a list of new inputs on the WORKSPACE block (not the mutator block)
     // and their corresponding input connection blocks
-    var valueConnections = [];
+    this.valueConnections = [];
     // Loop through all mutator blocks connected in menu
     while (clauseBlock){
       // Records the connected attribute block in the xml
@@ -226,7 +228,7 @@ Blockly.Blocks['graph_display'] = {
       // Incriments how many mutator blocks are connected
       this.elementCount_++;
       // Adds the name of the new input and its connected block
-      valueConnections.push([clauseBlock.type.toUpperCase(),
+      this.valueConnections.push([clauseBlock.type.toUpperCase(),
                              clauseBlock.valueConnection_]);
       // Move on to next connected mutator block if there is one
       clauseBlock = clauseBlock.nextConnection && clauseBlock.nextConnection.targetBlock();
@@ -236,7 +238,7 @@ Blockly.Blocks['graph_display'] = {
     // Loop through for every recorded block connection
     for (var i=0; i<=this.elementCount_-1; i++){
       // And reconnect the recorded block to the blocks input
-      Blockly.Mutator.reconnect(valueConnections[i][1],this,valueConnections[i][0]);
+      Blockly.Mutator.reconnect(this.valueConnections[i][1],this,this.valueConnections[i][0]);
     }
     // If there were 'Series' objects connected
     if (!(containerBlock.stateConnection_==null))
@@ -248,7 +250,7 @@ Blockly.Blocks['graph_display'] = {
    * @private
    * @this Blockly.Block
    */
-  updateShape_: function() {
+  updateShape_: function(domLoad = false) {
     // list of graph display inputs
     var inputs = ['TITLE','XTITLE','YTITLE','XMAX','XMIN','YMAX','YMIN','OBJECTS']
     // start by resetting all inputs
@@ -265,6 +267,15 @@ Blockly.Blocks['graph_display'] = {
               .setCheck("String")
               .setAlign(Blockly.ALIGN_RIGHT)
               .appendField(has);
+
+          if(!this.hasConnection(has.toUpperCase()) && !domLoad){
+
+            var newText = this.workspace.newBlock("text");
+            newText.initSvg();
+            newText.render();
+            newText.setFieldValue(this.default[has], 'TEXT');
+            this.getInput(has.toUpperCase()).connection.connect(newText.outputConnection);
+          }
         }
       }else{
         if (this.hasXml[has]){
@@ -272,6 +283,15 @@ Blockly.Blocks['graph_display'] = {
               .setCheck("Number")
               .setAlign(Blockly.ALIGN_RIGHT)
               .appendField(has);
+
+          if(!this.hasConnection(has.toUpperCase()) && !domLoad){
+
+            var newNumber = this.workspace.newBlock("math_number");
+            newNumber.initSvg();
+            newNumber.render();
+            newNumber.setFieldValue(this.default[has], 'NUM');
+            this.getInput(has.toUpperCase()).connection.connect(newNumber.outputConnection);
+          }
         }
       }
     }
@@ -305,7 +325,16 @@ Blockly.Blocks['graph_display'] = {
     if (!(statementInput.connection==null))
       // Record the connected block information in the root mutator block
       containerBlock.stateConnection_ = statementInput.connection.targetConnection;
+  },
+
+  hasConnection: function(inputName) {
+    for(var connec of this.valueConnections){
+      if(inputName === connec[0] && connec[1] !== undefined)
+        return true
+    }
+    return false
   }
+
 };
 
 Blockly.Blocks['display_root'] = {

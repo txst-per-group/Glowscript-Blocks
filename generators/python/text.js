@@ -36,7 +36,7 @@ Blockly.Python['text'] = function(block) {
 };
 
 Blockly.Python['text_join'] = function(block) {
-  // Create a string made up of any number of elements of any type.
+  // Create a string with any number of elements of any type inline.
   //Should we allow joining by '-' or ',' or any other characters?
   switch (block.itemCount_) {
     case 0:
@@ -67,6 +67,46 @@ Blockly.Python['text_join'] = function(block) {
       var code = '\'\'.join([str(' + tempVar + ') for ' + tempVar + ' in [' +
           elements.join(', ') + ']])';
       return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+  }
+};
+
+Blockly.Python['text_inline_print'] = function(block) {
+  // Print any number of elements of any type inline.
+  // Joins block inputs together with "," character.
+  var code = 'print(';
+  switch (block.itemCount_) {
+    case 0:
+      return ['\'\'', Blockly.Python.ORDER_ATOMIC];
+      break;
+    case 1:
+      var element = Blockly.Python.valueToCode(block, 'ADD0',
+              Blockly.Python.ORDER_NONE) || '\'\'';
+      code = code + element + ')\n';
+      return code;
+      break;
+    case 2:
+      var element0 = Blockly.Python.valueToCode(block, 'ADD0',
+              Blockly.Python.ORDER_NONE) || '\'\'';
+      var element1 = Blockly.Python.valueToCode(block, 'ADD1',
+              Blockly.Python.ORDER_NONE) || '\'\'';
+      code = code + element0 + ', ' + element1 + ')\n';
+      return code;
+      break;
+    default:
+      var elements = [];
+      for (var i = 0; i < block.itemCount_; i++) {
+        elements[i] = Blockly.Python.valueToCode(block, 'ADD' + i,
+                Blockly.Python.ORDER_NONE) || '\'\'';
+      }
+      var itemsList = '';
+      for (var i = 0; i < elements.length; i++) {
+        itemsList += elements[i];
+        if (i < (elements.length-1)) {
+          itemsList += ', ';
+        };
+      }
+      code = code + itemsList + ')\n';
+      return code;
   }
 };
 

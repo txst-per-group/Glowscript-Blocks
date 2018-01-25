@@ -334,11 +334,11 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
     if (block.rendered) {
       block.render();
     }
-    // If this mutator menu belongs to a shape block, update flyout in realtime
-    if (block.type.substr(0,7) == "vpython") {
+    // If this mutator menu belongs to a shape or graph block, update flyout in realtime.
+    if (block.type.substr(0,7) == "vpython" || block.type.substr(0,5) == "graph") {
       this.workspace_.flyout_.hide();
       var quarkXml = goog.dom.createDom('xml');
-      for (var i = 0, quarkName; quarkName = Blockly.Blocks[block.type].mutatorName[i]; i++) {
+      for (var i = 0, quarkName; quarkName = block.mutatorName[i]; i++) {
         quarkXml.appendChild(goog.dom.createDom('block', {'type': quarkName}));
       }
       var blocks = this.workspace_.getTopBlocks(false);

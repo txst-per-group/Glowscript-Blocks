@@ -260,6 +260,7 @@ Blockly.Blocks['variables_get'] = {
   onchange: function(){
     if(this.isIterator){
       this.modifyBlock("Number");
+      this.selectedType = "Number";
     } else {
       this.setNewType(this.getInput("FieldVariable").fieldRow[0].value_);
     }

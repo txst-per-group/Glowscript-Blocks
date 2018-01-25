@@ -70,19 +70,19 @@ Blockly.Blocks['text'] = {
   }
 };
 
-Blockly.Blocks['text_join'] = {
+Blockly.Blocks['text_inline_print'] = {
   /**
-   * Block for creating a string made up of any number of elements of any type.
+   * Block printing any number of elements of any type.
    * @this Blockly.Block
    */
   init: function() {
-    this.setHelpUrl(Blockly.Msg.TEXT_JOIN_HELPURL);
+    this.setHelpUrl("Print a line of text by joining together any number of items.");
     this.setColour(Blockly.Blocks.texts.HUE);
     this.itemCount_ = 2;
     this.updateShape_();
-    this.setOutput(true, 'String');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
     this.setMutator(new Blockly.Mutator(['text_create_join_item']));
-    this.setTooltip(Blockly.Msg.TEXT_JOIN_TOOLTIP);
   },
   /**
    * Create XML to represent number of text inputs.
@@ -183,7 +183,7 @@ Blockly.Blocks['text_join'] = {
       if (!this.getInput('ADD' + i)) {
         var input = this.appendValueInput('ADD' + i);
         if (i == 0) {
-          input.appendField(Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH);
+          input.appendField("print inline");
         }
       }
     }

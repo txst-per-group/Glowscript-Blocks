@@ -571,8 +571,49 @@ h1 {
         </value>
       </block>
 
-      <block type="vector_math">
+      <block type="vector_math_single">
         <value name="vector1">
+          <shadow type="vector">
+            <value name="X">
+              <shadow type="math_number">
+              <field name="NUM">0</field>
+              </shadow>
+            </value>
+            <value name="Y">
+              <shadow type="math_number">
+              <field name="NUM">0</field>
+              </shadow>
+            </value>
+            <value name="Z">
+              <shadow type="math_number">
+              <field name="NUM">0</field>
+              </shadow>
+            </value>
+          </shadow>
+        </value>
+      </block>
+
+      <block type="vector_math_double">
+        <value name="vector1">
+          <shadow type="vector">
+            <value name="X">
+              <shadow type="math_number">
+              <field name="NUM">0</field>
+              </shadow>
+            </value>
+            <value name="Y">
+              <shadow type="math_number">
+              <field name="NUM">0</field>
+              </shadow>
+            </value>
+            <value name="Z">
+              <shadow type="math_number">
+              <field name="NUM">0</field>
+              </shadow>
+            </value>
+          </shadow>
+        </value>
+        <value name="vector2">
           <shadow type="vector">
             <value name="X">
               <shadow type="math_number">
@@ -765,6 +806,8 @@ h1 {
             <field name="TEXT">abc</field>
           </shadow>
         </value>
+      </block>
+      <block type="text_inline_print">
       </block>
     </category>
     

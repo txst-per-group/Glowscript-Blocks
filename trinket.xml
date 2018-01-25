@@ -323,4 +323,7 @@
         </shadow>
       </value>
     </block>
+
+    <block type="text_inline_print">
+    </block>
   </category>

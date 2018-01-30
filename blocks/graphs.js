@@ -150,6 +150,7 @@ Blockly.Blocks['graph_display'] = {
     this.default = {title: 'Graph Title', xtitle: 'This is the X axis', 
                     ytitle: 'This is the Y axis', xmax: 1, xmin: -1, ymax: 1, ymin: -1};
     this.element_count_ = 0;
+    this.valueConnections = []
   },
   /**
    * Create XML to represent if block is supposed to have inputs 
@@ -182,7 +183,7 @@ Blockly.Blocks['graph_display'] = {
       this.hasXml[attribute] = parseInt(xmlElement.getAttribute(attribute), 10) || 0;
     }
     this.elementCount_ = parseInt(xmlElement.getAttribute('element_count'), 10) || 0;
-    this.updateShape_();
+    this.updateShape_(true);
   },
   /**
    * Populate the mutator's dialog with this block's components.

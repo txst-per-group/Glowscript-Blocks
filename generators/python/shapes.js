@@ -17,6 +17,8 @@ goog.require("Blockly.Python");
 
 
 Blockly.Python.Shape = function(block) {
+
+  var physics_attributes = {vel: 'vector(0,0,0)', acc: 'vector(0,0,0)', mass: '0', charge: '0'};
   
   var code = block.info.name + "(";
   var previousArg = false;
@@ -33,15 +35,34 @@ Blockly.Python.Shape = function(block) {
         ", retain=" + block.getFieldValue("RETAIN_VALUE") +
         ", interval=" + block.getFieldValue("INTERVAL_VALUE");
       } else {
-        if (previousArg)
-          code = code + ", "
-        code = code + attribute + "=" + 
-        Blockly.Python.valueToCode(block,
+        var argument = Blockly.Python.valueToCode(block,
                                    attribute.toUpperCase(),
                                    Blockly.Python.ORDER_ATOMIC);
-        previousArg = true;
-        
+        if (argument.length > 1){
+          if (previousArg)
+            code = code + ", "
+          code = code + attribute + "=" + argument;
+
+          previousArg = true;
+
+        }else if(attribute in physics_attributes){
+
+          if (previousArg)
+            code = code + ", "
+          code = code + attribute + "=" + physics_attributes[attribute];
+          previousArg = true;
+        }
       }
+    }
+  }
+  for (var attribute in physics_attributes){
+    if(!block.hasXml[attribute]){
+      if (previousArg)
+        code = code + ", "
+      code = code + attribute + "=" + physics_attributes[attribute];
+
+      previousArg = true;
+
     }
   }
   code = code + ")\n";

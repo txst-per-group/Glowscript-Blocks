@@ -38,7 +38,7 @@ Blockly.Python.Shape = function(block) {
         var argument = Blockly.Python.valueToCode(block,
                                    attribute.toUpperCase(),
                                    Blockly.Python.ORDER_ATOMIC);
-        if (argument.length > 1){
+        if (argument.length >= 1){
           if (previousArg)
             code = code + ", "
           code = code + attribute + "=" + argument;

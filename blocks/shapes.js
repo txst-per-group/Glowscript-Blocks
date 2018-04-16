@@ -57,6 +57,7 @@ Blockly.Blocks.Shape.prototype.init = function(){
     for (var attribute in this.hasXml){
         this.hasXml[attribute] = false
     }
+    this.setHelpUrl(Blockly.Msg[this.info.name.toUpperCase() + "_HELPURL"]);
 
     this.element_count_ = 0;
 };

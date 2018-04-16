@@ -7,6 +7,8 @@ goog.provide('Blockly.Msg.fa');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "افزودن نظر";
+Blockly.Msg.ARROW_HELPURL = "https://github.com/txst-per-group/Glowscript-Blocks/wiki/Shapes#arrow";  // untranslated
+Blockly.Msg.BOX_HELPURL = "https://github.com/txst-per-group/Glowscript-Blocks/wiki/Shapes#box";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "تغییر مقدار:";
 Blockly.Msg.CLEAN_UP = "تمیز کردن بلوک‌ها";
 Blockly.Msg.COLLAPSE_ALL = "فروپاشی بلوک‌ها";
@@ -41,7 +43,7 @@ Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops
 Blockly.Msg.CONTROLS_FOR_TITLE = "با تعداد %1 از %2 به %3 با گام‌های %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "متغیر %1 را در مقادیر شروع‌شده از عدد انتهای  به عدد انتهایی را دارد، با فواصل مشخص‌شده می‌شمارد و این بلوک مشخص‌شده را انجام می‌دهد.";
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "افزودن یک شرط به بلوک اگر.";
-Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "اضافه‌کردن نهایی، گرفتن همهٔ شرایط به بلوک اگر.";
+Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "اضافه کردن نهایی، گرفتن همهٔ شرایط به بلوک اگر.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated
 Blockly.Msg.CONTROLS_IF_IF_TOOLTIP = "افزودن، حذف یا بازمرتب‌سازی قسمت‌ها برای پیکربندی دوبارهٔ این بلوک اگر.";
 Blockly.Msg.CONTROLS_IF_MSG_ELSE = "آنگاه";
@@ -60,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "تکرار تا زمانی ک�
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "تکرار در حالی که";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "تا زمانی که یک مقدار ناصحیح است، چند عبارت را انجام بده.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "تا زمانی که یک مقدار صحیح است، چند عبارت را انجام بده.";
+Blockly.Msg.CYLINDER_HELPURL = "https://github.com/txst-per-group/Glowscript-Blocks/wiki/Shapes#cylinder";  // untranslated
 Blockly.Msg.DELETE_ALL_BLOCKS = "حذف همهٔ بلاک‌های %1؟";
 Blockly.Msg.DELETE_BLOCK = "حذف بلوک";
 Blockly.Msg.DELETE_X_BLOCKS = "حذف بلوک‌های %1";
@@ -69,16 +72,17 @@ Blockly.Msg.ENABLE_BLOCK = "فعال‌سازی بلوک";
 Blockly.Msg.EXPAND_ALL = "گسترش بلوک‌ها";
 Blockly.Msg.EXPAND_BLOCK = "گسترش بلوک";
 Blockly.Msg.EXTERNAL_INPUTS = "ورودی‌های خارجی";
+Blockly.Msg.HELIX_HELPURL = "https://github.com/txst-per-group/Glowscript-Blocks/wiki/Shapes#helix";  // untranslated
 Blockly.Msg.HELP = "راهنما";
 Blockly.Msg.INLINE_INPUTS = "ورودی‌های درون خطی";
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "ایجاد فهرست خالی";
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "فهرستی با طول صفر شامل هیچ رکورد داده‌ای بر می‌گرداند.";
 Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD = "فهرست";
-Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TOOLTIP = "اضافه‌کردن، حذف‌کردن یا ترتیب‌سازی مجدد بخش‌ها این بلوک فهرستی.";
+Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TOOLTIP = "اضافه کردن، حذف کردن یا ترتیب‌سازی مجدد بخش‌ها این بلوک فهرستی.";
 Blockly.Msg.LISTS_CREATE_WITH_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-list-with";  // untranslated
 Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH = "ایجاد فهرست با";
-Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP = "اضافه‌کردن یک مورد به فهرست.";
+Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP = "اضافه کردن یک مورد به فهرست.";
 Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP = "فهرستی از هر عددی از موارد می‌سازد.";
 Blockly.Msg.LISTS_GET_INDEX_FIRST = "اولین";
 Blockly.Msg.LISTS_GET_INDEX_FROM_END = "# از انتها";
@@ -295,6 +299,8 @@ Blockly.Msg.REDO = "واگردانی";
 Blockly.Msg.REMOVE_COMMENT = "حذف نظر";
 Blockly.Msg.RENAME_VARIABLE = "تغییر نام متغیر...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "تغییر نام همهٔ متغیرهای «%1» به:";
+Blockly.Msg.RING_HELPURL = "https://github.com/txst-per-group/Glowscript-Blocks/wiki/Shapes#ring";  // untranslated
+Blockly.Msg.SPHERE_HELPURL = "https://github.com/txst-per-group/Glowscript-Blocks/wiki/Shapes#sphere";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "الحاق متن";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "به";
@@ -315,7 +321,7 @@ Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "حرفی در موقعیت مشخص‌شده بر می‌گرداند.";
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "افزودن یک مورد به متن.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "عضویت";
-Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "اضافه‌کردن، حذف یا مرتب‌سازی بحش‌ها برای تنظیم مجدد این بلوک متنی.";
+Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "اضافه کردن، حذف یا مرتب‌سازی بحش‌ها برای تنظیم مجدد این بلوک متنی.";
 Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_END = "به حرف # از انتها";
 Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_START = "به حرف #";
 Blockly.Msg.TEXT_GET_SUBSTRING_END_LAST = "به آخرین حرف";
@@ -334,7 +340,7 @@ Blockly.Msg.TEXT_INDEXOF_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "شاخصی از اولین آخرین رخ‌داد متن اول در متن دوم بر می‌گرداند. اگر متن یافت نشد %1 باز می‌گرداند.";
 Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 خالی است";
-Blockly.Msg.TEXT_ISEMPTY_TOOLTIP = "اضافه‌کردن صحیح اگر متن فراهم‌شده خالی است.";
+Blockly.Msg.TEXT_ISEMPTY_TOOLTIP = "اضافه کردن صحیح اگر متن فراهم‌شده خالی است.";
 Blockly.Msg.TEXT_JOIN_HELPURL = "https://github.com/google/blockly/wiki/Text#text-creation";  // untranslated
 Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH = "ایجاد متن با";
 Blockly.Msg.TEXT_JOIN_TOOLTIP = "یک تکه‌ای از متن را با چسپاندن همهٔ تعداد از موارد ایجاد می‌کند.";
@@ -370,19 +376,19 @@ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITL
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 Blockly.Msg.CONTROLS_IF_MSG_THEN = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
+Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
 Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
-Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
+Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 Blockly.Msg.LISTS_GET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
-Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
+Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT = Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT;
 Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF = Blockly.Msg.CONTROLS_IF_MSG_ELSEIF;
-Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
-Blockly.Msg.CONTROLS_FOREACH_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
-Blockly.Msg.LISTS_SET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
+Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
+Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
+Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
+Blockly.Msg.CONTROLS_FOREACH_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 Blockly.Msg.LISTS_CREATE_WITH_ITEM_TITLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 Blockly.Msg.TEXT_APPEND_VARIABLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
-Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT = Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT;
+Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
+Blockly.Msg.LISTS_SET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;

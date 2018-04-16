@@ -5,6 +5,12 @@
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
+	"BOX_HELPURL": "https://github.com/txst-per-group/Glowscript-Blocks/wiki/Shapes#box",
+	"SPHERE_HELPURL": "https://github.com/txst-per-group/Glowscript-Blocks/wiki/Shapes#sphere",
+	"ARROW_HELPURL": "https://github.com/txst-per-group/Glowscript-Blocks/wiki/Shapes#arrow",
+	"CYLINDER_HELPURL": "https://github.com/txst-per-group/Glowscript-Blocks/wiki/Shapes#cylinder",
+	"RING_HELPURL": "https://github.com/txst-per-group/Glowscript-Blocks/wiki/Shapes#ring",
+	"HELIX_HELPURL": "https://github.com/txst-per-group/Glowscript-Blocks/wiki/Shapes#helix",
 	"VARIABLES_DEFAULT_NAME": "item",
 	"TODAY": "Today",
 	"DUPLICATE_BLOCK": "Duplicate",
